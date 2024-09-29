@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -std=gnu++20 -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build/Lab1",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -std=gnu++20 -o CMakeFiles/main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp"
+}
+]
