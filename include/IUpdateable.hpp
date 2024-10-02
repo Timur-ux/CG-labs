@@ -3,7 +3,7 @@
 
 class IUpdateable {
   public:
-    virtual void update() = 0;
+    virtual void update(const double & time, const double & dt) = 0;
 };
 
 #endif // !IUPDATEABLE_HPP_

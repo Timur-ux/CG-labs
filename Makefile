@@ -7,3 +7,6 @@ generate: ./CMakeLists.txt ./Lab1/CMakeLists.txt
 
 buildDir:
 	mkdir -p ./build
+
+L1: ./build/Lab1/main
+	./build/Lab1/main

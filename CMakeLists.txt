@@ -20,4 +20,7 @@ file(GLOB_RECURSE SRC LIST_DIRECTORIES FALSE ./src/*.cpp)
 set(SRC_LIB src_lib)
 add_library(${SRC_LIB} STATIC ${SRC})
 
+target_link_libraries(${SRC_LIB} glfw OpenGL GLEW)
+target_compile_options(${SRC_LIB} PUBLIC -g)
+
 add_subdirectory("./Lab1/")

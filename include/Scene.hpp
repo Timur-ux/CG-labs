@@ -5,18 +5,29 @@
 #include "Camera.hpp"
 #include "IUpdateable.hpp"
 #include "Object.hpp"
-#include <memory>
+#include "events.hpp"
 
-
+class UpdateEventHandler;
 class Scene : public IUpdateable {
-  std::map<Id, ptr<Object>> objects_;
-  std::map<Id, ptr<Camera>> cameras_;
+  std::map<Id, Object*> objects_;
+  std::map<Id, Camera*> cameras_;
+  ptr<UpdateEventHandler> objectUpdateEventHandler_;
+  Event<const double &, const double &> timeUpdateEvent_;
 
   public:
-  Scene() = default;
-  void addObject(ptr<Object> object);
-  void addCamera(ptr<Camera> camera);
+  Scene();
+  IEvent<const double &, const double &> &updateEvent;
+  void addObject(Object* object);
+  void addCamera(Camera* camera);
 
-  void update() override;
+  void update(const double & time, const double & dt) override;
+  void initialUpdate(const double & dt); // Call before start application loop
+};
+
+class UpdateEventHandler : public IEventHandler<Object*> {
+  std::vector<Object*> movedObjects;
+  public:
+  void call(Object*) override;
+  std::vector<Object*>&& getAndReset();
 };
 #endif // !SCENE_HPP_

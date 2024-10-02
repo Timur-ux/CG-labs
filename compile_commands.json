@@ -1,12 +1,52 @@
 [
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -std=gnu++20 -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Camera.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Camera.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Camera.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Line2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Line2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Line2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Object.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Object.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Object.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Point2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Point2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Point2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Program.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Program.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Scene.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Scene.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Scene.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Triangle2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Triangle2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Triangle2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build/Lab1",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -std=gnu++20 -o CMakeFiles/main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp"
 }
 ]

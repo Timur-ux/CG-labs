@@ -7,7 +7,7 @@
 
 class IDrawable {
   public:
-    virtual void draw(GLFWwindow * win) = 0;
+    virtual void draw() = 0;
 };
 
 #endif // !IDRAWABLE_HPP_

@@ -8,3 +8,4 @@ target_link_libraries(main
   OpenGL
   ${SRC_LIB})
 
+target_compile_options(main PUBLIC -g)
