@@ -1,6 +1,11 @@
 [
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/BezierCurve.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/BezierCurve.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/BezierCurve.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
   "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Camera.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Camera.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/Camera.cpp"
 },
@@ -33,6 +38,11 @@
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
   "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Square2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Square2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Square2d.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",

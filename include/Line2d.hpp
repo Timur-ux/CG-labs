@@ -6,7 +6,7 @@
 
 class Line2D : public Object {
 public:
-  Line2D(GLfloat verticies[6], Program program, void(*moveFN)(GLfloat*,const double & time, const double & dt) = nullptr);
+  Line2D(GLfloat verticies[6], Program program, TMoveFN moveFN = nullptr);
 };
 
 #endif // !LINE_2D_HPP_

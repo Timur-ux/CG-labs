@@ -6,7 +6,7 @@
 
 class Triangle2D : public Object {
   public:
-  Triangle2D(GLfloat verticies[9], Program program, void (*moveFN)(GLfloat*,const double & time, const double & dt) = nullptr);
+  Triangle2D(GLfloat verticies[9], Program program, TMoveFN moveFN = nullptr);
 };
 
 #endif // !TRIANGLE_2D_HPP_

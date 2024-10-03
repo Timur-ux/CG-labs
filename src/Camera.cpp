@@ -7,7 +7,7 @@ void Camera::update(const double &, const double&) {
   
   glfwGetWindowSize(win_, &width, &height);
 
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   for(auto & [_, object] : objectsInFrame_) {
     object->draw();
   }

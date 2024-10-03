@@ -3,15 +3,19 @@
 
 #include "Program.hpp"
 #include "events.hpp"
+#include <cstring>
 #define GLEW_STATIC
 #include "IDrawable.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <memory>
+#include <cstdlib>
 
 using Id = size_t;
 
 template <typename T> using ptr = std::shared_ptr<T>;
+
+using TMoveFN = void (*)(GLfloat *verticies, const double &time, const double &dt);
 
 class Geometry {
   GLuint vao_;
@@ -39,23 +43,35 @@ protected:
   GLenum type_ = GL_POINTS;
   Event<Object *> updateEvent_;
   GLfloat *verticies_;
-  void (*moveFN_)(GLfloat *, const double & time, const double &dt);
-  
+  TMoveFN moveFN_;
+
   Object(GLuint vertexN, GLuint vertexSize, GLfloat *vertexData,
-         Program program, void (*moveFN)(GLfloat *, const double &time, const double &dt) = nullptr)
+         Program program, TMoveFN moveFN = nullptr)
+
       : geometry_(vertexN, vertexSize, vertexData), verticies_(vertexData),
         program_(program), vertexN_(vertexN), id_(rand()),
-        updateEvent(updateEvent_),
-        moveFN_(moveFN){};
+        updateEvent(updateEvent_), moveFN_(moveFN){
+          verticies_ = new GLfloat[vertexN*3];
+          memcpy(verticies_, vertexData, vertexN*vertexSize);
+
+          program_.bind();
+          geometry_.bindVAO();
+          geometry_.bindVBO();
+
+          setAttrPtr("pos", 3, sizeof(GLfloat) * 3, 0);
+
+          geometry_.unbindVBO();
+          geometry_.unbindVAO();
+
+          program_.unbind();
+        };
 
 public:
-  virtual ~Object() {
-    delete verticies_;
-  };
+  virtual ~Object() { delete verticies_; };
   IEvent<Object *> &updateEvent;
 
   /**
-   * @brief Draw points on geometry's verticies by default
+   * @brief Draw figure on geometry's verticies by default
    */
   virtual void draw() override;
   void setAttrPtr(std::string name, int componentsN, GLsizei stride,
@@ -66,11 +82,11 @@ public:
     geometry_.updateVerticies((GLfloat *)verticiesData);
   };
 
-  virtual void call(const double & time, const double & dt) override {
-    if(moveFN_) {
-      moveFN_(verticies_,time,  dt);
+  virtual void call(const double &time, const double &dt) override {
+    if (moveFN_) {
+      moveFN_(verticies_, time, dt);
       updateVerticies(verticies_);
-      updateEvent_.invoke(this);// Раз обновили позицию, тыкнем всех подписчеков объекта
+      updateEvent_.invoke(this); // Раз обновили позицию, тыкнем всех подписчеков объекта
     }
   };
 };
