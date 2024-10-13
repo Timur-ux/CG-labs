@@ -7,3 +7,4 @@ all:
 
 L1: ./build/Lab1/main
 	./build/Lab1/main
+

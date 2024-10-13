@@ -14,7 +14,7 @@ find_package(GLEW 2.1.0 REQUIRED)
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
-include_directories("./include/")
+include_directories("./include/" "./include/old/")
 file(GLOB_RECURSE SRC LIST_DIRECTORIES FALSE ./src/*.cpp)
 
 set(SRC_LIB src_lib)
