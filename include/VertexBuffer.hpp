@@ -8,8 +8,9 @@ class VertexBuffer {
 private:
   GLuint vbo_;
   GLenum target_;
-
+  GLboolean isOK_;
 public:
+  VertexBuffer() : isOK_(false), vbo_(0), target_(0) {}
   VertexBuffer(GLenum target, GLsizeiptr size, void *data,
                GLenum usage = GL_DYNAMIC_DRAW);
 
@@ -22,6 +23,11 @@ public:
 
   void bind();
   void unbind();
+
+  void create(GLenum target, GLsizeiptr size, void *data,
+               GLenum usage = GL_DYNAMIC_DRAW);
+
+  GLboolean isOk() { return isOK_; }
 
   void setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
                     const void *offset, GLenum type = GL_FLOAT,

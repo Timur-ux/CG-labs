@@ -10,14 +10,6 @@ class Program {
 public:
   Program(std::string vshaderFileName, std::string fshaderFileName);
 
-  Program(Program && other);
-  Program& operator=(Program && other);
-
-  Program& operator=(Program & other) = delete;
-  Program(Program & other) = delete;
-
-  ~Program();
-
   GLuint get();
 
   void bind();

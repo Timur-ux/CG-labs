@@ -38,23 +38,6 @@ Program::Program(std::string vshaderFileName, std::string fshaderFileName) {
   glDeleteShader(fshader);
 }
 
-Program::Program(Program &&other) {
-  program_ = other.program_;
-  other.program_ = 0;
-}
-
-
-Program & Program::operator=(Program && other) {
-  program_ = other.program_;
-  other.program_ = 0;
-
-  return *this;
-}
-
-Program::~Program() {
-  glDeleteProgram(program_);
-}
-
 
 void Program::bind() {
   glUseProgram(program_);

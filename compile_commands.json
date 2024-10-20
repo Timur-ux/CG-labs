@@ -1,62 +1,117 @@
 [
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Program.cpp",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/CameraMVP.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/CameraMVP.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/CameraMVP.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Program.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/Program.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Scene.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Scene.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Scene.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/Shader.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/BezierCurve.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/BezierCurve.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/BezierCurve.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/VertexArray.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/VertexArray.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/VertexArray.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Camera.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Camera.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Camera.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/VertexBuffer.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/VertexBuffer.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/VertexBuffer.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Line2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Line2d.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Line2d.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/customWindow.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Object.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Object.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Object.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/geometry.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/geometry.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/geometry.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/OldScene.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/OldScene.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/OldScene.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/objects/Cube.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/objects/Cube.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/objects/Cube.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Point2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Point2d.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Point2d.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/objects/Object.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/objects/Object.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/objects/Object.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Square2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Square2d.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Square2d.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/BezierCurve.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/BezierCurve.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/BezierCurve.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/Triangle2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/Triangle2d.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/Triangle2d.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Camera.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Camera.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Camera.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/old/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/old/customWindow.cpp",
-  "file": "/mnt/c/Users/User/Projects/CG-labs/src/old/customWindow.cpp"
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Line2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Line2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Line2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Object.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Object.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Object.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/OldScene.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/OldScene.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/OldScene.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Point2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Point2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Point2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Program.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Program.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Program.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Shader.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Shader.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Shader.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Square2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Square2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Square2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/Triangle2d.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/Triangle2d.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/Triangle2d.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/src_old_lib.dir/src_old/customWindow.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src_old/customWindow.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src_old/customWindow.cpp"
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build/Lab1",
-  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/./include -I/mnt/c/Users/User/Projects/CG-labs/./include/old -g -std=gnu++20 -o CMakeFiles/main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/Lab1/include_old -I/mnt/c/Users/User/Projects/CG-labs/include_old -g -std=gnu++20 -o CMakeFiles/Lab1_main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/Lab1/main.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build/Lab2",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/Lab2/include -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/Lab2_main.dir/main.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/Lab2/main.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/Lab2/main.cpp"
 }
 ]

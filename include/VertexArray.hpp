@@ -13,6 +13,7 @@ class VertexArray {
 
     VertexArray(VertexArray && other);
     VertexArray & operator=(VertexArray && other);
+
     VertexArray(VertexArray & other) = delete;
     VertexArray & operator=(VertexArray & other) = delete;
 
@@ -20,7 +21,13 @@ class VertexArray {
 
     void bind();
     void unbind();
+};
 
+
+struct VAOBind {
+  VertexArray & vao;
+  VAOBind(VertexArray & target) : vao(target) {vao.bind();}
+  ~VAOBind() {vao.unbind();}
 };
 
 

@@ -1,13 +1,13 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
-#include "old/BezierCurve.hpp"
+#include "BezierCurve.hpp"
 #include "Program.hpp"
-#include "old/button.hpp"
+#include "button.hpp"
 #include "customWindow.hpp"
-#include "old/Scene.hpp"
-#include "old/Camera.hpp"
-#include "old/Object.hpp"
+#include "Scene.hpp"
+#include "Camera.hpp"
+#include "Object.hpp"
 #include "events.hpp"
 #include <GLFW/glfw3.h>
 #include <memory>
@@ -46,7 +46,6 @@ class SpeedChangeEventHandler : public IEventHandler<> {
     std::cout << "Change speed by: " << dv_ << "\nCurrent speed: " << square_.getV() << std::endl;
   }
 };
-
 
 
 void squareChangeSize(const double & time, GLfloat & width, GLfloat & height) {
