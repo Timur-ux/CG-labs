@@ -41,6 +41,11 @@
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/glCheckError.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/glCheckError.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/glCheckError.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
   "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/objects/Cube.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/objects/Cube.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/objects/Cube.cpp"
 },

@@ -1,5 +1,7 @@
 #include "Scene.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include "Program.hpp"
+#include "glCheckError.hpp"
 
 
 Scene::Scene(Program & program, CameraMVP cameraData, std::list<Object*> objects ) 
@@ -8,6 +10,7 @@ Scene::Scene(Program & program, CameraMVP cameraData, std::list<Object*> objects
     }
 
 void Scene::updateUniforms() {
+  ProgramBind binding(program_);
   GLint viewLoc = glGetUniformLocation(program_.get(), "view");
   GLint perspectiveLoc = glGetUniformLocation(program_.get(), "view");
 

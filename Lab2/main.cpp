@@ -1,30 +1,19 @@
-// #define DEBUG
 
 #include "CameraMVP.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
+#include "glCheckError.hpp"
 #include "objects/Cube.hpp"
-#include <complex>
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include <iterator>
 #define GLEW_STATIC
 #include "customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#ifdef DEBUG
-void printAnchor(glm::vec3 anchor, glm::mat4 model, glm::mat4 view,
-                 glm::mat4 perspective) {
-  glm::vec4 vertex(anchor, 1.0);
-
-  glm::vec4 result =  view * model * vertex;
-
-  std::cout << "{ " << result.x << ' ' << result.y << ' ' << result.z << " }"
-            << std::endl;
-}
-#endif
 
 int main() {
   if (!glfwInit())
@@ -32,8 +21,27 @@ int main() {
   glGetError();
 
   setDefaultCtxParams();
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
   GLFWwindow *win = glfwCreateWindow(800, 600, "Lab 2", NULL, NULL);
   glfwMakeContextCurrent(win);
+  GLint flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+  if (GLEW_ARB_debug_output && flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+  {
+    glEnable(GL_DEBUG_OUTPUT);
+  glCheckError();
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); 
+  glCheckError();
+    glDebugMessageCallback(glDebugOutput, nullptr);
+  glCheckError();
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+  glCheckError();
+  }
+  else
+  {
+    std::cout << "Can't load debug output extention" << std::endl;
+  }
+
+  glCheckError();
 
   glewExperimental = GL_TRUE;
   GLenum glewStatus;
@@ -43,19 +51,31 @@ int main() {
 
   Program program("./shaders/modelConstructionShader.vsh",
                   "./shaders/redColor.fsh");
-  Cube cube(1, glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0),
+  glCheckError();
+  Cube cube(4, glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0),
             program);
-  CameraMVP cameraData(glm::vec3(0, 0, 1), glm::vec3(0, 1, 0),
-                       glm::vec3(0, 0, 0), 180);
-  cameraData.lookAt({0, 0, 0});
+  cube.model_ = glm::mat4(1);
+  cube.model_ = glm::translate(cube.model_,  glm::vec3(0, 0, -10));
+  cube.model_ = glm::rotate(cube.model_, glm::radians(30.f),  glm::vec3(1, 1, -1));
+  glCheckError();
+  CameraMVP cameraData(glm::vec3(0, 10, 10), glm::vec3(0, 1, 0),
+                       glm::vec3(0, 2, 0));
+  glCheckError();
   Scene scene(program, cameraData, {&cube});
-  // glShadeModel(GL_FLAT);
+  glCheckError();
   glEnable(GL_PROGRAM_POINT_SIZE);
+  glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  glFrontFace(GL_CCW);
+  glCullFace(GL_BACK);
 
   double time = glfwGetTime(), prevTime = time;
-  cameraData.view_ = glm::translate(cameraData.view_, glm::vec3(0.0f, 0.0f, -3.0f));
-  cameraData.perspective_ = glm::perspective(45.0f, (GLfloat)800.0 / (GLfloat)600.0, 0.1f, 100.0f);
+  glCheckError();
+    glShadeModel(GL_FLAT);
+  glCheckError();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glCheckError();
   while (!glfwWindowShouldClose(win)) {
     glfwPollEvents();
 
@@ -66,39 +86,21 @@ int main() {
     glClearColor(0, 0.2, 0.2, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  glCheckError();
     prevTime = time;
     time = glfwGetTime();
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 projection;
-    model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-    projection = glm::perspective(45.0f, (GLfloat) width / (GLfloat) height, 0.1f, 100.0f);
+    glCheckError();
 
-    cube.model_ = model;
-    cameraData.view_ = view;
-    cameraData.perspective_ = projection;
-    
+  glCheckError();
     scene.updateUniforms();
+  glCheckError();
     scene.update(time, time - prevTime);
-
-#ifdef DEBUG
-    auto vertexData = cube.get();
-    auto &model = cube.getModel();
-
-    for (size_t i = 0; i < 8; ++i) {
-      glm::vec3 anchor(vertexData[3 * i], vertexData[3 * i + 1],
-                       vertexData[3 * i + 2]);
-
-      std::cout << i << ") ";
-      printAnchor(anchor, model, cameraData.view(), cameraData.perspective());
-    }
-    std::cout << "-----------------" << std::endl;
-#endif
+  glCheckError();
 
     glfwSwapBuffers(win);
     glViewport(0, 0, width, height);
   }
+  glCheckError();
 
   glfwDestroyWindow(win);
   glfwTerminate();

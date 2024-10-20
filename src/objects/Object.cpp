@@ -12,7 +12,8 @@ Object::Object(glm::vec3 position, glm::vec3 forward, glm::vec3 up, Program & pr
   : position_(position)
     , forward_(glm::normalize(forward))
     , up_(glm::normalize(up))
-    , program_(program) {
+    , program_(program)
+    , model_(1) {
   ProgramBind progBinding(program_);
   VAOBind vaoBingind(vao_);
   
