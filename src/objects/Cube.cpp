@@ -6,8 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
 
-Cube::Cube(GLfloat sideSize, glm::vec3 position, glm::vec3 forward, glm::vec3 up, Program & program)
-    : Object(position, forward, up, program) {
+Cube::Cube(GLfloat sideSize, glm::vec3 position, Program & program)
+    : Object(position, program) {
   VAOBind vaoBinding(vao_);
 
   GLfloat size2 = sideSize / 2;
@@ -17,14 +17,6 @@ Cube::Cube(GLfloat sideSize, glm::vec3 position, glm::vec3 forward, glm::vec3 up
 
       -size2, -size2, size2, size2, -size2,  size2,
       size2,  size2, size2, -size2,  size2,  size2};
-#ifdef DEBUG
-  verticies = {
-    -1, -1, -1, 1, -1, -1,
-    1, 1, -1, -1, 1, -1,
-    -1, -1, 1, 1, -1, 1,
-    1, 1, 1, -1, 1, 1,
-  }
-#endif
 
   VertexBuffer vbo(GL_ARRAY_BUFFER, verticies.size() * sizeof(GLfloat),
                    verticies.data());

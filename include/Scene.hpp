@@ -6,12 +6,11 @@
 #include "objects/Object.hpp"
 #include <list>
 
-struct Scene {
+class Scene {
   std::list<Object*> objects_;
   CameraMVP cameraData_;
   Program & program_;
 
-  void updateUniforms();
 public:
   Scene(Program & program, CameraMVP cameraData, std::list<Object*> objects = {});
 

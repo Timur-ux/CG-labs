@@ -1,6 +1,7 @@
 #include "objects/Object.hpp"
 #include "Program.hpp"
 #include "VertexArray.hpp"
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -8,16 +9,14 @@
 #include "geometry.hpp"
 
 
-Object::Object(glm::vec3 position, glm::vec3 forward, glm::vec3 up, Program & program) 
+Object::Object(glm::vec3 position, Program & program) 
   : position_(position)
-    , forward_(glm::normalize(forward))
-    , up_(glm::normalize(up))
     , program_(program)
     , model_(1) {
   ProgramBind progBinding(program_);
   VAOBind vaoBingind(vao_);
   
-  model_ = geometry::constructTransform(position_, forward_, up_);
+  model_ = glm::translate(model_, position_);
 }
 
 void Object::draw() {

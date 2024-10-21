@@ -6,18 +6,14 @@
 #include "VertexBuffer.hpp"
 #include <GL/gl.h>
 
-struct Cube : public Object {
+class Cube : public Object {
   VertexBuffer verticies_;
 
   std::vector<GLfloat> verticiesData_;
   public:
-    Cube(GLfloat sideSize, glm::vec3 position, glm::vec3 forward, glm::vec3 up, Program & program);
+    Cube(GLfloat sideSize, glm::vec3 position, Program & program);
 
     void draw() override;
-
- #ifdef DEBUG
-    std::vector<GLfloat> & get() {return verticiesData_;}
- #endif
 };
 
 
