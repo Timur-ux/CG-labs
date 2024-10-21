@@ -1,4 +1,5 @@
 #include "VertexBuffer.hpp"
+#include "glCheckError.hpp"
 #include <iostream>
 
 VertexBuffer::VertexBuffer(GLenum target, GLsizeiptr size, void *data,
@@ -43,6 +44,8 @@ VertexBuffer::VertexBuffer(VertexBuffer &&other) noexcept {
 }
 
 VertexBuffer &VertexBuffer::operator=(VertexBuffer &&other) noexcept {
+  if(this == &other)
+    return *this;
   vbo_ = other.vbo_;
   other.vbo_ = 0;
 
@@ -57,10 +60,13 @@ void VertexBuffer::setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
                                 const void *offset, GLenum type,
                                 GLboolean normalized) {
   if (!isOK_) return;
-  VBOBind _(*this);
+  glCheckError();
 
   glVertexAttribPointer(idx, componentsN, type, normalized, stride, offset);
+  std::cout << idx << ' ' << componentsN << ' ' << stride << ' ' << offset << std::endl;
+  glCheckError();
   glEnableVertexAttribArray(idx);
+  glCheckError();
 }
 
 void VertexBuffer::setData(GLsizei size, const void *data, GLenum usage) {

@@ -21,6 +21,11 @@
 },
 {
   "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
+  "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/Texture.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/Texture.cpp",
+  "file": "/mnt/c/Users/User/Projects/CG-labs/src/Texture.cpp"
+},
+{
+  "directory": "/mnt/c/Users/User/Projects/CG-labs/build",
   "command": "/usr/bin/c++  -I/mnt/c/Users/User/Projects/CG-labs/include -g -std=gnu++20 -o CMakeFiles/src_lib.dir/src/VertexArray.cpp.o -c /mnt/c/Users/User/Projects/CG-labs/src/VertexArray.cpp",
   "file": "/mnt/c/Users/User/Projects/CG-labs/src/VertexArray.cpp"
 },

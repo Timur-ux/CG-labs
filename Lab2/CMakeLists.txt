@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 add_executable(Lab2_main main.cpp)
 
 target_link_libraries(Lab2_main
+  SOIL
+  GLX
   glfw
   GLEW
   OpenGL

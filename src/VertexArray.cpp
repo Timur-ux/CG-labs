@@ -10,6 +10,8 @@ VertexArray::VertexArray(VertexArray && other) {
 }
 
 VertexArray & VertexArray::operator=(VertexArray && other) {
+  if(this == &other)
+    return *this;
   vao_ = other.vao_;
   other.vao_ = 0;
 

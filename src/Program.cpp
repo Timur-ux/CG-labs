@@ -45,6 +45,8 @@ Program::Program(Program &&other) {
 
 
 Program & Program::operator=(Program && other) {
+  if(this == &other)
+    return *this;
   program_ = other.program_;
   other.program_ = 0;
 

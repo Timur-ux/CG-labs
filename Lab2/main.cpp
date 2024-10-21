@@ -1,6 +1,7 @@
 #include "CameraMVP.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
+#include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
 #include "objects/Cube.hpp"
@@ -16,6 +17,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#define max(a, b) (a > b ? a : b)
+
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 Event<int, int, int> keyPressEvent;
@@ -23,18 +26,15 @@ Event<int, int, int> keyPressEvent;
 class MoveEventHandler : public IEventHandler<int, int, int> {
   CameraMVP &cameraData_;
   GLfloat moveSpeed_;
+  GLfloat acceleration_;
   bool pressed[1024]{false};
 public:
-  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f)
+  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.05f)
       : cameraData_(cameraData)
-      , moveSpeed_(moveSpeed){}
+      , moveSpeed_(moveSpeed)
+      , acceleration_(acceleration){}
 
-  void call(int key, int action, int mods) override {
-    if(action == GLFW_RELEASE) 
-      pressed[key] = false;
-    if(action == GLFW_PRESS)
-      pressed[key] = true;
-
+  void move() {
     if(pressed[GLFW_KEY_W]) 
       cameraData_.shiftBy(-cameraData_.forward()*moveSpeed_);
     if(pressed[GLFW_KEY_S])
@@ -47,6 +47,18 @@ public:
       cameraData_.shiftBy(cameraData_.up()*moveSpeed_);
     if(pressed[GLFW_KEY_J])
       cameraData_.shiftBy(-cameraData_.up()*moveSpeed_);
+
+    if(pressed[GLFW_KEY_KP_ADD])
+      moveSpeed_ += acceleration_;
+    if(pressed[GLFW_KEY_KP_SUBTRACT])
+      moveSpeed_ = max(moveSpeed_ - acceleration_, 0);
+  }
+
+  void call(int key, int action, int mods) override {
+    if(action == GLFW_RELEASE) 
+      pressed[key] = false;
+    if(action == GLFW_PRESS)
+      pressed[key] = true;
   }
 };
 
@@ -72,24 +84,22 @@ int main() {
               << glewStatus << std::endl;
 
   Program program("./shaders/MVPShader.vsh",
-                  "./shaders/redColor.fsh");
+                  "./shaders/texture2d.fsh");
   glCheckError();
-  Cube cube(4, glm::vec3(0, 0, 0), program);
+  Texture2D texture("./textures/container.jpg");
+  glCheckError();
+  Cube cube(4, glm::vec3(0, 0, 0), program, texture);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
 
-  MoveEventHandler moveHandler(cameraData, 2);
+  MoveEventHandler moveHandler(cameraData);
   keyPressEvent += moveHandler;
 
   glCheckError();
   Scene scene(program, cameraData, {&cube});
   glCheckError();
   glEnable(GL_DEPTH_TEST);
-  // glEnable(GL_CULL_FACE);
-  // glDepthFunc(GL_LESS);
-  glFrontFace(GL_CCW);
-  // glCullFace(GL_BACK);
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -111,6 +121,8 @@ int main() {
     glCheckError();
     scene.update(time, time - prevTime);
     glCheckError();
+
+    moveHandler.move();
 
     glfwSwapBuffers(win);
     glViewport(0, 0, width, height);
