@@ -44,7 +44,7 @@ void CameraMVP::moveTo(glm::vec3 position) {
 void CameraMVP::shiftBy(glm::vec3 shift) {
   glCheckError();
   position_ += shift;
-  forward_ = glm::normalize(position_ - target_);
+  target_ += shift;
   view_ = glm::lookAt(position_, target_, up_);
   {
     ProgramBind binding(program_);
@@ -58,6 +58,17 @@ void CameraMVP::lookAt(glm::vec3 target) {
   glCheckError();
   target_ = target;
   forward_ = glm::normalize(position_ - target_);
+  view_ = glm::lookAt(position_, target_, up_);
+  {
+    ProgramBind binding(program_);
+    glUniformMatrix4fv(viewLoc_, 1, GL_FALSE, glm::value_ptr(view_));
+  }
+  glCheckError();
+}
+void CameraMVP::lookInto(glm::vec3 direction) {
+  glCheckError();
+  forward_ = glm::normalize(direction);
+  target_ = position_ + forward_;
   view_ = glm::lookAt(position_, target_, up_);
   {
     ProgramBind binding(program_);

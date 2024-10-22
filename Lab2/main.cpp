@@ -21,7 +21,9 @@
 
 
 void keyCallback(GLFWwindow *, int, int, int, int);
+void mouseMoveCallback(GLFWwindow *, double, double);
 Event<int, int, int> keyPressEvent;
+Event<double, double> mouseMoveEvent;
 
 class MoveEventHandler : public IEventHandler<int, int, int> {
   CameraMVP &cameraData_;
@@ -29,7 +31,7 @@ class MoveEventHandler : public IEventHandler<int, int, int> {
   GLfloat acceleration_;
   bool pressed[1024]{false};
 public:
-  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.05f)
+  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f)
       : cameraData_(cameraData)
       , moveSpeed_(moveSpeed)
       , acceleration_(acceleration){}
@@ -55,10 +57,60 @@ public:
   }
 
   void call(int key, int action, int mods) override {
+    if(key < 0 || key > 1023)
+      return;
     if(action == GLFW_RELEASE) 
       pressed[key] = false;
     if(action == GLFW_PRESS)
       pressed[key] = true;
+  }
+};
+
+class LookupEventHandler : public IEventHandler<double, double> {
+  CameraMVP & cameraData_;
+  double x_, y_;
+  double yaw_ = -90, pitch_ = 0;
+  double sensetivity_ = 0.05;
+  bool first = false;
+  GLFWwindow * win_;
+
+  public:
+  LookupEventHandler(CameraMVP& cameraData, GLFWwindow * win) : cameraData_(cameraData), win_(win) {
+    glfwGetCursorPos(win, &x_, &y_);
+  }
+
+  void call(double newX, double newY) override {
+    std::cout << newX << ' ' << newY << ' ' << std::endl;
+    if(!first) {
+      x_ = newX;
+      y_ = newY;
+      first = true;
+      return;
+    }
+
+    double dx = newX - x_, dy = y_ - newY;
+    x_ = newX, y_ = newY;
+
+    dx *= sensetivity_;
+    dy *= sensetivity_;
+
+    yaw_ += dx;
+    pitch_ += dy;
+    if(pitch_ >= 89.0) pitch_ = 89.0;
+    else if (pitch_ <= -89.0) pitch_ = -89.0;
+
+    double yawRad = glm::radians(yaw_);
+    double pitchRad = glm::radians(pitch_);
+    
+    glm::vec3 newForward;
+    newForward.x = glm::cos(pitchRad) * glm::cos(yawRad);
+    newForward.y = glm::sin(pitchRad);
+    newForward.z = glm::cos(pitchRad) * glm::sin(yawRad);
+    
+    cameraData_.lookInto(newForward);
+    glCheckError();
+
+    glfwSetCursorPos(win_, 0, 0);
   }
 };
 
@@ -73,7 +125,9 @@ int main() {
   GLFWwindow *win = glfwCreateWindow(1200, 800, "Lab 2", NULL, NULL);
 
   glfwMakeContextCurrent(win);
+
   glfwSetKeyCallback(win, keyCallback);
+  glfwSetCursorPosCallback(win, mouseMoveCallback);
 
   glCheckError();
 
@@ -86,9 +140,11 @@ int main() {
   Program program("./shaders/MVPShader.vsh",
                   "./shaders/texture2d.fsh");
   glCheckError();
-  Texture2D texture("./textures/container.jpg");
+  Texture2D containerTex("./textures/container.jpg");
+  Texture2D sunTex("./textures/sun3.png");
   glCheckError();
-  Cube cube(4, glm::vec3(0, 0, 0), program, texture);
+  Cube cube(4, glm::vec3(0, 0, 0), program, containerTex);
+  Cube sun(4, glm::vec3(30, 10, -20), program, sunTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
@@ -96,8 +152,13 @@ int main() {
   MoveEventHandler moveHandler(cameraData);
   keyPressEvent += moveHandler;
 
+  LookupEventHandler lookupHandler(cameraData, win);
+  mouseMoveEvent += lookupHandler;
+
   glCheckError();
-  Scene scene(program, cameraData, {&cube});
+  Scene scene(program, cameraData, {&cube, &sun});
+  glCheckError();
+  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glCheckError();
   glEnable(GL_DEPTH_TEST);
   glCheckError();
@@ -140,3 +201,6 @@ void keyCallback(GLFWwindow *win, int key, int scancode, int action, int mods) {
   keyPressEvent.invoke(key, action, mods);
 }
 
+void mouseMoveCallback(GLFWwindow * win, double x, double y) {
+  mouseMoveEvent.invoke(x, y);
+}

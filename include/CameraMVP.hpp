@@ -36,6 +36,7 @@ public:
   void moveTo(glm::vec3 position);
   void shiftBy(glm::vec3 shift);
   void lookAt(glm::vec3 target);
+  void lookInto(glm::vec3 direction);
 
   void changeFov(GLfloat newFov);
   void changeRatio(GLfloat newRatio);

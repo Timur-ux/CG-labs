@@ -16,6 +16,7 @@ VertexBuffer::VertexBuffer(GLenum target, GLsizeiptr size, void *data,
     std::cerr << "Error while creating Vertex Buffer: " << errorCode
               << std::endl;
   isOK_ = true;
+  glBindBuffer(target, 0);
 }
 
 void VertexBuffer::create(GLenum target, GLsizeiptr size, void *data, GLenum usage) {
@@ -70,14 +71,14 @@ void VertexBuffer::setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
 }
 
 void VertexBuffer::setData(GLsizei size, const void *data, GLenum usage) {
-  VBOBind _(*this);
+  bind();
 
   if(isOK_)
     glBufferData(target_, size, data, usage);
 }
 
 void VertexBuffer::resetData() {
-  VBOBind _(*this);
+  bind();
 
   if(isOK_)
     glBufferData(target_, 1, nullptr, GL_DYNAMIC_DRAW);
@@ -85,7 +86,7 @@ void VertexBuffer::resetData() {
 
 
 void VertexBuffer::setSubData(GLintptr offset, GLsizeiptr size, const void * data) {
-  VBOBind _(*this);
+  bind();
 
   if(isOK_)
     glBufferSubData(target_, offset, size, data);
@@ -93,7 +94,7 @@ void VertexBuffer::setSubData(GLintptr offset, GLsizeiptr size, const void * dat
 
 
 void VertexBuffer::getSubData(GLintptr offset, GLsizeiptr size, void * ptr) {
-  VBOBind _(*this);
+  bind();
 
   if(isOK_)
     glGetBufferSubData(target_, offset, size, ptr);
