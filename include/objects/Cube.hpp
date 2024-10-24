@@ -5,7 +5,6 @@
 #include "Object.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
-#include <GL/gl.h>
 
 class Cube : public Object {
   VertexBuffer dataVBO_;

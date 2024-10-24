@@ -2,7 +2,9 @@
 #define OBJECT_HPP_
 
 #include "Program.hpp"
+#include "Texture.hpp"
 #include "VertexArray.hpp"
+#include "VertexBuffer.hpp"
 #include <glm/fwd.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -10,28 +12,31 @@
 class Object {
 protected:
   glm::vec3 position_;
-  glm::vec3 forward_;
-  glm::vec3 up_;
-
   glm::mat4 model_;
 
   Program & program_;
   VertexArray vao_;
+  VertexBuffer vboData_;
+  VertexBuffer vboIndicies_;
+
+  Texture2D & texture_;
+
+  std::vector<glm::vec3> verticiesCoords_;
+  std::vector<glm::vec2> textureCoords_;
+  std::vector<glm::vec3> normals_;
+  std::vector<GLbyte> indexes_;
+
+  GLenum drawMode_;
 
 public:
-  Object(glm::vec3 position, Program & program);
+  Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLbyte> indexes, GLenum drawMode, Texture2D &texture);
   const glm::vec3 & position() {return position_;}
 
   /**
-   * @brief Just set model matrix as uniform variable
-   * Childs must call verticies draw functions theyself
+   * @brief Just set:
+   *  model matrix as uniform variable
    */
   virtual void draw();
-
- #ifdef DEBUG
-  glm::mat4 & getModel() {return model_;};
- #endif
-
 };
 
 

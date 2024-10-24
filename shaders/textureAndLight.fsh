@@ -1,6 +1,6 @@
 #version 330 core
 
-uniform sampler2D textureData;
+uniform sampler2D texture0;
 
 in vec2 texCoord;
 in vec3 n;
@@ -16,5 +16,5 @@ void main() {
   float ka = 0.2;
   float kd = 0.8;
 
-  color = mix(texture(textureData, texCoord), (ka + kd*diff) * clr);
+  color = mix(texture(texture0, texCoord), (ka + kd*diff) * clr);
 }
