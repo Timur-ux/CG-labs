@@ -12,8 +12,6 @@ class Cube : public Object {
 
   public:
     Cube(GLfloat sideSize, glm::vec3 position, Program & program, Texture2D & texture);
-
-    void draw() override;
 };
 
 

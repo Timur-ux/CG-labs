@@ -24,17 +24,18 @@ protected:
   std::vector<glm::vec3> verticiesCoords_;
   std::vector<glm::vec2> textureCoords_;
   std::vector<glm::vec3> normals_;
-  std::vector<GLbyte> indexes_;
+  std::vector<GLubyte> indexes_;
 
   GLenum drawMode_;
 
 public:
-  Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLbyte> indexes, GLenum drawMode, Texture2D &texture);
+  Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture);
   const glm::vec3 & position() {return position_;}
 
   /**
    * @brief Just set:
    *  model matrix as uniform variable
+   *  and do basic draw functional
    */
   virtual void draw();
 };

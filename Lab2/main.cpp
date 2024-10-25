@@ -80,7 +80,7 @@ class LookupEventHandler : public IEventHandler<double, double> {
   }
 
   void call(double newX, double newY) override {
-    std::cout << newX << ' ' << newY << ' ' << std::endl;
+    // std::cout << newX << ' ' << newY << ' ' << std::endl;
     if(!first) {
       x_ = newX;
       y_ = newY;
@@ -143,8 +143,8 @@ int main() {
   Texture2D containerTex("./textures/container.jpg");
   Texture2D sunTex("./textures/sun3.png");
   glCheckError();
-  Cube cube(4, glm::vec3(0, 0, 0), program, containerTex);
-  Cube sun(4, glm::vec3(30, 10, -20), program, sunTex);
+  Cube cube(1, glm::vec3(0, 0, 0), program, containerTex);
+  Cube sun(1, glm::vec3(30, 10, -20), program, sunTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
@@ -158,9 +158,12 @@ int main() {
   glCheckError();
   Scene scene(program, cameraData, {&cube, &sun});
   glCheckError();
-  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
   glCheckError();
   glEnable(GL_DEPTH_TEST);
+  glCheckError();
+  glEnable(GL_PRIMITIVE_RESTART);
+  glPrimitiveRestartIndex(255);
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

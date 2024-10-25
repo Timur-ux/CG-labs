@@ -20,6 +20,7 @@ VertexBuffer::VertexBuffer(GLenum target, GLsizeiptr size, void *data,
 }
 
 void VertexBuffer::create(GLenum target, GLsizeiptr size, void *data, GLenum usage) {
+  target_ = target;
   glGetError();
 
   glGenBuffers(1, &vbo_);
