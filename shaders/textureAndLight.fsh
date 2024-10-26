@@ -16,5 +16,5 @@ void main() {
   float ka = 0.2;
   float kd = 0.8;
 
-  color = mix(texture(texture0, texCoord), (ka + kd*diff) * clr);
+  color =texture(texture0, texCoord) + (ka + kd*diff) * clr;
 }

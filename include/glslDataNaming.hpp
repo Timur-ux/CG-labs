@@ -9,7 +9,7 @@ namespace uniforms {
   inline const char * viewMatrix = "view";
   inline const char * perspectiveMatrix = "perspective";
 
-  inline const char * directionNormalizeMatrix = "modelNorm";
+  inline const char * directionNormalizeMatrix = "normalMatrix";
   inline const char * lightPosition = "lightPos";
 }; // !uniforms
 

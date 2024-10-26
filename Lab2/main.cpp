@@ -1,4 +1,6 @@
+#define DEBUG
 #include "CameraMVP.hpp"
+#include "Light/Lambert.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
@@ -16,8 +18,8 @@
 #include "customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-#define max(a, b) (a > b ? a : b)
+#include "EventHandlers/moveHandler.hpp"
+#include "EventHandlers/LookupHandler.hpp"
 
 
 void keyCallback(GLFWwindow *, int, int, int, int);
@@ -25,94 +27,7 @@ void mouseMoveCallback(GLFWwindow *, double, double);
 Event<int, int, int> keyPressEvent;
 Event<double, double> mouseMoveEvent;
 
-class MoveEventHandler : public IEventHandler<int, int, int> {
-  CameraMVP &cameraData_;
-  GLfloat moveSpeed_;
-  GLfloat acceleration_;
-  bool pressed[1024]{false};
-public:
-  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f)
-      : cameraData_(cameraData)
-      , moveSpeed_(moveSpeed)
-      , acceleration_(acceleration){}
 
-  void move() {
-    if(pressed[GLFW_KEY_W]) 
-      cameraData_.shiftBy(-cameraData_.forward()*moveSpeed_);
-    if(pressed[GLFW_KEY_S])
-      cameraData_.shiftBy(cameraData_.forward()*moveSpeed_);
-    if(pressed[GLFW_KEY_A])
-      cameraData_.shiftBy(-glm::normalize(glm::cross(cameraData_.up(), cameraData_.forward()))*moveSpeed_);
-    if(pressed[GLFW_KEY_D])
-      cameraData_.shiftBy(glm::normalize(glm::cross(cameraData_.up(), cameraData_.forward()))*moveSpeed_);
-    if(pressed[GLFW_KEY_K])
-      cameraData_.shiftBy(cameraData_.up()*moveSpeed_);
-    if(pressed[GLFW_KEY_J])
-      cameraData_.shiftBy(-cameraData_.up()*moveSpeed_);
-
-    if(pressed[GLFW_KEY_KP_ADD])
-      moveSpeed_ += acceleration_;
-    if(pressed[GLFW_KEY_KP_SUBTRACT])
-      moveSpeed_ = max(moveSpeed_ - acceleration_, 0);
-  }
-
-  void call(int key, int action, int mods) override {
-    if(key < 0 || key > 1023)
-      return;
-    if(action == GLFW_RELEASE) 
-      pressed[key] = false;
-    if(action == GLFW_PRESS)
-      pressed[key] = true;
-  }
-};
-
-class LookupEventHandler : public IEventHandler<double, double> {
-  CameraMVP & cameraData_;
-  double x_, y_;
-  double yaw_ = -90, pitch_ = 0;
-  double sensetivity_ = 0.05;
-  bool first = false;
-  GLFWwindow * win_;
-
-  public:
-  LookupEventHandler(CameraMVP& cameraData, GLFWwindow * win) : cameraData_(cameraData), win_(win) {
-    glfwGetCursorPos(win, &x_, &y_);
-  }
-
-  void call(double newX, double newY) override {
-    // std::cout << newX << ' ' << newY << ' ' << std::endl;
-    if(!first) {
-      x_ = newX;
-      y_ = newY;
-      first = true;
-      return;
-    }
-
-    double dx = newX - x_, dy = y_ - newY;
-    x_ = newX, y_ = newY;
-
-    dx *= sensetivity_;
-    dy *= sensetivity_;
-
-    yaw_ += dx;
-    pitch_ += dy;
-    if(pitch_ >= 89.0) pitch_ = 89.0;
-    else if (pitch_ <= -89.0) pitch_ = -89.0;
-
-    double yawRad = glm::radians(yaw_);
-    double pitchRad = glm::radians(pitch_);
-    
-    glm::vec3 newForward;
-    newForward.x = glm::cos(pitchRad) * glm::cos(yawRad);
-    newForward.y = glm::sin(pitchRad);
-    newForward.z = glm::cos(pitchRad) * glm::sin(yawRad);
-    
-    cameraData_.lookInto(newForward);
-    glCheckError();
-
-    glfwSetCursorPos(win_, 0, 0);
-  }
-};
 
 int main() {
   if (!glfwInit())
@@ -138,7 +53,7 @@ int main() {
               << glewStatus << std::endl;
 
   Program program("./shaders/MVPShader.vsh",
-                  "./shaders/texture2d.fsh");
+                  "./shaders/textureAndLight.fsh");
   glCheckError();
   Texture2D containerTex("./textures/container.jpg");
   Texture2D sunTex("./textures/sun3.png");
@@ -155,10 +70,12 @@ int main() {
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
+  LambertLight light(sun.position(), cameraData, program);
+
   glCheckError();
-  Scene scene(program, cameraData, {&cube, &sun});
+  Scene scene(program, cameraData, light, {&cube, &sun});
   glCheckError();
-  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glCheckError();
   glEnable(GL_DEPTH_TEST);
   glCheckError();
@@ -166,7 +83,6 @@ int main() {
   glPrimitiveRestartIndex(255);
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glCheckError();
 
   while (!glfwWindowShouldClose(win)) {
