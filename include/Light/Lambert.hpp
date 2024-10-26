@@ -7,8 +7,10 @@
 
 class LambertLight : public ILight {
   CameraMVP & cameraData_;
+  Program & program_;
+  glm::vec3 position_;
 public:
-  LambertLight(CameraMVP & cameraData) : cameraData_(cameraData) {};
+  LambertLight(glm::vec3 position, CameraMVP & cameraData, Program & program) : position_(position),  cameraData_(cameraData), program_(program) {};
 
   void setupLightFor(Object & object) override;
 };

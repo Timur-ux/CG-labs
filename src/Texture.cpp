@@ -2,6 +2,7 @@
 #include "glCheckError.hpp"
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
+#include <iostream>
 
 
 Texture2D::Texture2D(std::string textureFileName) {

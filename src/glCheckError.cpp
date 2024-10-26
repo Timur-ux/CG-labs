@@ -1,4 +1,5 @@
 #include "glCheckError.hpp"
+#include <iostream>
 GLenum glCheckError_(const char *file, int line)
 {
     GLenum errorCode;

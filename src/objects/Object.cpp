@@ -8,6 +8,7 @@
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,

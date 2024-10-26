@@ -31,6 +31,7 @@ protected:
 public:
   Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture);
   const glm::vec3 & position() {return position_;}
+  const glm::mat4 & model() {return model_;}
 
   /**
    * @brief Just set:
