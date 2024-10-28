@@ -11,6 +11,7 @@ struct CameraMVP {
   glm::vec3 up_;
   glm::vec3 target_;
   glm::vec3 forward_;
+
   glm::mat4 view_;
   glm::mat4 perspective_;
 
@@ -22,6 +23,9 @@ struct CameraMVP {
 
   GLint viewLoc_;
   GLint perspectiveLoc_;
+
+  GLboolean viewChanged_ = false;
+  GLboolean perspectiveChanged_ = false;
 
 public:
   CameraMVP(Program & program, glm::vec3 position, glm::vec3 up, glm::vec3 target,
@@ -40,6 +44,8 @@ public:
 
   void changeFov(GLfloat newFov);
   void changeRatio(GLfloat newRatio);
+
+  void updateState();
 };
 
 #endif // !CAMERA_MVP_HPP_

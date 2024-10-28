@@ -1,4 +1,4 @@
-#include "objects/Cube.hpp"
+#include "objects/Rectangle.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -53,10 +53,10 @@ static const std::vector<GLubyte> indexes{
     20, 21, 22, 23       // down
 };
 
-Cube::Cube(GLfloat sideSize, glm::vec3 position, Program &program,
+Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
            Texture2D &texture)
     : Object(position, program, vertexCoords, textureCoords, normals, indexes,
              GL_TRIANGLE_FAN, texture),
       texture_(texture) {
-  model_ = glm::scale(model_, glm::vec3(sideSize));
+  model_ = glm::scale(model_, sideSize);
 }

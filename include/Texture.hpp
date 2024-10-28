@@ -1,21 +1,46 @@
 #ifndef TEXTURE_HPP_
 #define TEXTURE_HPP_
 
+#include <SOIL/SOIL.h>
 #include <string>
 #define GLEW_STATIC
 #include <GL/glew.h>
 
 
+class Texture {
+protected:
+  GLuint texture_ = 0;
+  GLint textureBlock_ = -1;
+  Texture() = default;
+public:
+  Texture(Texture & other) = delete;
+  Texture & operator=(Texture & other) = delete;
+
+  Texture(Texture && other);
+  Texture & operator=(Texture && other);
+
+  GLint block() {return textureBlock_;}
+  bool setTextureBlock(GLint newBlock);
+
+  static int maximumTextureBlocks();
+  void bind();
+  void unbind();
+
+  virtual ~Texture();
+
+};
+
 /*
  * Creates 2d texture with rgba image
  * */
-class Texture2D {
-  GLuint texture_;
+class Texture2D : public Texture{
   int width_;
   int height_;
 
   public:
-  Texture2D(std::string textureFileName);
+
+  Texture2D(std::string textureFileName, int block = 0, GLenum imageType = GL_RGB, int soilLoadType = SOIL_LOAD_RGB);
+  Texture2D(unsigned char * data, int block = 0);
   
   Texture2D(Texture2D & other) = delete;
   Texture2D & operator=(Texture2D & other) = delete;
@@ -24,9 +49,6 @@ class Texture2D {
   Texture2D & operator=(Texture2D && other);
 
   ~Texture2D();
-
-  void bind();
-  void unbind();
 
   int width() {return width_;}
   int height() {return height_;}

@@ -1,6 +1,7 @@
 #include "objects/Object.hpp"
 #include "Program.hpp"
 #include "VertexArray.hpp"
+#include "VertexBuffer.hpp"
 #include "glCheckError.hpp"
 #include "glslDataNaming.hpp"
 #include <GL/gl.h>
@@ -15,21 +16,19 @@ Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec2> textureCoords,
                std::vector<glm::vec3> normals, std::vector<GLubyte> indexes,
                GLenum drawMode, Texture2D &texture)
-    : position_(position), program_(program), model_(1),
-      verticiesCoords_(verticiesCoords), textureCoords_(textureCoords),
-      normals_(normals), indexes_(indexes), drawMode_(drawMode),
-      texture_(texture) {
-  ProgramBind progBinding(program_);
+    : position_(position), program_(&program), model_(1), drawMode_(drawMode),
+      textures_({&texture}) {
+  ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
   glCheckError();
   model_ = glm::translate(model_, position_);
-  size_t bufferSize = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
+  bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                       textureCoords.size() * sizeof(textureCoords[0]) +
                       normals.size() * sizeof(normals[0]);
-  char *buffer = new char[bufferSize]{0};
+  char *buffer = new char[bufferSize_]{0};
 
-  vboData_.create(GL_ARRAY_BUFFER, bufferSize, buffer);
+  vboData_.create(GL_ARRAY_BUFFER, bufferSize_, buffer);
   delete[] buffer;
   glCheckError();
 
@@ -38,7 +37,7 @@ Object::Object(glm::vec3 position, Program &program,
 
   vboData_.setSubData(0, verticiesCoords.size() * sizeof(verticiesCoords[0]),
                       verticiesCoords.data());
-  GLint loc = glGetAttribLocation(program_.get(), attributes::vertexPosition);
+  GLint loc = program_->getAttribLoc(attributes::vertexPosition);
   if(loc != -1) 
     vboData_.setAttribPtr(loc, 3, sizeof(GLfloat) * 3, 0);
   else
@@ -48,7 +47,7 @@ Object::Object(glm::vec3 position, Program &program,
   vboData_.setSubData(verticiesCoords.size() * sizeof(verticiesCoords[0]),
                       textureCoords.size() * sizeof(textureCoords[0]),
                       textureCoords.data());
-  loc = glGetAttribLocation(program_.get(), attributes::texturePosition);
+  loc = program_->getAttribLoc(attributes::texturePosition);
   if(loc != -1)
     vboData_.setAttribPtr(
         loc, 2, sizeof(GLfloat) * 2,
@@ -60,7 +59,7 @@ Object::Object(glm::vec3 position, Program &program,
   vboData_.setSubData(verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                           textureCoords.size() * sizeof(textureCoords[0]),
                       normals.size() * sizeof(normals[0]), normals.data());
-  loc = glGetAttribLocation(program_.get(), attributes::normalToBorder);
+  loc = program_->getAttribLoc(attributes::normalToBorder);
   if(loc != -1)
     vboData_.setAttribPtr(
         loc, 3, sizeof(GLfloat) * 3,
@@ -77,25 +76,91 @@ Object::Object(glm::vec3 position, Program &program,
 }
 
 void Object::draw() {
-  texture_.bind();
-  program_.bind();
+  for(auto& tex : textures_)
+    tex->bind();
+  program_->bind();
   vao_.bind();
   vboIndicies_.bind();
 
-  glCheckError();
-  GLint modelLoc = glGetUniformLocation(program_.get(), uniforms::modelMatrix);
-  if(modelLoc != -1)
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model_));
-  else
+  if(!program_->setUniformMat4(uniforms::modelMatrix, model_))
     std::cerr << "Can't find location of " << uniforms::modelMatrix << " uniform" << std::endl;
   glCheckError();
 
-  glDrawElements(drawMode_, indexes_.size(), GL_UNSIGNED_BYTE, 0);
+  glDrawElements(drawMode_, indexes_, GL_UNSIGNED_BYTE, 0);
   glCheckError();
 
   vboIndicies_.unbind();
   vao_.unbind();
-  program_.unbind();
-  texture_.unbind();
+  program_->unbind();
+  for(auto& tex : textures_)
+    tex->unbind();
   glCheckError();
+}
+
+bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
+  VBOBind _(vboData_);
+
+  char * buffer;
+  size_t bufferSize = bufferSize_ - vertexSize_ + vertexesCoords.size() * sizeof(glm::vec3);
+
+  buffer = new char[bufferSize];
+  vboData_.getSubData(vertexSize_, bufferSize_ - vertexSize_, buffer + vertexesCoords.size() * sizeof(glm::vec3));
+
+  memcpy(buffer, vertexesCoords.data(), vertexesCoords.size() * sizeof(glm::vec3));
+
+  vboData_.setData(bufferSize, buffer);
+  bufferSize_ = bufferSize;
+  vertexSize_ = vertexesCoords.size() * sizeof(glm::vec3);
+  delete[] buffer;
+
+  vboData_.setAttribPtr(program_->getAttribLoc(attributes::vertexPosition), 3, sizeof(glm::vec3), 0);
+  return true;
+}
+
+bool Object::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
+  VBOBind _(vboData_);
+
+  char * buffer;
+  size_t bufferSize = bufferSize_ - textureSize_ + textureCoords.size() * sizeof(glm::vec2);
+
+  buffer = new char[bufferSize];
+  vboData_.getSubData(0, vertexSize_, buffer);
+  vboData_.getSubData(vertexSize_ + textureSize_, normalsSize_, buffer + (vertexSize_ + textureCoords.size() * sizeof(glm::vec2)));
+
+  memcpy(buffer + vertexSize_, textureCoords.data(), textureCoords.size() * sizeof(glm::vec2));
+
+  vboData_.setData(bufferSize, buffer);
+  bufferSize_ = bufferSize;
+  textureSize_ = textureCoords.size() * sizeof(glm::vec2);
+
+  delete[] buffer;
+
+  vboData_.setAttribPtr(program_->getAttribLoc(attributes::texturePosition), 2, sizeof(glm::vec2), (const void*)vertexSize_);
+  return true;
+}
+
+bool Object::setNormals(const std::vector<glm::vec3> &normals) {
+  VBOBind _(vboData_);
+
+  char * buffer;
+  size_t bufferSize = bufferSize_ - normalsSize_ + normals.size() * sizeof(glm::vec3);
+  buffer = new char[bufferSize];
+  vboData_.getSubData(0, vertexSize_ + textureSize_, buffer);
+  memcpy(buffer + vertexSize_ + textureSize_, normals.data(), normals.size() * sizeof(glm::vec3));
+
+  vboData_.setData(bufferSize, buffer);
+  bufferSize_ = bufferSize;
+  normalsSize_ = normals.size() * sizeof(glm::vec3);
+
+  delete[] buffer;
+
+  vboData_.setAttribPtr(program_->getAttribLoc(attributes::normalToBorder), 3, sizeof(glm::vec3), (const void *)(vertexSize_ + textureSize_));
+  return true;
+}
+
+bool Object::setIndexes(const std::vector<GLubyte> &indexes) {
+  VBOBind _(vboIndicies_);
+
+  vboIndicies_.setData(indexes.size() * sizeof(GLubyte), indexes.data());
+  return true;
 }

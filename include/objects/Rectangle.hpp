@@ -6,12 +6,12 @@
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
-class Cube : public Object {
+class Rectangle : public Object {
   VertexBuffer dataVBO_;
   Texture2D &texture_;
 
   public:
-    Cube(GLfloat sideSize, glm::vec3 position, Program & program, Texture2D & texture);
+    Rectangle(glm::vec3 sideSizes, glm::vec3 position, Program & program, Texture2D & texture);
 };
 
 

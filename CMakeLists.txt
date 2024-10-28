@@ -28,7 +28,7 @@ add_library(${SRC_OLD_LIB} STATIC ${SRC_OLD})
 
 target_include_directories(${SRC_OLD_LIB} PUBLIC "include_old")
 target_include_directories(${SRC_LIB} PUBLIC  "include")
-target_link_libraries(${SRC_LIB} libSOIL.a GLX glfw OpenGL GLEW)
+target_link_libraries(${SRC_LIB} SOIL GLX glfw OpenGL GLEW)
 target_link_libraries(${SRC_OLD_LIB} glfw OpenGL GLEW glm::glm-header-only)
 
 add_subdirectory("./Lab1/")

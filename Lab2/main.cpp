@@ -1,3 +1,4 @@
+#include "Light/Fong.hpp"
 #define DEBUG
 #include "CameraMVP.hpp"
 #include "Light/Lambert.hpp"
@@ -6,7 +7,7 @@
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Cube.hpp"
+#include "objects/Rectangle.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
 #include <glm/geometric.hpp>
@@ -52,14 +53,14 @@ int main() {
     std::cerr << "Error: GLEW initialization failed, status code: "
               << glewStatus << std::endl;
 
-  Program program("./shaders/MVPShader.vsh",
-                  "./shaders/textureAndLight.fsh");
+  Program program("./shaders/Lab2Shader1(Lambert).glsl");
   glCheckError();
   Texture2D containerTex("./textures/container.jpg");
   Texture2D sunTex("./textures/sun3.png");
   glCheckError();
-  Cube cube(1, glm::vec3(0, 0, 0), program, containerTex);
-  Cube sun(1, glm::vec3(30, 10, -20), program, sunTex);
+  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
+  Rectangle sun(glm::vec3(1), glm::vec3(30, 10, -20), program, sunTex);
+  Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, sunTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
@@ -70,10 +71,10 @@ int main() {
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  LambertLight light(sun.position(), cameraData, program);
+  LambertLight light(sun, cameraData, program);
 
   glCheckError();
-  Scene scene(program, cameraData, light, {&cube, &sun});
+  Scene scene(program, cameraData, light, {&cube, &sun, &floor});
   glCheckError();
   glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glCheckError();
@@ -87,7 +88,11 @@ int main() {
 
   while (!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    cameraData.updateState();
     glfwPollEvents();
+    moveHandler.move();
+
 
     prevTime = time;
     time = glfwGetTime();
@@ -102,8 +107,6 @@ int main() {
     scene.update(time, time - prevTime);
     glCheckError();
 
-    moveHandler.move();
-
     glfwSwapBuffers(win);
     glViewport(0, 0, width, height);
   }
@@ -117,6 +120,8 @@ int main() {
 }
 
 void keyCallback(GLFWwindow *win, int key, int scancode, int action, int mods) {
+  if(key == GLFW_KEY_ESCAPE)
+    glfwSetWindowShouldClose(win, GLFW_TRUE);
   keyPressEvent.invoke(key, action, mods);
 }
 

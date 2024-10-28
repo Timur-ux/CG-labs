@@ -14,25 +14,32 @@ protected:
   glm::vec3 position_;
   glm::mat4 model_;
 
-  Program & program_;
+  Program * program_;
   VertexArray vao_;
   VertexBuffer vboData_;
   VertexBuffer vboIndicies_;
 
-  Texture2D & texture_;
-
-  std::vector<glm::vec3> verticiesCoords_;
-  std::vector<glm::vec2> textureCoords_;
-  std::vector<glm::vec3> normals_;
-  std::vector<GLubyte> indexes_;
+  std::vector<Texture*> textures_;
+  
 
   GLenum drawMode_;
+  size_t bufferSize_ = 0;
+  size_t indexes_ = 0;
+  size_t vertexSize_ = 0;
+  size_t textureSize_ = 0;
+  size_t normalsSize_ = 0;
 
 public:
+  Object(glm::vec3 position = glm::vec3(0));
   Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture);
+
   const glm::vec3 & position() {return position_;}
   const glm::mat4 & model() {return model_;}
 
+  bool setVertexesCoords(const std::vector<glm::vec3>& vertexesCoords);
+  bool setTextureCoords(const std::vector<glm::vec2> &textureCoords);
+  bool setNormals(const std::vector<glm::vec3> &normals);
+  bool setIndexes(const std::vector<GLubyte> &indexes);
   /**
    * @brief Just set:
    *  model matrix as uniform variable

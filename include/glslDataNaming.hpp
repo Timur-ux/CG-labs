@@ -11,6 +11,8 @@ namespace uniforms {
 
   inline const char * directionNormalizeMatrix = "normalMatrix";
   inline const char * lightPosition = "lightPos";
+
+  inline const char * fongP = "fongP";
 }; // !uniforms
 
 namespace attributes {
