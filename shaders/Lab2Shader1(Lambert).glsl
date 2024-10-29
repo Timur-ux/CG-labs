@@ -16,6 +16,10 @@ out vec2 texCoord;
 out vec3 n; // Вектор нормали
 out vec3 l; // Направление на источник света
 
+float random2d(vec2 coord){
+  return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
 void main() {
   vec4 p = view*model*vec4(vertexPosition, 1.0);
   gl_Position = perspective*p;

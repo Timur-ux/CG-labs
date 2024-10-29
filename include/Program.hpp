@@ -43,9 +43,16 @@ public:
 
 struct ProgramBind {
   Program & program;
-  ProgramBind(Program & programToBind) : program(programToBind) {program.bind();}
+  GLint oldProgram = 0;
+  ProgramBind(Program & programToBind) : program(programToBind) {
+    glGetIntegerv(GL_CURRENT_PROGRAM, &oldProgram);
+    program.bind();
+  }
 
-  ~ProgramBind() {program.unbind();}
+  ~ProgramBind() {
+    program.unbind();
+    glUseProgram(oldProgram);
+  }
 };
 
 #endif // !GL_PROGRAM_HPP_

@@ -1,6 +1,7 @@
 #ifndef VERTEX_BUFFER_HPP_
 #define VERTEX_BUFFER_HPP_
 
+#include <cassert>
 #define GLEW_STATIC
 #include <GL/glew.h>
 
@@ -23,6 +24,7 @@ public:
 
   void bind();
   void unbind();
+  GLenum type() {return target_;}
 
   void create(GLenum target, GLsizeiptr size, void *data,
                GLenum usage = GL_DYNAMIC_DRAW);
@@ -43,9 +45,15 @@ public:
 
 struct VBOBind {
   VertexBuffer &buffer;
-  VBOBind(VertexBuffer &bufferToBind) : buffer(bufferToBind) { buffer.bind(); }
+  GLint oldBuffer = 0;
+  VBOBind(VertexBuffer &bufferToBind) : buffer(bufferToBind) {
+    assert(("Olny GL_ARRAY_BUFFER permitted", buffer.type() == GL_ARRAY_BUFFER));
+    glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &oldBuffer);
+    buffer.bind(); }
 
-  ~VBOBind() { buffer.unbind(); }
+  ~VBOBind() { buffer.unbind(); 
+    glBindBuffer(GL_ARRAY_BUFFER, oldBuffer);
+  }
 };
 
 #endif // !VERTEX_BUFFER_HPP_
