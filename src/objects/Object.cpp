@@ -11,6 +11,15 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
+std::ostream & operator<<(std::ostream & os, glm::vec3 &vec) {
+  os << "vec3(" << vec.x << ", " << vec.y << ", " << vec.z << ")" << std::endl;
+  return os;
+}
+
+std::ostream & operator<<(std::ostream & os, glm::vec2 &vec) {
+  os << "vec3(" << vec.x << ", " << vec.y  << ")" << std::endl;
+  return os;
+}
 Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
@@ -18,6 +27,13 @@ Object::Object(glm::vec3 position, Program &program,
                GLenum drawMode, Texture2D &texture)
     : position_(position), program_(&program), model_(1), drawMode_(drawMode),
       textures_({&texture}) {
+      //   for(auto & a : verticiesCoords)
+      //     std::cout << a;
+      //   for(auto & a : textureCoords)
+      //     std::cout << a;
+      //   for(auto & a : normals)
+      //     std::cout << a;
+
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
@@ -78,9 +94,11 @@ Object::Object(glm::vec3 position, Program &program,
 void Object::draw() {
   for(auto& tex : textures_)
     tex->bind();
+  glCheckError();
   program_->bind();
   vao_.bind();
   vboIndicies_.bind();
+  glCheckError();
 
   if(!program_->setUniformMat4(uniforms::modelMatrix, model_))
     std::cerr << "Can't find location of " << uniforms::modelMatrix << " uniform" << std::endl;

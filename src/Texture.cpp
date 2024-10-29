@@ -8,12 +8,16 @@
 
 void Texture::bind() {
   glActiveTexture(GL_TEXTURE0 + textureBlock_);
+    glCheckError();
   glBindTexture(GL_TEXTURE_2D, texture_);
+    glCheckError();
 }
 
 void Texture::unbind() {
   glActiveTexture(GL_TEXTURE0 + textureBlock_);
+    glCheckError();
   glBindTexture(GL_TEXTURE_2D, 0);
+    glCheckError();
 }
 
 int Texture::maximumTextureBlocks() {
@@ -131,3 +135,7 @@ Texture2D & Texture2D::operator=(Texture2D && other) {
   return *this;
 }
 
+bool Texture::setTextureBlock(GLint newBlock) {
+  glActiveTexture(GL_TEXTURE0 + newBlock);
+  return true;
+}

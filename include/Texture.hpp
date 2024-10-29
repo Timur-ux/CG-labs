@@ -10,7 +10,7 @@
 class Texture {
 protected:
   GLuint texture_ = 0;
-  GLint textureBlock_ = -1;
+  GLint textureBlock_ = 0;
   Texture() = default;
 public:
   Texture(Texture & other) = delete;
@@ -20,7 +20,7 @@ public:
   Texture & operator=(Texture && other);
 
   GLint block() {return textureBlock_;}
-  bool setTextureBlock(GLint newBlock);
+  bool setTextureBlock(GLint indexOfNewBlock);
 
   static int maximumTextureBlocks();
   void bind();
@@ -47,8 +47,6 @@ class Texture2D : public Texture{
 
   Texture2D(Texture2D && other);
   Texture2D & operator=(Texture2D && other);
-
-  ~Texture2D();
 
   int width() {return width_;}
   int height() {return height_;}

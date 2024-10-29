@@ -40,6 +40,7 @@ public:
   bool setTextureCoords(const std::vector<glm::vec2> &textureCoords);
   bool setNormals(const std::vector<glm::vec3> &normals);
   bool setIndexes(const std::vector<GLubyte> &indexes);
+
   /**
    * @brief Just set:
    *  model matrix as uniform variable

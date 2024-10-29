@@ -1,5 +1,4 @@
 #include "Light/Fong.hpp"
-#define DEBUG
 #include "CameraMVP.hpp"
 #include "Light/Lambert.hpp"
 #include "Program.hpp"
@@ -54,6 +53,7 @@ int main() {
               << glewStatus << std::endl;
 
   Program program("./shaders/Lab2Shader1(Lambert).glsl");
+  // Program program("./shaders/simpleShader.vsh", "./shaders/redColor.fsh");
   glCheckError();
   Texture2D containerTex("./textures/container.jpg");
   Texture2D sunTex("./textures/sun3.png");
@@ -87,19 +87,26 @@ int main() {
   glCheckError();
 
   while (!glfwWindowShouldClose(win)) {
+    glCheckError();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glCheckError();
 
     cameraData.updateState();
+    glCheckError();
     glfwPollEvents();
+    glCheckError();
     moveHandler.move();
+    glCheckError();
 
 
     prevTime = time;
     time = glfwGetTime();
+    glCheckError();
     float dt = time - prevTime;
     int width, height;
 
     glfwGetWindowSize(win, &width, &height);
+    glCheckError();
 
     glClearColor(0, 0.2, 0.2, 1);
 

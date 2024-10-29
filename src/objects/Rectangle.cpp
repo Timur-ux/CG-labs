@@ -4,6 +4,7 @@
 #include "VertexArray.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include <vector>
 
 // Counter clock wise from left bottom

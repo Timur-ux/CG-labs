@@ -1,175 +1,175 @@
 [
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/CameraMVP.cpp.o -c /home/raison/git/CG-labs/src/CameraMVP.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/CameraMVP.cpp.o -c /home/raison/git/CG-labs/src/CameraMVP.cpp",
   "file": "/home/raison/git/CG-labs/src/CameraMVP.cpp",
   "output": "CMakeFiles/src_lib.dir/src/CameraMVP.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/EventHandlers/LookupHandler.cpp.o -c /home/raison/git/CG-labs/src/EventHandlers/LookupHandler.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/EventHandlers/LookupHandler.cpp.o -c /home/raison/git/CG-labs/src/EventHandlers/LookupHandler.cpp",
   "file": "/home/raison/git/CG-labs/src/EventHandlers/LookupHandler.cpp",
   "output": "CMakeFiles/src_lib.dir/src/EventHandlers/LookupHandler.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/EventHandlers/moveHandler.cpp.o -c /home/raison/git/CG-labs/src/EventHandlers/moveHandler.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/EventHandlers/moveHandler.cpp.o -c /home/raison/git/CG-labs/src/EventHandlers/moveHandler.cpp",
   "file": "/home/raison/git/CG-labs/src/EventHandlers/moveHandler.cpp",
   "output": "CMakeFiles/src_lib.dir/src/EventHandlers/moveHandler.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Light/Fong.cpp.o -c /home/raison/git/CG-labs/src/Light/Fong.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Light/Fong.cpp.o -c /home/raison/git/CG-labs/src/Light/Fong.cpp",
   "file": "/home/raison/git/CG-labs/src/Light/Fong.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Light/Fong.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Light/Lambert.cpp.o -c /home/raison/git/CG-labs/src/Light/Lambert.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Light/Lambert.cpp.o -c /home/raison/git/CG-labs/src/Light/Lambert.cpp",
   "file": "/home/raison/git/CG-labs/src/Light/Lambert.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Light/Lambert.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /home/raison/git/CG-labs/src/Program.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /home/raison/git/CG-labs/src/Program.cpp",
   "file": "/home/raison/git/CG-labs/src/Program.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Program.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Scene.cpp.o -c /home/raison/git/CG-labs/src/Scene.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Scene.cpp.o -c /home/raison/git/CG-labs/src/Scene.cpp",
   "file": "/home/raison/git/CG-labs/src/Scene.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Scene.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /home/raison/git/CG-labs/src/Shader.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Shader.cpp.o -c /home/raison/git/CG-labs/src/Shader.cpp",
   "file": "/home/raison/git/CG-labs/src/Shader.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Shader.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Texture.cpp.o -c /home/raison/git/CG-labs/src/Texture.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Texture.cpp.o -c /home/raison/git/CG-labs/src/Texture.cpp",
   "file": "/home/raison/git/CG-labs/src/Texture.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Texture.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/VertexArray.cpp.o -c /home/raison/git/CG-labs/src/VertexArray.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/VertexArray.cpp.o -c /home/raison/git/CG-labs/src/VertexArray.cpp",
   "file": "/home/raison/git/CG-labs/src/VertexArray.cpp",
   "output": "CMakeFiles/src_lib.dir/src/VertexArray.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/VertexBuffer.cpp.o -c /home/raison/git/CG-labs/src/VertexBuffer.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/VertexBuffer.cpp.o -c /home/raison/git/CG-labs/src/VertexBuffer.cpp",
   "file": "/home/raison/git/CG-labs/src/VertexBuffer.cpp",
   "output": "CMakeFiles/src_lib.dir/src/VertexBuffer.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /home/raison/git/CG-labs/src/customWindow.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/customWindow.cpp.o -c /home/raison/git/CG-labs/src/customWindow.cpp",
   "file": "/home/raison/git/CG-labs/src/customWindow.cpp",
   "output": "CMakeFiles/src_lib.dir/src/customWindow.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/geometry.cpp.o -c /home/raison/git/CG-labs/src/geometry.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/geometry.cpp.o -c /home/raison/git/CG-labs/src/geometry.cpp",
   "file": "/home/raison/git/CG-labs/src/geometry.cpp",
   "output": "CMakeFiles/src_lib.dir/src/geometry.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/glCheckError.cpp.o -c /home/raison/git/CG-labs/src/glCheckError.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/glCheckError.cpp.o -c /home/raison/git/CG-labs/src/glCheckError.cpp",
   "file": "/home/raison/git/CG-labs/src/glCheckError.cpp",
   "output": "CMakeFiles/src_lib.dir/src/glCheckError.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Object.cpp.o -c /home/raison/git/CG-labs/src/objects/Object.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Object.cpp.o -c /home/raison/git/CG-labs/src/objects/Object.cpp",
   "file": "/home/raison/git/CG-labs/src/objects/Object.cpp",
   "output": "CMakeFiles/src_lib.dir/src/objects/Object.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/objects/Rectangle.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/objects/Rectangle.cpp",
   "file": "/home/raison/git/CG-labs/src/objects/Rectangle.cpp",
   "output": "CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/BezierCurve.cpp.o -c /home/raison/git/CG-labs/src_old/BezierCurve.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/BezierCurve.cpp.o -c /home/raison/git/CG-labs/src_old/BezierCurve.cpp",
   "file": "/home/raison/git/CG-labs/src_old/BezierCurve.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/BezierCurve.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Camera.cpp.o -c /home/raison/git/CG-labs/src_old/Camera.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Camera.cpp.o -c /home/raison/git/CG-labs/src_old/Camera.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Camera.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Camera.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Line2d.cpp.o -c /home/raison/git/CG-labs/src_old/Line2d.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Line2d.cpp.o -c /home/raison/git/CG-labs/src_old/Line2d.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Line2d.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Line2d.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Object.cpp.o -c /home/raison/git/CG-labs/src_old/Object.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Object.cpp.o -c /home/raison/git/CG-labs/src_old/Object.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Object.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Object.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/OldScene.cpp.o -c /home/raison/git/CG-labs/src_old/OldScene.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/OldScene.cpp.o -c /home/raison/git/CG-labs/src_old/OldScene.cpp",
   "file": "/home/raison/git/CG-labs/src_old/OldScene.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/OldScene.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Point2d.cpp.o -c /home/raison/git/CG-labs/src_old/Point2d.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Point2d.cpp.o -c /home/raison/git/CG-labs/src_old/Point2d.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Point2d.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Point2d.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Program.cpp.o -c /home/raison/git/CG-labs/src_old/Program.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Program.cpp.o -c /home/raison/git/CG-labs/src_old/Program.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Program.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Program.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Shader.cpp.o -c /home/raison/git/CG-labs/src_old/Shader.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Shader.cpp.o -c /home/raison/git/CG-labs/src_old/Shader.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Shader.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Shader.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Square2d.cpp.o -c /home/raison/git/CG-labs/src_old/Square2d.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Square2d.cpp.o -c /home/raison/git/CG-labs/src_old/Square2d.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Square2d.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Square2d.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Triangle2d.cpp.o -c /home/raison/git/CG-labs/src_old/Triangle2d.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/Triangle2d.cpp.o -c /home/raison/git/CG-labs/src_old/Triangle2d.cpp",
   "file": "/home/raison/git/CG-labs/src_old/Triangle2d.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/Triangle2d.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/customWindow.cpp.o -c /home/raison/git/CG-labs/src_old/customWindow.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/src_old_lib.dir/src_old/customWindow.cpp.o -c /home/raison/git/CG-labs/src_old/customWindow.cpp",
   "file": "/home/raison/git/CG-labs/src_old/customWindow.cpp",
   "output": "CMakeFiles/src_old_lib.dir/src_old/customWindow.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build/Lab1",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/Lab1/include_old -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/Lab1_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab1/main.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab1/include_old -I/home/raison/git/CG-labs/include_old -std=gnu++20 -g -o CMakeFiles/Lab1_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab1/main.cpp",
   "file": "/home/raison/git/CG-labs/Lab1/main.cpp",
   "output": "Lab1/CMakeFiles/Lab1_main.dir/main.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build/Lab2",
-  "command": "/usr/bin/c++  -I/home/raison/git/CG-labs/Lab2/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab2_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab2/main.cpp",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab2/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab2_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab2/main.cpp",
   "file": "/home/raison/git/CG-labs/Lab2/main.cpp",
   "output": "Lab2/CMakeFiles/Lab2_main.dir/main.cpp.o"
 }
