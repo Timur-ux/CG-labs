@@ -1,12 +1,13 @@
 #ifndef CAMERA_MVP_HPP_
 #define CAMERA_MVP_HPP_
 
+#include "IMoveable.hpp"
 #include "Program.hpp"
 #include <glm/glm.hpp>
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-struct CameraMVP {
+struct CameraMVP : public IMoveable {
   glm::vec3 position_;
   glm::vec3 up_;
   glm::vec3 target_;
@@ -31,11 +32,11 @@ public:
   CameraMVP(Program & program, glm::vec3 position, glm::vec3 up, glm::vec3 target,
             GLfloat fov = 45.0, GLfloat ratio = 4.0 / 3.0);
 
-  const glm::mat4 &view() { return view_; };
-  const glm::mat4 &perspective() { return perspective_; };
-  const glm::vec3 &position() {return position_;}
-  const glm::vec3 &forward() {return forward_;}
-  const glm::vec3 &up() {return up_;}
+  const glm::mat4 &view() const { return view_; };
+  const glm::mat4 &perspective() const { return perspective_; };
+  const glm::vec3 &position() const override {return position_;}
+  const glm::vec3 &forward() const {return forward_;}
+  const glm::vec3 &up() const {return up_;}
 
   void moveTo(glm::vec3 position);
   void shiftBy(glm::vec3 shift);

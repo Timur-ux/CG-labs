@@ -11,10 +11,10 @@ class Scene {
   std::list<Object*> objects_;
   CameraMVP cameraData_;
   Program & program_;
-  ILight & light_;
+  std::vector<ILight *> lights_;
 
 public:
-  Scene(Program & program, CameraMVP cameraData, ILight & light, std::list<Object*> objects = {});
+  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::list<Object*> objects = {});
 
   void update(double time, double dt);
 };

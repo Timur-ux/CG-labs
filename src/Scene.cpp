@@ -3,19 +3,31 @@
 #include "Light/Light.hpp"
 #include "Program.hpp"
 #include "glCheckError.hpp"
+#include "glslDataNaming.hpp"
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
 
 
-Scene::Scene(Program & program, CameraMVP cameraData, ILight &light , std::list<Object*> objects) 
-    : program_(program), cameraData_(cameraData), objects_(objects), light_(light) {}
+Scene::Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights, std::list<Object*> objects) 
+    : program_(program), cameraData_(cameraData), objects_(objects), lights_(lights) {}
 
 
 void Scene::update(double time, double dt) {
+  std::stringstream ss;
+  ss <<uniforms::lights  << "[0]." << LightData::firstField();
+  GLint lightsLoc = program_.getUniformLoc(ss.str().c_str());
+
+  if(lightsLoc == -1)
+    throw std::invalid_argument("position of " + std::string(uniforms::lights) + " uniform undefined");
+
   for(Object * object : objects_) {
-    light_.setupLightFor(*object);
-    glCheckError();
+    for(size_t i = 0; i < lights_.size(); ++i) {
+      if(!lights_[i]->getData(*object).setAsUniform(program_, i, lightsLoc))
+        std::cerr << "Can't set light data as uniform" << std::endl;
+      glCheckError();
+    }
     object->draw();
     glCheckError();
   }
-  glCheckError();
 }

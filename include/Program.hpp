@@ -28,11 +28,26 @@ public:
   GLint getAttribLoc(const char * name);
 
   bool setUniformMat4(const char * name, glm::mat4 & data);
+  bool setUniformMat4(GLint loc, glm::mat4 & data);
+
   bool setUniformMat3(const char * name, glm::mat3 & data);
+  bool setUniformMat3(GLint loc, glm::mat3 & data);
+
   bool setUniformFloat(const char * name, GLfloat & data);
+  bool setUniformFloat(GLint loc, GLfloat & data);
+
   bool setUniformVec2(const char * name, glm::vec2 & data);
+  bool setUniformVec2(GLint loc, glm::vec2 & data);
+
   bool setUniformVec3(const char * name, glm::vec3 & data);
+  bool setUniformVec3(GLint loc, glm::vec3 & data);
+
   bool setUniformVec4(const char * name, glm::vec4 & data);
+  bool setUniformVec4(GLint loc, glm::vec4 & data);
+
+  bool setUniformStruct(const char * name, size_t n, const void * data);
+  bool setUniformStruct(GLint loc, size_t n, const void * data);
+
 
   void bind();
   void unbind();

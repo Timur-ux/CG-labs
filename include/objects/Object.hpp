@@ -1,6 +1,7 @@
 #ifndef OBJECT_HPP_
 #define OBJECT_HPP_
 
+#include "IMoveable.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -9,7 +10,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-class Object {
+class Object : public IMoveable {
 protected:
   glm::vec3 position_;
   glm::mat4 model_;
@@ -33,8 +34,8 @@ public:
   Object(glm::vec3 position = glm::vec3(0));
   Object(glm::vec3 position, Program & program, std::vector<glm::vec3> verticiesCoords, std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals, std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture);
 
-  const glm::vec3 & position() {return position_;}
-  const glm::mat4 & model() {return model_;}
+  const glm::vec3 & position() const override {return position_;}
+  const glm::mat4 & model() const {return model_;}
 
   bool setVertexesCoords(const std::vector<glm::vec3>& vertexesCoords);
   bool setTextureCoords(const std::vector<glm::vec2> &textureCoords);

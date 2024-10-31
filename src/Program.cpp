@@ -194,6 +194,55 @@ bool Program::setUniformVec4(const char *name, glm::vec4 &data) {
   return true;
 }
 
+
+bool Program::setUniformMat4(GLint loc, glm::mat4 &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(data));
+  return true;
+}
+
+bool Program::setUniformMat3(GLint loc, glm::mat3 &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(data));
+  return true;
+}
+
+bool Program::setUniformFloat(GLint loc, GLfloat &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniform1f(loc, data);
+  return true;
+}
+
+bool Program::setUniformVec2(GLint loc, glm::vec2 &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniform2fv(loc, 1, glm::value_ptr(data));
+  return true;
+}
+
+bool Program::setUniformVec3(GLint loc, glm::vec3 &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniform3fv(loc, 1, glm::value_ptr(data));
+  return true;
+}
+
+bool Program::setUniformVec4(GLint loc, glm::vec4 &data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniform4fv(loc, 1, glm::value_ptr(data));
+  return true;
+}
+
 int Program::maximumVertexUniforms() {
   GLint res;
   glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &res);

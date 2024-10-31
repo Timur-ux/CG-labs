@@ -1,4 +1,3 @@
-#include "Light/Fong.hpp"
 #include "CameraMVP.hpp"
 #include "Light/Lambert.hpp"
 #include "Program.hpp"
@@ -7,6 +6,7 @@
 #include "events.hpp"
 #include "glCheckError.hpp"
 #include "objects/Rectangle.hpp"
+#include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
 #include <glm/geometric.hpp>
@@ -53,13 +53,15 @@ int main() {
               << glewStatus << std::endl;
 
   Program program("./shaders/Lab2Shader1(Lambert).glsl");
+  eTB_GLSL__print_uniforms(program.get());
   // Program program("./shaders/simpleShader.vsh", "./shaders/redColor.fsh");
   glCheckError();
   Texture2D containerTex("./textures/container.jpg");
   Texture2D sunTex("./textures/sun3.png");
   glCheckError();
   Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
-  Rectangle sun(glm::vec3(1), glm::vec3(30, 10, -20), program, sunTex);
+  Rectangle sun(glm::vec3(.1), glm::vec3(30, 10, -20), program, sunTex);
+  Rectangle sun2(glm::vec3(.1), glm::vec3(-30, 10, -20), program, sunTex);
   Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, sunTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
@@ -71,10 +73,11 @@ int main() {
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  LambertLight light(sun, cameraData, program);
+  LambertLight light(&sun, cameraData, program);
+  LambertLight light2(&sun2, cameraData, program);
 
   glCheckError();
-  Scene scene(program, cameraData, light, {&cube, &sun, &floor});
+  Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
   glCheckError();
   glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glCheckError();
