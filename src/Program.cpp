@@ -158,12 +158,21 @@ bool Program::setUniformMat3(const char *name, glm::mat3 &data) {
   return true;
 }
 
-bool Program::setUniformFloat(const char *name, GLfloat &data) {
+bool Program::setUniformFloat(const char *name, GLfloat data) {
   ProgramBind _(*this);
   GLint loc = getUniformLoc(name);
   if (loc < 0)
     return false;
   glUniform1f(loc, data);
+  return true;
+}
+
+bool Program::setUniformInt(const char *name, GLint data) {
+  ProgramBind _(*this);
+  GLint loc = getUniformLoc(name);
+  if (loc < 0)
+    return false;
+  glUniform1i(loc, data);
   return true;
 }
 
@@ -211,11 +220,19 @@ bool Program::setUniformMat3(GLint loc, glm::mat3 &data) {
   return true;
 }
 
-bool Program::setUniformFloat(GLint loc, GLfloat &data) {
+bool Program::setUniformFloat(GLint loc, GLfloat data) {
   ProgramBind _(*this);
   if (loc < 0)
     return false;
   glUniform1f(loc, data);
+  return true;
+}
+
+bool Program::setUniformInt(GLint loc, GLint data) {
+  ProgramBind _(*this);
+  if (loc < 0)
+    return false;
+  glUniform1i(loc, data);
   return true;
 }
 

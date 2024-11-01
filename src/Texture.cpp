@@ -4,8 +4,6 @@
 #include <SOIL/SOIL.h>
 #include <iostream>
 
-
-
 void Texture::bind() {
   glActiveTexture(GL_TEXTURE0 + textureBlock_);
     glCheckError();
@@ -49,6 +47,7 @@ Texture::~Texture() {
 }
 
 Texture2D::Texture2D(std::string textureFileName, int block, GLenum imageType, int soilLoadType) : Texture() {
+  textureBlock_ = block;
   glCheckError();
   glGenTextures(1, &texture_);
   glCheckError();
@@ -88,7 +87,28 @@ Texture2D::Texture2D(std::string textureFileName, int block, GLenum imageType, i
 }
 
 
+Texture2D::Texture2D(int width, int height, GLenum type, std::list<std::pair<GLenum, GLint>> texParameters, GLenum elementType, int block) : Texture(), width_(width), height_(height) {
+  textureBlock_ = block;
+  glCheckError();
+  glGenTextures(1, &texture_);
+  glCheckError();
+  glBindTexture(GL_TEXTURE_2D, texture_);
+  glCheckError();
+
+  for(auto & [param, value] : texParameters) {
+    glTexParameteri(GL_TEXTURE_2D, param, value);
+  }
+  glCheckError();
+
+  glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, elementType, nullptr);
+  glCheckError();
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glCheckError();
+}
+
 Texture2D::Texture2D(unsigned char * data, int block) : Texture() {
+  textureBlock_ = block;
   glCheckError();
   glGenTextures(1, &texture_);
   glCheckError();

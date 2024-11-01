@@ -20,6 +20,7 @@
 #include <GLFW/glfw3.h>
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
+#include "Framebuffer.hpp"
 
 
 void keyCallback(GLFWwindow *, int, int, int, int);
@@ -55,14 +56,19 @@ int main() {
   Program program("./shaders/Lab2Shader1(Lambert).glsl");
   eTB_GLSL__print_uniforms(program.get());
   // Program program("./shaders/simpleShader.vsh", "./shaders/redColor.fsh");
+
+  int width, height;
+  glfwGetWindowSize(win, &width, &height);
+
+ 
   glCheckError();
-  Texture2D containerTex("./textures/container.jpg");
-  Texture2D sunTex("./textures/sun3.png");
+  Texture2D containerTex("./textures/container.jpg", 0);
+  Texture2D sunTex("./textures/sun3.png", 1);
   glCheckError();
   Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
-  Rectangle sun(glm::vec3(.1), glm::vec3(30, 10, -20), program, sunTex);
-  Rectangle sun2(glm::vec3(.1), glm::vec3(-30, 10, -20), program, sunTex);
-  Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, sunTex);
+  Rectangle sun(glm::vec3(1), glm::vec3(1, 1, -5), program, sunTex);
+  // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
+  Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, containerTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
@@ -73,11 +79,12 @@ int main() {
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  LambertLight light(&sun, cameraData, program);
-  LambertLight light2(&sun2, cameraData, program);
+  LambertLight light(&sun, cameraData, program, Framebuffer::createShadowMap(512, 512, 2));
+  // LambertLight light2(&sun2, cameraData, program, Framebuffer::createShadowMap(512, 512, 3));
 
   glCheckError();
-  Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
+  // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
+  Scene scene(program, cameraData, {&light}, {&cube, &floor});
   glCheckError();
   glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   glCheckError();
@@ -91,34 +98,20 @@ int main() {
 
   while (!glfwWindowShouldClose(win)) {
     glCheckError();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glCheckError();
-
-    cameraData.updateState();
-    glCheckError();
-    glfwPollEvents();
-    glCheckError();
-    moveHandler.move();
-    glCheckError();
-
-
-    prevTime = time;
-    time = glfwGetTime();
-    glCheckError();
-    float dt = time - prevTime;
-    int width, height;
 
     glfwGetWindowSize(win, &width, &height);
-    glCheckError();
-
+    cameraData.updateState();
     glClearColor(0, 0.2, 0.2, 1);
+    glfwPollEvents();
+    moveHandler.move();
+    prevTime = time;
+    time = glfwGetTime();
+    float dt = time - prevTime;
+    scene.update(time, dt);
 
-    glCheckError();
-    scene.update(time, time - prevTime);
-    glCheckError();
 
-    glfwSwapBuffers(win);
     glViewport(0, 0, width, height);
+    glfwSwapBuffers(win);
   }
   glCheckError();
 

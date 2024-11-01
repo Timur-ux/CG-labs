@@ -1,6 +1,8 @@
 #ifndef PRINT_UNIFORMS_HPP_
 #define PRINT_UNIFORMS_HPP_
 
+#include "Program.hpp"
+#include "Texture.hpp"
 #include <cstdio>
 #include <cstring>
 #define GLEW_STATIC
@@ -123,6 +125,8 @@ inline type_set [] = {
 inline void
 eTB_GLSL__print_uniforms (GLuint program)
 {
+  printf("Maximum texture blocks: %d\n", Texture::maximumTextureBlocks());
+  printf("Maximum uniforms: %d %d\n", Program::maximumVertexUniforms(), Program::maximumFragmentUniforms());
   GLint uniform_count;
   glGetProgramiv (program, GL_ACTIVE_UNIFORMS, &uniform_count);
 

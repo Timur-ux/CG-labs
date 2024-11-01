@@ -20,6 +20,17 @@ std::ostream &operator<<(std::ostream &os, glm::vec2 &vec) {
   os << "vec3(" << vec.x << ", " << vec.y << ")" << std::endl;
   return os;
 }
+
+Object::Object(glm::vec3 position) {
+  ProgramBind progBinding(*program_);
+  VAOBind vaoBingind(vao_);
+
+  glCheckError();
+  model_ = glm::translate(model_, position_);
+  forward_ = glm::vec3(model_*glm::vec4(0,0,1,1));
+  up_ = glm::vec3(model_*glm::vec4(0,1,0,1));
+}
+
 Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
@@ -33,6 +44,8 @@ Object::Object(glm::vec3 position, Program &program,
 
   glCheckError();
   model_ = glm::translate(model_, position_);
+  forward_ = glm::normalize(glm::vec3(position_));
+  up_ = glm::vec3(glm::vec4(0, 1,0,1));
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
                 normals.size() * sizeof(normals[0]);
@@ -94,8 +107,10 @@ Object::Object(glm::vec3 position, Program &program,
 }
 
 void Object::draw() {
-  for (auto &tex : textures_)
-    tex->bind();
+  for (size_t i = 0; i < textures_.size();++i) {
+    textures_[i]->bind();
+    program_->setUniformInt(uniforms::texture0, textures_[i]->block());
+  }
   glCheckError();
   program_->bind();
   vao_.bind();
@@ -116,6 +131,13 @@ void Object::draw() {
   for (auto &tex : textures_)
     tex->unbind();
   glCheckError();
+}
+
+void Object::draw(Program * otherProgram) {
+  Program * myProgram = program_;
+  program_ = otherProgram;
+  draw();
+  program_ = myProgram;
 }
 
 bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {

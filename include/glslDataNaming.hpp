@@ -3,7 +3,8 @@
 
 
 namespace uniforms {
-  inline const char * texture0 = "texture0";
+  inline const char * texture0 = "main_texture0";
+  inline const char * shadowMapTexture = "shadowMap_texture1";
 
   inline const char * modelMatrix = "model";
   inline const char * viewMatrix = "view";
@@ -12,6 +13,8 @@ namespace uniforms {
   inline const char * lights = "lights";
 
   inline const char * fongP = "fongP";
+
+  inline const char * lightSpaceMatrix = "lightSpaceMatrix";
 }; // !uniforms
 
 namespace attributes {
