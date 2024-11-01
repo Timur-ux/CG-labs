@@ -59,6 +59,20 @@ int main() {
 
   int width, height;
   glfwGetWindowSize(win, &width, &height);
+  glCheckError();
+  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glCheckError();
+  glEnable(GL_DEPTH_TEST);
+  glCheckError();
+  glEnable(GL_PRIMITIVE_RESTART);
+  glPrimitiveRestartIndex(255);
+  glCheckError();
+  // glFrontFace(GL_CCW);
+  // glCheckError();
+  // glCullFace(GL_BACK);
+  // glCheckError();
+  // glEnable(GL_CULL_FACE);
+  // glCheckError();
 
  
   glCheckError();
@@ -66,7 +80,7 @@ int main() {
   Texture2D sunTex("./textures/sun3.png", 1);
   glCheckError();
   Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
-  Rectangle sun(glm::vec3(1), glm::vec3(1, 1, -5), program, sunTex);
+  Rectangle sun(glm::vec3(1), glm::vec3(0, 0, -7), program, sunTex);
   // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
   Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, containerTex);
   glCheckError();
@@ -85,13 +99,6 @@ int main() {
   glCheckError();
   // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
   Scene scene(program, cameraData, {&light}, {&cube, &floor});
-  glCheckError();
-  glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  glCheckError();
-  glEnable(GL_DEPTH_TEST);
-  glCheckError();
-  glEnable(GL_PRIMITIVE_RESTART);
-  glPrimitiveRestartIndex(255);
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   glCheckError();

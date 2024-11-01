@@ -1,7 +1,7 @@
 #include "Light/Light.hpp"
 #include "Program.hpp"
 
-bool LightData::setAsUniform(Program & program, size_t i, size_t startLoc, size_t shaderMapTextureId) {
+bool LightData::setAsUniform(Program & program, size_t i, size_t startLoc) {
   
   ProgramBind _(program);
   shadowMap_texture1->bind();
@@ -12,5 +12,5 @@ bool LightData::setAsUniform(Program & program, size_t i, size_t startLoc, size_
          && program.setUniformFloat(startLoc + i*8 + 4, kAmbient)
          && program.setUniformFloat(startLoc + i*8 + 5, kGlare)
          && program.setUniformMat4(startLoc + i*8 + 6, lightSpaceMatrix)
-         && program.setUniformInt(startLoc + i*8 + 7, i);
+         && program.setUniformInt(startLoc + i*8 + 7, shadowMap_texture1->block());
 }

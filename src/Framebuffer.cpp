@@ -72,8 +72,8 @@ void Framebuffer::bind() {
 
   glViewport(0, 0, width_, height_);
   if(colorBuffersCounter_ == 0) {
-    glReadBuffer(GL_NONE);
-    glDrawBuffer(GL_NONE);
+    // glReadBuffer(GL_NONE);
+    // glDrawBuffer(GL_NONE);
   } else {
     // TODO
   }
@@ -101,14 +101,18 @@ bool Framebuffer::isOk() {
 }
 
 void Framebuffer::bindDepthBuffer(Texture2D *depthBuffer) {
-  FBOBind _(*this);
+  bind();
+  depthBuffer->bind();
   glCheckError();
   depthBuffer_ = depthBuffer;
   glCheckError();
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
                          depthBuffer->texture_, 0);
+  // glDrawBuffer(GL_NONE);
+  // glReadBuffer(GL_NONE);
   std::cout << "FBO: " << fbo_ << std::endl;
   glCheckError();
+  unbind();
 }
 
 void Framebuffer::createDepthBuffer(int block) {
@@ -116,10 +120,11 @@ void Framebuffer::createDepthBuffer(int block) {
   glCheckError();
   depthBuffer_ = new Texture2D(width_, height_, GL_DEPTH_COMPONENT,
                                {
-                                   {GL_TEXTURE_MAG_FILTER, GL_LINEAR},
-                                   {GL_TEXTURE_MIN_FILTER, GL_LINEAR},
-                                   {GL_TEXTURE_WRAP_S, GL_REPEAT},
-                                   {GL_TEXTURE_WRAP_T, GL_REPEAT},
+                                   {GL_TEXTURE_MAG_FILTER, GL_NEAREST},
+                                   {GL_TEXTURE_MIN_FILTER, GL_NEAREST},
+                                   {GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE},
+                                   {GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE},
+                                   {GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE},
                                },
                                GL_FLOAT, block);
   glCheckError();

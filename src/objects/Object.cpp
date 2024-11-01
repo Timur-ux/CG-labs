@@ -127,9 +127,9 @@ void Object::draw() {
 
   vboIndicies_.unbind();
   vao_.unbind();
-  program_->unbind();
   for (auto &tex : textures_)
     tex->unbind();
+  program_->unbind();
   glCheckError();
 }
 

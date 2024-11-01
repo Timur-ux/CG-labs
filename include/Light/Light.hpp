@@ -33,8 +33,7 @@ struct LightData {
    * @param i -- index in array of structs
    * @param startLoc -- location used in shader to array of structs
    */
-  virtual bool setAsUniform(Program &program, size_t i, size_t startLoc,
-                            size_t shaderMapTextureId = 1);
+  virtual bool setAsUniform(Program &program, size_t i, size_t startLoc);
   static std::string firstField() { return "normalMatrix"; }
 };
 

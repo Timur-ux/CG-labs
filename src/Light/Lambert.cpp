@@ -34,11 +34,10 @@ void LambertLight::renderToShadowMap(const std::list<Object *> &objects) {
   }
 
   ProgramBind programBind(shadowMapProgram_);
-  shadowMapFramebuffer_.bind();
   shadowMapProgram_.setUniformMat4(uniforms::lightSpaceMatrix,
                                    lightSpaceMatrix_);
 
-
+  shadowMapFramebuffer_.bind();
   glClear(GL_DEPTH_BUFFER_BIT);
   for (auto &object : objects)
     object->draw(&shadowMapProgram_);

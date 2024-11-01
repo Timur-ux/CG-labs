@@ -34,7 +34,7 @@ public:
         shadowMapProgram_("./shaders/depthShader.glsl"),
         shadowMapFramebuffer_(std::move(framebuffer)) {
 
-    lightProjection_ = glm::perspective(45.0f, 4.0f/3.0f, n_, f_);//glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, n_, f_);
+    lightProjection_ = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, n_, f_);//glm::perspective(glm::radians(45.0f), 4.0f/3.0f, n_, f_);//
     glm::mat4 view = glm::lookAt(
         host_->position(), host_->position() + host_->forward(), host->up());
     lightSpaceMatrix_ = lightProjection_ * view;

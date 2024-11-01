@@ -19,16 +19,18 @@ void Scene::update(double time, double dt) {
   GLint lightsLoc = program_.getUniformLoc(ss.str().c_str());
 
   if(lightsLoc == -1)
-    throw std::invalid_argument("position of " + std::string(uniforms::lights) + " uniform undefined");
+    std::cerr << "position of " + std::string(uniforms::lights) + " uniform undefined" << std::endl;
 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   for(auto & light: lights_) {
     light->renderToShadowMap(objects_);
   }
-
+  glFinish();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   for(Object * object : objects_) {
     for(size_t i = 0; i < lights_.size(); ++i) {
-      if(!lights_[i]->getData(*object).setAsUniform(program_, i, lightsLoc, i + 4))
+      if(!lights_[i]->getData(*object).setAsUniform(program_, i, lightsLoc))
         std::cerr << "Can't set light data as uniform" << std::endl;
       glCheckError();
     }
