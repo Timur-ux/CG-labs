@@ -95,7 +95,9 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   float minDepth = texture(shadowMap, projCoords.xy).r;
   float curDepth = fragPosLightSpace.z;
 
-  float shadow = curDepth <= minDepth ? 0.0 : 1.0;
+  float shadow = ((curDepth <= minDepth) ? 0.0 : 1.0);
+  if(curDepth > 1)
+    shadow = 0.0;
 
   return shadow;
 }
@@ -109,9 +111,8 @@ void main() {
     vec3 l2 = normalize(fsIn.l[i]); // И направление на источник света
     float diff = max(dot(n2,l2), 0.0); // диффузионная составляющая света
     float shadow = calculateShadow(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-     color += ((lights[i].kAmbient +  (1 - shadow)*lights[i].kDiffuse*diff)*lights[i].color * texColor);
+     color = ((lights[i].kAmbient +  (1 - shadow)*lights[i].kDiffuse*diff)*lights[i].color * texColor);
     // float minDepth = texture(lights[i].shadowMap_texture1, fsIn.texCoord).r;//shadowDepth(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-    // color = vec4(minDepth);
-    // color += vec4(vec3(shadow), 1.0);
+    // color = vec4(vec3(shadow), 1.0);
   }
 }

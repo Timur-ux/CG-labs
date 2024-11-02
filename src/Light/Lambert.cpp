@@ -4,9 +4,11 @@
 #include "glCheckError.hpp"
 #include "glslDataNaming.hpp"
 
+#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/trigonometric.hpp>
 
 LightData LambertLight::getData(const Object &object) {
   // if (host_->moved()) {
@@ -37,19 +39,20 @@ void LambertLight::renderToShadowMap(const std::list<Object *> &objects) {
   // temp mark
   glm::mat4 lightProjection, lightView;
   float near_plane = 1.0f, far_plane = 7.5f;
-  lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+  lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);//glm::perspective(glm::radians(45.0f), 4.0f/3.0f, near_plane, far_plane);
   lightView = glm::lookAt(host_->position(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
   lightSpaceMatrix_ = lightProjection * lightView;
 
   shadowMapProgram_.bind();
-  shadowMapProgram_.setUniformMat4(uniforms::lightSpaceMatrix,
-                                   lightSpaceMatrix_);
+  if(!shadowMapProgram_.setUniformMat4(uniforms::lightSpaceMatrix,
+                                   lightSpaceMatrix_))
+    std::cerr << "Can't set " << uniforms::lightSpaceMatrix << "uniform in depth buffer rendering" << std::endl;
 
-  // depthFramebuffer_.bind();
+  depthFramebuffer_.bind();
   // depthFramebuffer_.bindDepthMap(0);
   glClear(GL_DEPTH_BUFFER_BIT);
   for (auto &object : objects)
     object->draw(&shadowMapProgram_);
-  // depthFramebuffer_.unbind();
+  depthFramebuffer_.unbind();
   shadowMapProgram_.unbind();
 }

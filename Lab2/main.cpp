@@ -73,14 +73,15 @@ int main() {
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D sunTex("./textures/sun3.png", 0);
   glCheckError();
-  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, -30), program, containerTex);
-  Rectangle cube2(glm::vec3(1), glm::vec3(2, 0, -4), program, containerTex);
-  Rectangle cube3(glm::vec3(3, .2, 3), glm::vec3(0, 2, -25), program, containerTex);
-  Rectangle cube4(glm::vec3(1), glm::vec3(0, 0, -2), program, containerTex);
-  glm::vec3 lightPos(-1.0f, 9.0f, -25.0f);
+  glm::vec3 lightPos(-1.0f, 3.0f, -1.0f);
   Rectangle sun(glm::vec3(1), lightPos, program, sunTex);
+  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
+  Rectangle xLine(glm::vec3(0.3), sun.position() + glm::vec3(2, 0, 0), program, containerTex);
+  Rectangle yLine(glm::vec3(0.6), sun.position() + glm::vec3(0, 2, 0), program, containerTex);
+  Rectangle yNegLine(glm::vec3(0.6), sun.position() - glm::vec3(0, 2, 0), program, containerTex);
+  Rectangle zLine(glm::vec3(0.9), sun.position() + glm::vec3(0, 0, 2), program, containerTex);
   // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
-  Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, containerTex);
+  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25), program, containerTex);
   glCheckError();
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
@@ -99,7 +100,7 @@ int main() {
 
   glCheckError();
   // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
-  Scene scene(program, cameraData, {&light}, {&cube, &cube2, &cube3, &floor});
+  Scene scene(program, cameraData, {&light}, { &cube, &xLine, &yLine,&yNegLine, &zLine, &floor});
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   glCheckError();
