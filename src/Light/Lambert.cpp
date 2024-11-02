@@ -35,19 +35,21 @@ void LambertLight::renderToShadowMap(const std::list<Object *> &objects) {
   // }
 
   // temp mark
-  // glm::mat4 lightProjection, lightView;
-  // float near_plane = 1.0f, far_plane = 7.5f;
-  // lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-  // lightView = glm::lookAt(host_->position(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-  // lightSpaceMatrix_ = lightProjection * lightView;
+  glm::mat4 lightProjection, lightView;
+  float near_plane = 1.0f, far_plane = 7.5f;
+  lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+  lightView = glm::lookAt(host_->position(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+  lightSpaceMatrix_ = lightProjection * lightView;
 
-  ProgramBind programBind(shadowMapProgram_);
+  shadowMapProgram_.bind();
   shadowMapProgram_.setUniformMat4(uniforms::lightSpaceMatrix,
                                    lightSpaceMatrix_);
 
-  depthFramebuffer_.bind();
-  // glClear(GL_DEPTH_BUFFER_BIT);
+  // depthFramebuffer_.bind();
+  // depthFramebuffer_.bindDepthMap(0);
+  glClear(GL_DEPTH_BUFFER_BIT);
   for (auto &object : objects)
     object->draw(&shadowMapProgram_);
-  depthFramebuffer_.unbind();
+  // depthFramebuffer_.unbind();
+  shadowMapProgram_.unbind();
 }

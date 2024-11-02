@@ -73,8 +73,12 @@ int main() {
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D sunTex("./textures/sun3.png", 0);
   glCheckError();
-  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
-  Rectangle sun(glm::vec3(1), glm::vec3(0, 10, 0), program, sunTex);
+  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, -30), program, containerTex);
+  Rectangle cube2(glm::vec3(1), glm::vec3(2, 0, -4), program, containerTex);
+  Rectangle cube3(glm::vec3(3, .2, 3), glm::vec3(0, 2, -25), program, containerTex);
+  Rectangle cube4(glm::vec3(1), glm::vec3(0, 0, -2), program, containerTex);
+  glm::vec3 lightPos(-1.0f, 9.0f, -25.0f);
+  Rectangle sun(glm::vec3(1), lightPos, program, sunTex);
   // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
   Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, containerTex);
   glCheckError();
@@ -95,7 +99,7 @@ int main() {
 
   glCheckError();
   // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
-  Scene scene(program, cameraData, {&light}, {&cube, &floor});
+  Scene scene(program, cameraData, {&light}, {&cube, &cube2, &cube3, &floor});
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   glCheckError();

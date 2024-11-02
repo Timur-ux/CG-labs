@@ -20,36 +20,36 @@ public:
   DepthFramebuffer(int width, int height, int depthTexBlock)
       : width_(width), height_(height), depthMap_(nullptr), depthTexBlock_(depthTexBlock) {
     glGenFramebuffers(1, &fbo_);
-    // depthMap_ = new Texture2D(width_, height_, GL_DEPTH_COMPONENT,
-    //                           {
-    //                               {GL_TEXTURE_MAG_FILTER, GL_NEAREST},
-    //                               {GL_TEXTURE_MIN_FILTER, GL_NEAREST},
-    //                               {GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER},
-    //                               {GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER},
-    //                               {GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER},
-    //                           },
-    //                           GL_FLOAT, depthTexBlock);
-    //
-    // depthMap_->bind();
-    glActiveTexture(GL_TEXTURE0 + depthTexBlock);
-    glGenTextures(1, &depthTex_);
-    glCheckError();
-    glBindTexture(GL_TEXTURE_2D, depthTex_);
-    glCheckError();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glCheckError();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glCheckError();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glCheckError();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glCheckError();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glCheckError();
+    depthMap_ = new Texture2D(width_, height_, GL_DEPTH_COMPONENT,
+                              {
+                                  {GL_TEXTURE_MAG_FILTER, GL_NEAREST},
+                                  {GL_TEXTURE_MIN_FILTER, GL_NEAREST},
+                                  {GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER},
+                                  {GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER},
+                                  {GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER},
+                              },
+                              GL_FLOAT, depthTexBlock);
+    depthTex_ = depthMap_->texture();
+
+    depthMap_->bind();
+    // glGenTextures(1, &depthTex_);
+    // glCheckError();
+    // glBindTexture(GL_TEXTURE_2D, depthTex_);
+    // glCheckError();
+    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    // glCheckError();
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // glCheckError();
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // glCheckError();
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    // glCheckError();
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // glCheckError();
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
     glCheckError();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
-                           depthTex_, 0);
+                           depthMap_->texture(), 0);
     glCheckError();
     glDrawBuffer(GL_NONE);
     glCheckError();
@@ -110,7 +110,6 @@ public:
   void bind() {
     glGetIntegerv(GL_VIEWPORT, (GLint *)&saveViewport_);
     glViewport(0, 0, width_, height_);
-    // depthMap_->bind();
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
   }
@@ -119,7 +118,6 @@ public:
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(saveViewport_[0], saveViewport_[1], saveViewport_[2],
                saveViewport_[3]);
-    // depthMap_->unbind();
   }
 
   bool setDepthTexAsUniform(Program & program, const char * name) {
@@ -132,6 +130,15 @@ public:
     bool res = program.setUniformInt(loc, depthTexBlock_);
     glCheckError();
     return res;
+  }
+
+  void bindDepthMap(int block) {
+    depthMap_->setTextureBlock(block);
+    depthMap_->bind();
+  }
+  void unbindDepthMap(int block) {
+    depthMap_->setTextureBlock(block);
+    depthMap_->unbind();
   }
 };
 

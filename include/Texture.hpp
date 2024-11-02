@@ -8,6 +8,7 @@
 #include <GL/glew.h>
 
 class Framebuffer;
+namespace my {
 class Texture {
 protected:
   GLuint texture_ = 0;
@@ -34,10 +35,12 @@ public:
   virtual ~Texture();
 };
 
+}
+
 /*
  * Creates 2d texture with rgba image
  * */
-class Texture2D : public Texture {
+class Texture2D : public my::Texture {
   int width_;
   int height_;
 

@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <list>
 #include <stb_image.h>
 
 #include <glm/glm.hpp>
@@ -9,6 +10,12 @@
 #include <learnopengl/shader.h>
 #include <learnopengl/camera.h>
 #include <learnopengl/model.h>
+#include "CameraMVP.hpp"
+#include "DepthFramebuffer.hpp"
+#include "Light/Lambert.hpp"
+#include "glslDataNaming.hpp"
+#include "objects/Rectangle.hpp"
+#include "utils/printUniforms.hpp"
 
 #include <iostream>
 
@@ -85,6 +92,7 @@ int main()
     Shader shader("./shaders/3.1.2.shadow_mapping.vs", "./shaders/3.1.2.shadow_mapping.fs");
     Shader simpleDepthShader("./shaders/3.1.2.shadow_mapping_depth.vs", "./shaders/3.1.2.shadow_mapping_depth.fs");
     Shader debugDepthQuad("./shaders/3.1.2.debug_quad.vs", "./shaders/3.1.2.debug_quad_depth.fs");
+    eTB_GLSL__print_uniforms(debugDepthQuad.ID);
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -113,31 +121,30 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glBindVertexArray(0);
 
+    // lighting info
+    // -------------
+    glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
+
     // load textures
     // -------------
     unsigned int woodTexture = loadTexture("./textures/container.jpg");
 
+    Program program("./shaders/Lab2Shader1(Lambert).glsl");
+    eTB_GLSL__print_uniforms(program.get());
+    Texture2D containerTex("./textures/container.jpg", 0);
+    Texture2D sunTex("./textures/sun3.png", 0);
+    glCheckError();
+    Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
+    Rectangle sun(glm::vec3(1), lightPos, program, sunTex);
+    // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
+    Rectangle floor(glm::vec3(500, 0.01, 500), glm::vec3(0, -1, -250), program, containerTex);
+
+    CameraMVP cameraData(program, lightPos, glm::vec3(0, 1, 0),
+                       glm::vec3(0, 0, 0));
     // configure depth map FBO
     // -----------------------
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    unsigned int depthMapFBO;
-    glGenFramebuffers(1, &depthMapFBO);
-    // create depth texture
-    unsigned int depthMap;
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // attach depth texture as FBO's depth buffer
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+    LambertLight light(&sun, cameraData, program, DepthFramebuffer(SHADOW_WIDTH, SHADOW_HEIGHT, 1));
 
     // shader configuration
     // --------------------
@@ -147,12 +154,12 @@ int main()
     debugDepthQuad.use();
     debugDepthQuad.setInt("depthMap", 0);
 
-    // lighting info
-    // -------------
-    glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
     // render loop
     // -----------
+
+
+    list<Object*> objects{&cube, &floor};
     while (!glfwWindowShouldClose(window))
     {
         // per-frame time logic
@@ -183,10 +190,10 @@ int main()
         simpleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        light.depthFramebuffer_.bind();
             glClear(GL_DEPTH_BUFFER_BIT);
-            renderScene(simpleDepthShader);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            light.renderToShadowMap(objects);
+        light.depthFramebuffer_.unbind();
 
         // reset viewport
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -194,29 +201,42 @@ int main()
 
         // 2. render scene as normal using the generated depth/shadow map  
         // --------------------------------------------------------------
-        shader.use();
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        shader.setMat4("projection", projection);
-        shader.setMat4("view", view);
-        // set light uniforms
-        shader.setVec3("viewPos", camera.Position);
-        shader.setVec3("lightPos", lightPos);
-        shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, woodTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderScene(shader);
+        // shader.use();
+        // glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        // glm::mat4 view = camera.GetViewMatrix();
+        // shader.setMat4("projection", projection);
+        // shader.setMat4("view", view);
+        // // set light uniforms
+        // shader.setVec3("viewPos", camera.Position);
+        // shader.setVec3("lightPos", lightPos);
+        // shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, woodTexture);
+        // light.depthFramebuffer_.bindDepthMap(1);
+        // renderScene(shader);
+        program.bind();
+    std::stringstream ss;
+    ss <<uniforms::lights  << "[0]." << LightData::firstField();
+    // find place light's data started with
+    GLint lightsLoc = program.getUniformLoc(ss.str().c_str());
+      for(Object * object : objects) {
+          if(!light.getData(*object).setAsUniform(program, 0, lightsLoc))
+            std::cerr << "Can't set light data as uniform" << std::endl;
+          glCheckError();
+          object->draw();
+          glCheckError();
+        }
+        program.unbind();
 
         // render Depth map to quad for visual debugging
         // ---------------------------------------------
         debugDepthQuad.use();
         debugDepthQuad.setFloat("near_plane", near_plane);
         debugDepthQuad.setFloat("far_plane", far_plane);
+        light.depthFramebuffer_.bindDepthMap(0);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        //renderQuad();
+        glBindTexture(GL_TEXTURE_2D, light.depthFramebuffer_.depthTex_);
+        // renderQuad();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

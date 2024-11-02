@@ -3,7 +3,6 @@
 
 #include "CameraMVP.hpp"
 #include "DepthFramebuffer.hpp"
-#include "Framebuffer.hpp"
 #include "IMoveable.hpp"
 #include "Light.hpp"
 #include "objects/Object.hpp"

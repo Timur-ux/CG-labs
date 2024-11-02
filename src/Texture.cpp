@@ -4,6 +4,8 @@
 #include <SOIL/SOIL.h>
 #include <iostream>
 
+using namespace my;
+
 void Texture::bind() {
   glActiveTexture(GL_TEXTURE0 + textureBlock_);
     glCheckError();

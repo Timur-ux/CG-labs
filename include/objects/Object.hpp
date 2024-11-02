@@ -11,6 +11,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
+using namespace my;
+
 class Object : public IMoveable {
 protected:
   glm::vec3 position_;
