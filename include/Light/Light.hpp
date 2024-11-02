@@ -1,6 +1,7 @@
 #ifndef LIGHT_HPP_
 #define LIGHT_HPP_
 
+#include "DepthFramebuffer.hpp"
 #include "Framebuffer.hpp"
 #include "objects/Object.hpp"
 #include <list>
@@ -15,16 +16,16 @@ struct LightData {
   float kAmbient; // Коэффициент фонового света
   float kGlare;   // Коэффициент блика
   glm::mat4 lightSpaceMatrix;
-  Texture2D *shadowMap_texture1;
+  DepthFramebuffer& depthFramebuffer;
 
   LightData(glm::mat3 theNormalMatrix, glm::vec3 theLightPosition,
             glm::vec4 theColor, float theKDiffuse, float theKAmbient,
             float theKGlare, glm::mat4 theLightSpaceMatrix,
-            Texture2D *theShadowMap)
+            DepthFramebuffer &theDepthFramebuffer)
       : normalMatrix(theNormalMatrix), lightPosition(theLightPosition),
         color(theColor), kDiffuse(theKDiffuse), kAmbient(theKAmbient),
         kGlare(theKGlare), lightSpaceMatrix(theLightSpaceMatrix),
-        shadowMap_texture1(theShadowMap) {}
+        depthFramebuffer(theDepthFramebuffer) {}
 
   /**
    * @brief set fields as uniforms in program

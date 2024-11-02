@@ -130,6 +130,8 @@ eTB_GLSL__print_uniforms (GLuint program)
   GLint uniform_count;
   glGetProgramiv (program, GL_ACTIVE_UNIFORMS, &uniform_count);
 
+  GLint attribs_count;
+  glGetProgramiv (program, GL_ACTIVE_ATTRIBUTES, &attribs_count);
   GLchar name [256];
 
   for (GLint i = 0; i < uniform_count; i++) {
@@ -158,6 +160,35 @@ eTB_GLSL__print_uniforms (GLuint program)
     }
 
     if (i == (uniform_count - 1))
+      printf ("\n");
+  }
+
+  for (GLint i = 0; i < attribs_count; i++) {
+    memset (name, '\0', 256);
+    GLint  size;
+    GLenum type;
+
+    glGetActiveAttrib (program, i, 255, NULL, &size, &type, name);
+
+    GLint location = glGetAttribLocation(program, name);
+
+    for (int j = 0; j < sizeof (type_set) / sizeof (glsl_type_set); j++) {
+      if (type_set [j].type != type)
+        continue;
+
+      const char* type_name = type_set [j].name;
+
+      if (size > 1)
+        printf ( "Attrib %d (loc=%d):\t%20s %-20s <Size: %d>\n",
+                   i, location, type_name, name, size );
+      else
+        printf ( "Attrib %d (loc=%d):\t%20s %-20s\n",
+                   i, location, type_name, name );
+
+      break;
+    }
+
+    if (i == (attribs_count - 1))
       printf ("\n");
   }
 }

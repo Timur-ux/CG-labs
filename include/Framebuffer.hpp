@@ -86,9 +86,10 @@ class Framebuffer {
       static Framebuffer framebuffer = Framebuffer(width, height, 0);
 
       framebuffer = Framebuffer(width, height, 0);
-      framebuffer.bind();
       glCheckError();
       framebuffer.createDepthBuffer(depthBufferTextureBlock);
+      glCheckError();
+      framebuffer.bind();
       glCheckError();
       if(!framebuffer.isOk()) 
         std::cerr << "Error: framebuffer is not complete" << std::endl;

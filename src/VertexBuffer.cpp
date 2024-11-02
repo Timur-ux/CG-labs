@@ -65,7 +65,6 @@ void VertexBuffer::setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
   glCheckError();
 
   glVertexAttribPointer(idx, componentsN, type, normalized, stride, offset);
-  std::cout << idx << ' ' << componentsN << ' ' << stride << ' ' << offset << std::endl;
   glCheckError();
   glEnableVertexAttribArray(idx);
   glCheckError();

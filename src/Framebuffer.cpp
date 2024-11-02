@@ -67,25 +67,25 @@ Framebuffer::~Framebuffer() {
 }
 
 void Framebuffer::bind() {
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
   glGetIntegerv(GL_VIEWPORT, (GLint*)&saveViewPort_);
-
   glViewport(0, 0, width_, height_);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
   if(colorBuffersCounter_ == 0) {
     // glReadBuffer(GL_NONE);
     // glDrawBuffer(GL_NONE);
   } else {
     // TODO
   }
-  if(depthBuffer_) {
-    depthBuffer_->bind();
-  }
+  // if(depthBuffer_) {
+  //   depthBuffer_->bind();
+  // }
 }
 
 void Framebuffer::unbind() {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  if(depthBuffer_)
-    depthBuffer_->unbind();
+  // if(depthBuffer_)
+  //   depthBuffer_->unbind();
 
   glViewport(saveViewPort_[0], saveViewPort_[1], saveViewPort_[2], saveViewPort_[3]);
 }
@@ -101,22 +101,19 @@ bool Framebuffer::isOk() {
 }
 
 void Framebuffer::bindDepthBuffer(Texture2D *depthBuffer) {
-  bind();
   depthBuffer->bind();
   glCheckError();
   depthBuffer_ = depthBuffer;
-  glCheckError();
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+  glFramebufferTexture2D(target_, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
                          depthBuffer->texture_, 0);
-  // glDrawBuffer(GL_NONE);
-  // glReadBuffer(GL_NONE);
+  glCheckError();
+  glDrawBuffer(GL_NONE);
+  glReadBuffer(GL_NONE);
   std::cout << "FBO: " << fbo_ << std::endl;
   glCheckError();
-  unbind();
 }
 
 void Framebuffer::createDepthBuffer(int block) {
-  FBOBind _(*this);
   glCheckError();
   depthBuffer_ = new Texture2D(width_, height_, GL_DEPTH_COMPONENT,
                                {
@@ -128,7 +125,9 @@ void Framebuffer::createDepthBuffer(int block) {
                                },
                                GL_FLOAT, block);
   glCheckError();
+  glBindFramebuffer(target_, fbo_);
   bindDepthBuffer(depthBuffer_);
+  glBindFramebuffer(target_, 0);
   glCheckError();
 }
 

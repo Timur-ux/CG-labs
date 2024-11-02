@@ -27,8 +27,8 @@ Object::Object(glm::vec3 position) {
 
   glCheckError();
   model_ = glm::translate(model_, position_);
-  forward_ = glm::vec3(model_*glm::vec4(0,0,1,1));
-  up_ = glm::vec3(model_*glm::vec4(0,1,0,1));
+  forward_ = glm::vec3(model_ * glm::vec4(0, 0, 1, 1));
+  up_ = glm::vec3(model_ * glm::vec4(0, 1, 0, 1));
 }
 
 Object::Object(glm::vec3 position, Program &program,
@@ -45,7 +45,7 @@ Object::Object(glm::vec3 position, Program &program,
   glCheckError();
   model_ = glm::translate(model_, position_);
   forward_ = glm::normalize(glm::vec3(position_));
-  up_ = glm::vec3(glm::vec4(0, 1,0,1));
+  up_ = glm::vec3(glm::vec4(0, 1, 0, 1));
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
                 normals.size() * sizeof(normals[0]);
@@ -107,12 +107,11 @@ Object::Object(glm::vec3 position, Program &program,
 }
 
 void Object::draw() {
-  for (size_t i = 0; i < textures_.size();++i) {
+  for (size_t i = 0; i < textures_.size(); ++i) {
     textures_[i]->bind();
-    program_->setUniformInt(uniforms::texture0, textures_[i]->block());
   }
   glCheckError();
-  program_->bind();
+  // ProgramBind _(*program_);
   vao_.bind();
   vboIndicies_.bind();
   glCheckError();
@@ -129,12 +128,11 @@ void Object::draw() {
   vao_.unbind();
   for (auto &tex : textures_)
     tex->unbind();
-  program_->unbind();
   glCheckError();
 }
 
-void Object::draw(Program * otherProgram) {
-  Program * myProgram = program_;
+void Object::draw(Program *otherProgram) {
+  Program *myProgram = program_;
   program_ = otherProgram;
   draw();
   program_ = myProgram;

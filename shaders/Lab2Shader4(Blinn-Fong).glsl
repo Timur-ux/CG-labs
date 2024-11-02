@@ -12,7 +12,6 @@ struct LightData {
   float kDiffuse; // Коэффициент диффузионной составляющей света
   float kAmbient; // Коэффициент фонового света
   float kGlare; // Коэффициент блика (не используется в модели Ламберта)
-
   mat4 lightSpaceMatrix;
   sampler2D shadowMap_texture1;
 };
@@ -23,9 +22,9 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 perspective;
 
-layout (location = 0) in vec3 vertexPosition;
-layout (location = 1) in vec2 textureCoord;
-layout (location = 2) in vec3 normal;
+in vec3 vertexPosition;
+in vec2 textureCoord;
+in vec3 normal;
 
 
 out VS_OUT {
@@ -39,14 +38,13 @@ out VS_OUT {
 void main() {
   vec4 p = view*model*vec4(vertexPosition, 1.0);
 
-  gl_Position = perspective*p ;
+  gl_Position = perspective*p;
   vsOut.texCoord = textureCoord;
   vsOut.fragPosWorldSpace = model*vec4(vertexPosition, 1.0);
 
-  // vec3 unused = normal + vec3(1);
   for(int i = 0; i < LIGHTS; ++i) {
-    vsOut.fragPosLightSpace[i] = lights[i].lightSpaceMatrix*vsOut.fragPosWorldSpace ;
-    vsOut.n[i] = normalize(lights[i].normalMatrix * normal);
+    vsOut.fragPosLightSpace[i] = lights[i].lightSpaceMatrix*vsOut.fragPosWorldSpace;
+    vsOut.n[i] = normalize(lights[i].normalMatrix*normal);
     vsOut.l[i] = normalize(lights[i].lightPosition - vec3(p));
   }
 }
@@ -81,9 +79,6 @@ in VS_OUT {
   vec3 l[LIGHTS]; // Направления на источники света
 } fsIn;
 
-out vec4 color;
-
-
 // 1 -- полная тень
 // 0 -- отсутствие тени
 float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
@@ -100,18 +95,28 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   return shadow;
 }
 
+out vec4 color;
+uniform vec3 cameraPos;
+
 void main() {
-  vec4 texColor = texture(main_texture0, fsIn.texCoord);
+  vec3 texColor = texture(main_texture0, fsIn.texCoord).rgb;
   color = vec4(0);
   for(int i = 0; i < LIGHTS; ++i) {
     
+    vec3 ambient = lights[i].color*lights[i].kAmbient;
     vec3 n2 = normalize(fsIn.n[i]); // Нормируем интерполируемую нормаль
     vec3 l2 = normalize(fsIn.l[i]); // И направление на источник света
     float diff = max(dot(n2,l2), 0.0); // диффузионная составляющая света
+    vec3 diffuse = lights[i].kDiffuse*diff*light[i].color;
+    
+    vec3 viewDir = normalize(cameraPos - fsIn.fragPosWorldSpace.xyz);
+    vec3 reflectDir = reflect(-l2, n2);
+
+    vec3 halfwayDir = normalize(l2 + viewDir);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 64.0);
+    vec3 specular = lights[i].kGlare*spec*lights[i].color;
+
     float shadow = calculateShadow(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-     // color += ((lights[i].kAmbient +  (1 - shadow)*lights[i].kDiffuse*diff)*lights[i].color * texColor);
-    // float minDepth = texture(lights[i].shadowMap_texture1, fsIn.texCoord).r;//shadowDepth(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-    // color = vec4(minDepth);
-    color += vec4(vec3(shadow), 1.0);
+    color = (ambient + (1.0 - shadow) * (diffuse + specular))
   }
 }

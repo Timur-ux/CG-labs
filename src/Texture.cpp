@@ -93,7 +93,7 @@ Texture2D::Texture2D(int width, int height, GLenum type, std::list<std::pair<GLe
   glGenTextures(1, &texture_);
   glCheckError();
   glBindTexture(GL_TEXTURE_2D, texture_);
-  glCheckError();
+  // bind();
 
   glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, elementType, nullptr);
   glCheckError();
@@ -104,8 +104,7 @@ Texture2D::Texture2D(int width, int height, GLenum type, std::list<std::pair<GLe
   glCheckError();
 
 
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glCheckError();
+  // unbind();
 }
 
 Texture2D::Texture2D(unsigned char * data, int block) : Texture() {

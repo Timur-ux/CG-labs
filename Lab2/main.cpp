@@ -67,17 +67,11 @@ int main() {
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(255);
   glCheckError();
-  // glFrontFace(GL_CCW);
-  // glCheckError();
-  // glCullFace(GL_BACK);
-  // glCheckError();
-  // glEnable(GL_CULL_FACE);
-  // glCheckError();
 
  
   glCheckError();
   Texture2D containerTex("./textures/container.jpg", 0);
-  Texture2D sunTex("./textures/sun3.png", 1);
+  Texture2D sunTex("./textures/sun3.png", 0);
   glCheckError();
   Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
   Rectangle sun(glm::vec3(1), glm::vec3(0, 10, 0), program, sunTex);
@@ -93,8 +87,11 @@ int main() {
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  LambertLight light(&sun, cameraData, program, Framebuffer::createShadowMap(1200, 800, 2));
-  // LambertLight light2(&sun2, cameraData, program, Framebuffer::createShadowMap(512, 512, 3));
+  LambertLight light(&sun, cameraData, program, DepthFramebuffer(1200, 800, 1));
+
+  program.setUniformInt("main_texture0", 0);
+  program.setUniformInt("lights[0].shadowMap_texture1", 1);
+
 
   glCheckError();
   // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
@@ -104,19 +101,26 @@ int main() {
   glCheckError();
 
   while (!glfwWindowShouldClose(win)) {
-    glCheckError();
-
-    glfwGetWindowSize(win, &width, &height);
-    cameraData.updateState();
-    glClearColor(0, 0.2, 0.2, 1);
-    glfwPollEvents();
-    moveHandler.move();
     prevTime = time;
     time = glfwGetTime();
     float dt = time - prevTime;
+    glCheckError();
+
+
+    // process input
+    cameraData.updateState();
+    glfwPollEvents();
+    moveHandler.move();
+
+    // render
+    glClearColor(0, 0.2, 0.2, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, light.depthFramebuffer_.depthTex_);
     scene.update(time, dt);
 
 
+    glfwGetWindowSize(win, &width, &height);
     glViewport(0, 0, width, height);
     glfwSwapBuffers(win);
   }
