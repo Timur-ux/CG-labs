@@ -95,13 +95,14 @@ Texture2D::Texture2D(int width, int height, GLenum type, std::list<std::pair<GLe
   glBindTexture(GL_TEXTURE_2D, texture_);
   glCheckError();
 
+  glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, elementType, nullptr);
+  glCheckError();
+
   for(auto & [param, value] : texParameters) {
     glTexParameteri(GL_TEXTURE_2D, param, value);
   }
   glCheckError();
 
-  glTexImage2D(GL_TEXTURE_2D, 0, type, width, height, 0, type, elementType, nullptr);
-  glCheckError();
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glCheckError();

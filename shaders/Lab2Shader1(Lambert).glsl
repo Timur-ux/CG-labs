@@ -81,17 +81,7 @@ in VS_OUT {
 
 out vec4 color;
 
-float bias = -0.001;
-float shadowDepth(vec4 fragPosLightSpace, sampler2D shadowMap) {
-  // Перспективно делим
-  vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w; 
-  // Приводим координаты к интервалу [0, 1]
-  projCoords = 0.5 * projCoords + 0.5;
 
-  float minDepth = texture(shadowMap, projCoords.xy).r;
-
-  return minDepth;
-}
 // 1 -- полная тень
 // 0 -- отсутствие тени
 float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
@@ -103,8 +93,7 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   float minDepth = texture(shadowMap, projCoords.xy).r;
   float curDepth = fragPosLightSpace.z;
 
-  float shadow = curDepth + bias <= minDepth ? 0.0 : 1.0;
-  shadow = minDepth;
+  float shadow = curDepth <= minDepth ? 0.0 : 1.0;
 
   return shadow;
 }
