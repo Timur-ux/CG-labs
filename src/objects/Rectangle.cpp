@@ -55,9 +55,9 @@ static const std::vector<GLubyte> indexes{
 };
 
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
-           Texture2D &texture)
+           Texture2D &texture, bool rotate)
     : Object(position, program, vertexCoords, textureCoords, normals, indexes,
-             GL_TRIANGLE_FAN, texture),
+             GL_TRIANGLE_FAN, texture, rotate),
       texture_(texture) {
   model_ = glm::scale(model_, sideSize);
 }

@@ -11,7 +11,7 @@ class Rectangle : public Object {
   Texture2D &texture_;
 
   public:
-    Rectangle(glm::vec3 sideSizes, glm::vec3 position, Program & program, Texture2D & texture);
+    Rectangle(glm::vec3 sideSizes, glm::vec3 position, Program & program, Texture2D & texture, bool rotate = false);
 };
 
 

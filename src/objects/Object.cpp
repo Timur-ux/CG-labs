@@ -9,6 +9,7 @@
 #include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/trigonometric.hpp>
 #include <iostream>
 
 std::ostream &operator<<(std::ostream &os, glm::vec3 &vec) {
@@ -35,7 +36,7 @@ Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
                std::vector<glm::vec3> normals, std::vector<GLubyte> indexes,
-               GLenum drawMode, Texture2D &texture)
+               GLenum drawMode, Texture2D &texture, bool rotate)
     : position_(position), program_(&program), model_(1), drawMode_(drawMode),
       textures_({&texture}) {
 
@@ -44,7 +45,13 @@ Object::Object(glm::vec3 position, Program &program,
 
   glCheckError();
   model_ = glm::translate(model_, position_);
-  forward_ = glm::normalize(glm::vec3(position_));
+  if(position_ != glm::vec3(0))
+    forward_ = glm::normalize(position_ - glm::vec3(0));
+  else
+    forward_ = glm::vec3(1, 0, 0);
+
+  if(rotate)
+    model_ = glm::rotate(model_, glm::radians(45.0f), forward_);
   up_ = glm::vec3(glm::vec4(0, 1, 0, 1));
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +

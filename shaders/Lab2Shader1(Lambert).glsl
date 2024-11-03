@@ -84,6 +84,7 @@ in VS_OUT {
 out vec4 color;
 
 
+float bias = 0.01;
 // 1 -- полная тень
 // 0 -- отсутствие тени
 float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
@@ -93,9 +94,11 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   projCoords = 0.5 * projCoords + 0.5;
 
   float minDepth = texture(shadowMap, projCoords.xy).r;
+  fragPosLightSpace = 0.5 * fragPosLightSpace + 0.5;
   float curDepth = fragPosLightSpace.z;
 
-  float shadow = ((curDepth <= minDepth) ? 0.0 : 1.0);
+  float shadow = ((curDepth - bias <= minDepth) ? 0.0 : 1.0);
+  // shadow = minDepth;
   if(curDepth > 1)
     shadow = 0.0;
 

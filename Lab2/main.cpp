@@ -21,7 +21,7 @@
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
 #include "Framebuffer.hpp"
-
+#include "MoveObjectFN.hpp"
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
@@ -75,7 +75,8 @@ int main() {
   glCheckError();
   glm::vec3 lightPos(-1.0f, 3.0f, -1.0f);
   Rectangle sun(glm::vec3(1), lightPos, program, sunTex);
-  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex);
+  Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex, true);
+  MoveObjectFN moveCubeFN(&cube);
   Rectangle xLine(glm::vec3(0.3), sun.position() + glm::vec3(2, 0, 0), program, containerTex);
   Rectangle yLine(glm::vec3(0.6), sun.position() + glm::vec3(0, 2, 0), program, containerTex);
   Rectangle yNegLine(glm::vec3(0.6), sun.position() - glm::vec3(0, 2, 0), program, containerTex);
@@ -100,7 +101,7 @@ int main() {
 
   glCheckError();
   // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
-  Scene scene(program, cameraData, {&light}, { &cube, &xLine, &yLine,&yNegLine, &zLine, &floor});
+  Scene scene(program, cameraData, {&light}, { &cube, &xLine, &yLine,&yNegLine, &floor});
   glCheckError();
   double time = glfwGetTime(), prevTime = time;
   glCheckError();
@@ -123,6 +124,7 @@ int main() {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, light.depthFramebuffer_.depthTex_);
     scene.update(time, dt);
+    moveCubeFN(time);
 
 
     glfwGetWindowSize(win, &width, &height);

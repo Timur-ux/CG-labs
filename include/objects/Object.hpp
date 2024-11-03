@@ -6,13 +6,13 @@
 #include "Texture.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/fwd.hpp>
 #include <glm/geometric.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
 using namespace my;
-
 class Object : public IMoveable {
 protected:
   glm::vec3 position_;
@@ -35,13 +35,12 @@ protected:
   size_t normalsSize_ = 0;
 
   bool moved_ = false;
-
 public:
   Object(glm::vec3 position = glm::vec3(0));
   Object(glm::vec3 position, Program &program,
          std::vector<glm::vec3> verticiesCoords,
          std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals,
-         std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture);
+         std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture, bool rotate = false);
 
   const glm::vec3 &position() const override { return position_; }
   const glm::mat4 &model() const { return model_; }
@@ -50,6 +49,11 @@ public:
   bool setTextureCoords(const std::vector<glm::vec2> &textureCoords);
   bool setNormals(const std::vector<glm::vec3> &normals);
   bool setIndexes(const std::vector<GLubyte> &indexes);
+
+  void shiftBy(glm::vec3 dp) {
+    model_ = glm::translate(model_, dp);
+    position_ += dp;
+  }
 
   virtual const glm::vec3 &forward() const override { return forward_; };
   virtual const glm::vec3 &up() const override { return up_; };
