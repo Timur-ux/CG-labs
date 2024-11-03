@@ -25,6 +25,12 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/IMoveable.cpp.o -c /home/raison/git/CG-labs/src/IMoveable.cpp",
+  "file": "/home/raison/git/CG-labs/src/IMoveable.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/IMoveable.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Light/Fong.cpp.o -c /home/raison/git/CG-labs/src/Light/Fong.cpp",
   "file": "/home/raison/git/CG-labs/src/Light/Fong.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Light/Fong.cpp.o"

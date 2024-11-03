@@ -7,12 +7,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-struct CameraMVP : public IMoveable {
-  glm::vec3 position_;
-  glm::vec3 up_;
-  glm::vec3 target_;
-  glm::vec3 forward_;
-
+struct CameraMVP : public MoveableBase {
   glm::mat4 view_;
   glm::mat4 perspective_;
 
@@ -34,19 +29,16 @@ public:
 
   const glm::mat4 &view() const { return view_; };
   const glm::mat4 &perspective() const { return perspective_; };
-  const glm::vec3 &position() const override {return position_;}
-  const glm::vec3 &forward() const override {return forward_;}
-  const glm::vec3 &up() const override {return up_;}
 
-  bool moved() override {return viewChanged_;}
-
-  void moveTo(glm::vec3 position);
-  void shiftBy(glm::vec3 shift);
   void lookAt(glm::vec3 target);
   void lookInto(glm::vec3 direction);
 
   void changeFov(GLfloat newFov);
   void changeRatio(GLfloat newRatio);
+
+  virtual void shiftBy(glm::vec3 dp) override;
+  virtual void moveTo(glm::vec3 newPosition) override;
+  virtual void rotateAround(glm::vec3 v, float rads) override;
 
   void updateState();
 };

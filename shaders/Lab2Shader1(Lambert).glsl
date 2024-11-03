@@ -98,9 +98,9 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   float curDepth = fragPosLightSpace.z;
 
   float shadow = ((curDepth - bias <= minDepth) ? 0.0 : 1.0);
-  // shadow = minDepth;
-  if(curDepth > 1)
+  if(projCoords.z >= 1)
     shadow = 0.0;
+  // shadow = minDepth;
 
   return shadow;
 }

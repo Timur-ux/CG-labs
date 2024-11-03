@@ -1,4 +1,5 @@
 #include "objects/Object.hpp"
+#include "IMoveable.hpp"
 #include "Program.hpp"
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
@@ -22,7 +23,7 @@ std::ostream &operator<<(std::ostream &os, glm::vec2 &vec) {
   return os;
 }
 
-Object::Object(glm::vec3 position) {
+Object::Object(glm::vec3 position) : MoveableBase(position, glm::vec3(0)) {
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
@@ -37,7 +38,7 @@ Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec2> textureCoords,
                std::vector<glm::vec3> normals, std::vector<GLubyte> indexes,
                GLenum drawMode, Texture2D &texture, bool rotate)
-    : position_(position), program_(&program), model_(1), drawMode_(drawMode),
+    : MoveableBase(position, glm::vec3(0)), program_(&program), drawMode_(drawMode),
       textures_({&texture}) {
 
   ProgramBind progBinding(*program_);

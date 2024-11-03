@@ -12,14 +12,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
-using namespace my;
-class Object : public IMoveable {
+class Object : public MoveableBase {
 protected:
-  glm::vec3 position_;
-  glm::vec3 forward_;
-  glm::vec3 up_;
-  glm::mat4 model_;
-
   Program *program_;
   VertexArray vao_;
   VertexBuffer vboData_;
@@ -34,7 +28,6 @@ protected:
   size_t textureSize_ = 0;
   size_t normalsSize_ = 0;
 
-  bool moved_ = false;
 public:
   Object(glm::vec3 position = glm::vec3(0));
   Object(glm::vec3 position, Program &program,
@@ -42,28 +35,10 @@ public:
          std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals,
          std::vector<GLubyte> indexes, GLenum drawMode, Texture2D &texture, bool rotate = false);
 
-  const glm::vec3 &position() const override { return position_; }
-  const glm::mat4 &model() const { return model_; }
-
   bool setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords);
   bool setTextureCoords(const std::vector<glm::vec2> &textureCoords);
   bool setNormals(const std::vector<glm::vec3> &normals);
   bool setIndexes(const std::vector<GLubyte> &indexes);
-
-  void shiftBy(glm::vec3 dp) {
-    model_ = glm::translate(model_, dp);
-    position_ += dp;
-  }
-
-  virtual const glm::vec3 &forward() const override { return forward_; };
-  virtual const glm::vec3 &up() const override { return up_; };
-  virtual bool moved() override {
-    if (moved_) {
-      moved_ = false;
-      return true;
-    }
-    return false;
-  };
 
   /**
    * @brief Just set:

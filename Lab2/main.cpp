@@ -20,7 +20,6 @@
 #include <GLFW/glfw3.h>
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
-#include "Framebuffer.hpp"
 #include "MoveObjectFN.hpp"
 
 void keyCallback(GLFWwindow *, int, int, int, int);
@@ -36,16 +35,9 @@ int main() {
   glGetError();
 
   setDefaultCtxParams();
-  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-
   GLFWwindow *win = glfwCreateWindow(1200, 800, "Lab 2", NULL, NULL);
-
   glfwMakeContextCurrent(win);
 
-  glfwSetKeyCallback(win, keyCallback);
-  glfwSetCursorPosCallback(win, mouseMoveCallback);
-
-  glCheckError();
 
   glewExperimental = GL_TRUE;
   GLenum glewStatus;
@@ -53,27 +45,28 @@ int main() {
     std::cerr << "Error: GLEW initialization failed, status code: "
               << glewStatus << std::endl;
 
-  Program program("./shaders/Lab2Shader1(Lambert).glsl");
-  eTB_GLSL__print_uniforms(program.get());
-  // Program program("./shaders/simpleShader.vsh", "./shaders/redColor.fsh");
-
+  // Настройки opengl
   int width, height;
   glfwGetWindowSize(win, &width, &height);
-  glCheckError();
   glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  glCheckError();
   glEnable(GL_DEPTH_TEST);
-  glCheckError();
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(255);
-  glCheckError();
 
+  // Callback'и
+  glfwSetKeyCallback(win, keyCallback);
+  glfwSetCursorPosCallback(win, mouseMoveCallback);
+
+  // Шейдерная программа для основного рендера
+  Program program("./shaders/Lab2Shader1(Lambert).glsl");
+  eTB_GLSL__print_uniforms(program.get());
  
-  glCheckError();
+  // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D sunTex("./textures/sun3.png", 0);
-  glCheckError();
-  glm::vec3 lightPos(-1.0f, 3.0f, -1.0f);
+
+  // Объекты
+  glm::vec3 lightPos(-1.0f, 30.0f, -1.0f);
   Rectangle sun(glm::vec3(1), lightPos, program, sunTex);
   Rectangle cube(glm::vec3(1), glm::vec3(0, 0, 0), program, containerTex, true);
   MoveObjectFN moveCubeFN(&cube);
@@ -81,58 +74,55 @@ int main() {
   Rectangle yLine(glm::vec3(0.6), sun.position() + glm::vec3(0, 2, 0), program, containerTex);
   Rectangle yNegLine(glm::vec3(0.6), sun.position() - glm::vec3(0, 2, 0), program, containerTex);
   Rectangle zLine(glm::vec3(0.9), sun.position() + glm::vec3(0, 0, 2), program, containerTex);
-  // Rectangle sun2(glm::vec3(4.1), glm::vec3(-30, 10, -20), program, sunTex);
   Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25), program, containerTex);
   glCheckError();
+
+  // Камера
   CameraMVP cameraData(program, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
 
+  // Event Handler'ы
   MoveEventHandler moveHandler(cameraData);
   keyPressEvent += moveHandler;
-
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  LambertLight light(&sun, cameraData, program, DepthFramebuffer(1200, 800, 1));
+  // Источники света
+  LambertLight light(lightPos, glm::vec3(0), cameraData, program, DepthFramebuffer(1200, 1200, 1));
 
-  program.setUniformInt("main_texture0", 0);
-  program.setUniformInt("lights[0].shadowMap_texture1", 1);
-
-
-  glCheckError();
-  // Scene scene(program, cameraData, {&light, &light2}, {&cube, &sun, &sun2, &floor});
+  // Сцены
   Scene scene(program, cameraData, {&light}, { &cube, &xLine, &yLine,&yNegLine, &floor});
-  glCheckError();
-  double time = glfwGetTime(), prevTime = time;
-  glCheckError();
 
+  // Настройки шейдерной программы
+  program.setUniformInt("main_texture0", 0);
+
+  // Цикл рендера
+  double time = glfwGetTime(), prevTime = time;
   while (!glfwWindowShouldClose(win)) {
+    // Обновляем время
     prevTime = time;
     time = glfwGetTime();
     float dt = time - prevTime;
     glCheckError();
 
-
-    // process input
-    cameraData.updateState();
-    glfwPollEvents();
-    moveHandler.move();
-
-    // render
+    // рендерим сцену
     glClearColor(0, 0.2, 0.2, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, light.depthFramebuffer_.depthTex_);
     scene.update(time, dt);
     moveCubeFN(time);
 
-
-    glfwGetWindowSize(win, &width, &height);
+    // Свапаем буферы glfwGetWindowSize(win, &width, &height);
     glViewport(0, 0, width, height);
     glfwSwapBuffers(win);
+
+    // Обрабатываем ввод
+    cameraData.updateState();
+    glfwPollEvents();
+    moveHandler.move();
   }
   glCheckError();
 
+  // Освобождаем ресурсы
   glfwDestroyWindow(win);
   glfwTerminate();
   glCheckError();

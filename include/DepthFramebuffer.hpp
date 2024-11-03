@@ -15,10 +15,8 @@ class DepthFramebuffer {
   GLuint saveViewport_[4];
 
 public:
-  GLuint depthTex_;
-  int depthTexBlock_;
   DepthFramebuffer(int width, int height, int depthTexBlock)
-      : width_(width), height_(height), depthMap_(nullptr), depthTexBlock_(depthTexBlock) {
+      : width_(width), height_(height), depthMap_(nullptr) {
     glGenFramebuffers(1, &fbo_);
     depthMap_ = new Texture2D(width_, height_, GL_DEPTH_COMPONENT,
                               {
@@ -29,36 +27,16 @@ public:
                                   {GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER},
                               },
                               GL_FLOAT, depthTexBlock);
-    depthTex_ = depthMap_->texture();
 
     depthMap_->bind();
-    // glGenTextures(1, &depthTex_);
-    // glCheckError();
-    // glBindTexture(GL_TEXTURE_2D, depthTex_);
-    // glCheckError();
-    // glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    // glCheckError();
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    // glCheckError();
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // glCheckError();
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    // glCheckError();
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // glCheckError();
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
-    glCheckError();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
                            depthMap_->texture(), 0);
-    glCheckError();
     glDrawBuffer(GL_NONE);
-    glCheckError();
     glReadBuffer(GL_NONE);
-    glCheckError();
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
       std::cerr << "Depth framebuffer is incomplete" << std::endl;
-    glCheckError();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glCheckError();
@@ -75,11 +53,8 @@ public:
     other.fbo_ = 0;
     other.depthMap_ = nullptr;
 
-    depthTexBlock_ = other.depthTexBlock_;
-    depthTex_ = other.depthTex_;
-    other.depthTexBlock_ = 0;
-    other.depthTex_ = 0;
   }
+
   DepthFramebuffer & operator=(DepthFramebuffer && other) {
     if(this == &other)
       return *this;
@@ -91,11 +66,6 @@ public:
 
     other.fbo_ = 0;
     other.depthMap_ = nullptr;
-
-    depthTexBlock_ = other.depthTexBlock_;
-    depthTex_ = other.depthTex_;
-    other.depthTexBlock_ = 0;
-    other.depthTex_ = 0;
 
     return *this;
   }
@@ -120,25 +90,8 @@ public:
                saveViewport_[3]);
   }
 
-  bool setDepthTexAsUniform(Program & program, const char * name) {
-    bool res = program.setUniformInt(name, depthTexBlock_);
-    glCheckError();
-    return res;
-  }
-
-  bool setDepthTexAsUniform(Program & program, GLint loc) {
-    bool res = program.setUniformInt(loc, depthTexBlock_);
-    glCheckError();
-    return res;
-  }
-
-  void bindDepthMap(int block) {
-    depthMap_->setTextureBlock(block);
-    depthMap_->bind();
-  }
-  void unbindDepthMap(int block) {
-    depthMap_->setTextureBlock(block);
-    depthMap_->unbind();
+  Texture2D & depthMap() {
+    return *depthMap_;
   }
 };
 

@@ -1,4 +1,5 @@
 #include "CameraMVP.hpp"
+#include "IMoveable.hpp"
 #include "Program.hpp"
 #include "geometry.hpp"
 #include "glCheckError.hpp"
@@ -13,10 +14,9 @@
 
 CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
                      glm::vec3 target, GLfloat fov, GLfloat ratio)
-    : program_(program), position_(position), up_(glm::normalize(up)),
-      target_(target), fov_(fov), ratio_(ratio), view_(1), perspective_(1),
-      forward_(glm::normalize(target - position)) {
-  glCheckError();
+    : MoveableBase(position, target), program_(program), 
+       fov_(fov), ratio_(ratio), view_(1), perspective_(1) {
+   up_ = up;
 
   viewLoc_ = glGetUniformLocation(program_.get(), "view");
   perspectiveLoc_ = glGetUniformLocation(program_.get(), "perspective");
@@ -32,15 +32,13 @@ CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
 }
 
 void CameraMVP::moveTo(glm::vec3 position) {
-  position_ = position;
-  forward_ = glm::normalize(position_ - target_);
+  MoveableBase::moveTo(position);
   viewChanged_ = true;
 }
 
 void CameraMVP::shiftBy(glm::vec3 shift) {
-  position_ += shift;
+  MoveableBase::shiftBy(shift);
   viewChanged_ = true;
-  glCheckError();
 }
 
 void CameraMVP::updateState() {
@@ -59,21 +57,20 @@ void CameraMVP::updateState() {
 }
 
 void CameraMVP::lookAt(glm::vec3 target) {
-  glCheckError();
-  target_ = target;
-  forward_ = glm::normalize(target_ - position_ );
+  forward_ = glm::normalize(target - position_ );
   viewChanged_ = true;
 }
 
 void CameraMVP::lookInto(glm::vec3 direction) {
-  glCheckError();
   forward_ = glm::normalize(direction);
-  target_ = position_ + forward_;
   viewChanged_ = true;
 }
 
+void CameraMVP::rotateAround(glm::vec3 v, float rads) {
+  MoveableBase::rotateAround(v, rads);
+  viewChanged_ = true;
+}
 void CameraMVP::changeFov(GLfloat newFov) {
-  glCheckError();
   if (newFov <= 0 || newFov > 180)
     throw std::invalid_argument("Fov must be in (0, 180]. Given: " +
                                 std::to_string(newFov));
@@ -82,7 +79,6 @@ void CameraMVP::changeFov(GLfloat newFov) {
 }
 
 void CameraMVP::changeRatio(GLfloat newRatio) {
-  glCheckError();
   if (newRatio <= 0)
     throw std::invalid_argument("Ratio must be positive. Given: " +
                                 std::to_string(newRatio));

@@ -3,11 +3,17 @@
 
 #include "DepthFramebuffer.hpp"
 #include "Framebuffer.hpp"
+#include "IMoveable.hpp"
 #include "objects/Object.hpp"
 #include <list>
 
+// Структура для передачи данных о свете внутрь программы шейдера
 // Для корректной работы структура LightData должна совпадать с оной в шейдере
 struct LightData {
+  static const int MAXIMUM_TEXTURE_BLOCKS = 8;
+  static const int DEPTH_MAP_OFFSET =
+      1; // До какого блока у нас лежат обычные текстуры и с какого блока у нас
+         // начинаются карты глубин
   glm::mat3 normalMatrix;  // Матрица нормализации нормалей
   glm::vec3 lightPosition; // Позиция света
   glm::vec4 color;         // Цвет источника
@@ -15,8 +21,8 @@ struct LightData {
   float kDiffuse; // Коэффициент диффузионной составляющей света
   float kAmbient; // Коэффициент фонового света
   float kGlare;   // Коэффициент блика
-  glm::mat4 lightSpaceMatrix;
-  DepthFramebuffer& depthFramebuffer;
+  glm::mat4 lightSpaceMatrix; // Проективно-видовая матрица позиции источника света
+  DepthFramebuffer &depthFramebuffer; // Отсюда будет вытаскиваться карта глубин
 
   LightData(glm::mat3 theNormalMatrix, glm::vec3 theLightPosition,
             glm::vec4 theColor, float theKDiffuse, float theKAmbient,
@@ -35,14 +41,21 @@ struct LightData {
    * @param startLoc -- location used in shader to array of structs
    */
   virtual bool setAsUniform(Program &program, size_t i, size_t startLoc);
-  static std::string firstField() { return "normalMatrix"; }
+
+  /**
+   * @brief Используется для определения позиции массива с данными о свете
+   *
+   * @return строка вида <имя массива>[0].<имя первого поля>
+   */
+  static std::string firstField(); 
 };
 
 class ILight {
-public:
-  virtual void attachTo(IMoveable *newHost) = 0;
   virtual LightData getData(const Object &object) = 0;
+public:
   virtual void renderToShadowMap(const std::list<Object *> &objects) = 0;
+  virtual void bindDepthMapTo(int block) = 0;
+  virtual bool setLightParamsFor(const Object & object, size_t i) = 0;
   virtual ~ILight() {}
 };
 

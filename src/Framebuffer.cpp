@@ -105,7 +105,7 @@ void Framebuffer::bindDepthBuffer(Texture2D *depthBuffer) {
   glCheckError();
   depthBuffer_ = depthBuffer;
   glFramebufferTexture2D(target_, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
-                         depthBuffer->texture_, 0);
+                         depthBuffer->texture(), 0);
   glCheckError();
   glDrawBuffer(GL_NONE);
   glReadBuffer(GL_NONE);
