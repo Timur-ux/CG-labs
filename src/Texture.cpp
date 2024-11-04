@@ -8,8 +8,11 @@
 // ----------
 
 void Texture::bind() {
+  glCheckError();
   glActiveTexture(GL_TEXTURE0 + textureBlock_);
+  glCheckError();
   glBindTexture(GL_TEXTURE_2D, texture_);
+  glCheckError();
 }
 
 void Texture::unbind() {
@@ -19,7 +22,7 @@ void Texture::unbind() {
 
 int Texture::maximumTextureBlocks() {
   int res;
-  glGetIntegerv(GL_MAX_TEXTURE_UNITS, &res);
+  glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &res);
 
   return res;
 }

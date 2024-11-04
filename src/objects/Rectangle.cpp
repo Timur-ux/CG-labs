@@ -34,7 +34,7 @@ static const std::vector<glm::vec2> textureCoords{
 // Counter clock wise from left bottom
 static const std::vector<glm::vec3> normals{
     {0, 0, -1}, {0, 0, -1}, {0, 0, -1}, {0, 0, -1}, // front
-    {0, 0, 1},  {0, 0, 1},  {0, 0, 1},  {0, 0, 1},              // back
+    {0, 0, 1},  {0, 0, 1},  {0, 0, 1},  {0, 0, 1},  // back
 
     {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, {-1, 0, 0}, // left
     {1, 0, 0},  {1, 0, 0},  {1, 0, 0},  {1, 0, 0},  // right
@@ -44,20 +44,20 @@ static const std::vector<glm::vec3> normals{
 };
 
 static const std::vector<GLubyte> indexes{
-    0,  1,  2,  3,  255, // front
-    4,  5,  6,  7,  255, // back
+    2,  1,  0,  0,  3,  2, // front
+    5,  6,  7,  7,  4,  5, // back
 
-    8,  9, 10, 11, 255, // left
-    12, 13, 14, 15, 255, // right
+    10,  9,  8, 8, 11, 10,  // left
+    15, 14, 13, 13, 12, 15, // right
 
-    16, 17, 18, 19, 255, // up
-    20, 21, 22, 23       // down
+    18, 17, 16, 16, 19, 18, // up
+    23, 22, 21, 21, 20, 23, // down
 };
 
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
-           Texture2D &texture, bool rotate)
+                     Texture2D &texture, bool rotate)
     : Object(position, program, vertexCoords, textureCoords, normals, indexes,
-             GL_TRIANGLE_FAN, texture, rotate),
+             GL_TRIANGLES, texture, rotate),
       texture_(texture) {
   model_ = glm::scale(model_, sideSize);
 }

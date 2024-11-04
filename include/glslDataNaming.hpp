@@ -11,8 +11,7 @@ namespace uniforms {
   inline const char * perspectiveMatrix = "perspective";
 
   inline const char * lights = "lights";
-
-  inline const char * fongP = "fongP";
+  inline const char * cameraPos = "cameraPos";
 
   inline const char * lightSpaceMatrix = "lightSpaceMatrix";
 }; // !uniforms

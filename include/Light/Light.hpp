@@ -1,6 +1,7 @@
 #ifndef LIGHT_HPP_
 #define LIGHT_HPP_
 
+#include "CameraMVP.hpp"
 #include "DepthFramebuffer.hpp"
 #include "Framebuffer.hpp"
 #include "IMoveable.hpp"
@@ -21,7 +22,8 @@ struct LightData {
   float kDiffuse; // Коэффициент диффузионной составляющей света
   float kAmbient; // Коэффициент фонового света
   float kGlare;   // Коэффициент блика
-  glm::mat4 lightSpaceMatrix; // Проективно-видовая матрица позиции источника света
+  glm::mat4
+      lightSpaceMatrix; // Проективно-видовая матрица позиции источника света
   DepthFramebuffer &depthFramebuffer; // Отсюда будет вытаскиваться карта глубин
 
   LightData(glm::mat3 theNormalMatrix, glm::vec3 theLightPosition,
@@ -47,16 +49,46 @@ struct LightData {
    *
    * @return строка вида <имя массива>[0].<имя первого поля>
    */
-  static std::string firstField(); 
+  static std::string firstField();
 };
 
 class ILight {
   virtual LightData getData(const Object &object) = 0;
+
 public:
   virtual void renderToShadowMap(const std::list<Object *> &objects) = 0;
   virtual void bindDepthMapTo(int block) = 0;
-  virtual bool setLightParamsFor(const Object & object, size_t i) = 0;
+  virtual bool setLightParamsFor(const Object &object, size_t i) = 0;
   virtual ~ILight() {}
 };
 
+class LightBase : public ILight, public MoveableBase {
+protected:
+  CameraMVP &cameraData_;
+  Program &program_;
+  Program &shadowMapProgram_;
+
+  glm::vec4 color_;
+  GLfloat kDiffuse_;
+  GLfloat kAmbient_;
+  GLfloat kGlare_ = 0;
+
+  glm::mat4 lightProjection_;
+  glm::mat4 lightSpaceMatrix_; //  lightProjection*view
+
+  GLfloat n_ = 1.0f, f_ = 100.0f;
+  DepthFramebuffer depthFramebuffer_;
+
+  LightData getData(const Object &object) override;
+
+public:
+  LightBase(glm::vec3 position, glm::vec3 target, CameraMVP &cameraData,
+            Program &program, DepthFramebuffer &&framebuffer,
+            glm::vec4 color = {1, 1, 1, 1}, GLfloat kDiffuse = 0.6,
+            GLfloat kAmbient = 0.2, GLfloat kGlare = 0.2);
+
+  virtual void renderToShadowMap(const std::list<Object *> &objects) override;
+  virtual void bindDepthMapTo(int block) override;
+  virtual bool setLightParamsFor(const Object &object, size_t i) override;
+};
 #endif // !LIGHT_HPP_

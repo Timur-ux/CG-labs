@@ -13,15 +13,6 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 
-std::ostream &operator<<(std::ostream &os, glm::vec3 &vec) {
-  os << "vec3(" << vec.x << ", " << vec.y << ", " << vec.z << ")" << std::endl;
-  return os;
-}
-
-std::ostream &operator<<(std::ostream &os, glm::vec2 &vec) {
-  os << "vec3(" << vec.x << ", " << vec.y << ")" << std::endl;
-  return os;
-}
 
 Object::Object(glm::vec3 position) : MoveableBase(position, glm::vec3(0)) {
   ProgramBind progBinding(*program_);
@@ -115,6 +106,7 @@ Object::Object(glm::vec3 position, Program &program,
 }
 
 void Object::draw() {
+  glCheckError();
   for (size_t i = 0; i < textures_.size(); ++i) {
     textures_[i]->bind();
   }
@@ -142,7 +134,9 @@ void Object::draw() {
 void Object::draw(Program *otherProgram) {
   Program *myProgram = program_;
   program_ = otherProgram;
+  glCheckError();
   draw();
+  glCheckError();
   program_ = myProgram;
 }
 

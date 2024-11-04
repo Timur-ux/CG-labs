@@ -12,9 +12,13 @@ Scene::Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> ligh
 
 void Scene::update(double time, double dt) {
   // render to shadow map
+  glCheckError();
   for(auto & light: lights_) {
+  glCheckError();
     light->renderToShadowMap(objects_);
+  glCheckError();
   }
+  glCheckError();
   glFinish();
 
   program_.bind();
@@ -26,7 +30,9 @@ void Scene::update(double time, double dt) {
         std::cerr << "Can't set light data as uniform" << std::endl;
     }
 
+  glCheckError();
     object->draw();
+  glCheckError();
   }
 
   program_.unbind();

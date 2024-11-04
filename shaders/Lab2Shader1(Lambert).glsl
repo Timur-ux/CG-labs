@@ -2,7 +2,8 @@
 
 #version 330 core
 
-#define LIGHTS 1
+#define MAX_LIGHTS 10
+uniform int lightsCnt;
 
 struct LightData {
   mat3 normalMatrix; // Матрица нормализации нормалей
@@ -17,7 +18,7 @@ struct LightData {
   sampler2D shadowMap_texture1;
 };
 
-uniform LightData lights[LIGHTS];
+uniform LightData lights[MAX_LIGHTS];
 
 uniform mat4 model;
 uniform mat4 view;
@@ -30,10 +31,10 @@ layout (location = 2) in vec3 normal;
 
 out VS_OUT {
   vec4 fragPosWorldSpace;
-  vec4 fragPosLightSpace[LIGHTS];
+  vec4 fragPosLightSpace[MAX_LIGHTS];
   vec2 texCoord;
-  vec3 n[LIGHTS]; // Вектора нормали
-  vec3 l[LIGHTS]; // Направления на источники света
+  vec3 n[MAX_LIGHTS]; // Вектора нормали
+  vec3 l[MAX_LIGHTS]; // Направления на источники света
 } vsOut;
 
 void main() {
@@ -43,8 +44,7 @@ void main() {
   vsOut.texCoord = textureCoord;
   vsOut.fragPosWorldSpace = model*vec4(vertexPosition, 1.0);
 
-  // vec3 unused = normal + vec3(1);
-  for(int i = 0; i < LIGHTS; ++i) {
+  for(int i = 0; i < lightsCnt; ++i) {
     vsOut.fragPosLightSpace[i] = lights[i].lightSpaceMatrix*vsOut.fragPosWorldSpace ;
     vsOut.n[i] = normalize(lights[i].normalMatrix * normal);
     vsOut.l[i] = normalize(lights[i].lightPosition - vec3(p));
@@ -55,7 +55,8 @@ void main() {
 
 #version 330 core
 
-#define LIGHTS 1
+#define MAX_LIGHTS 10
+uniform int lightsCnt;
 
 struct LightData {
   mat3 normalMatrix; // Матрица нормализации нормалей
@@ -69,16 +70,16 @@ struct LightData {
   sampler2D shadowMap_texture1;
 };
 
-uniform LightData lights[LIGHTS];
+uniform LightData lights[MAX_LIGHTS];
 
 uniform sampler2D main_texture0;
 
 in VS_OUT {
   vec4 fragPosWorldSpace;
-  vec4 fragPosLightSpace[LIGHTS];
+  vec4 fragPosLightSpace[MAX_LIGHTS];
   vec2 texCoord;
-  vec3 n[LIGHTS]; // Вектора нормали
-  vec3 l[LIGHTS]; // Направления на источники света
+  vec3 n[MAX_LIGHTS]; // Вектора нормали
+  vec3 l[MAX_LIGHTS]; // Направления на источники света
 } fsIn;
 
 out vec4 color;
@@ -105,17 +106,21 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   return shadow;
 }
 
-void main() {
-  vec4 texColor = texture(main_texture0, fsIn.texCoord);
-  color = vec4(0);
-  for(int i = 0; i < LIGHTS; ++i) {
-    
+vec4 calculateLight(int i, vec4 texColor) {
     vec3 n2 = normalize(fsIn.n[i]); // Нормируем интерполируемую нормаль
     vec3 l2 = normalize(fsIn.l[i]); // И направление на источник света
     float diff = max(dot(n2,l2), 0.0); // диффузионная составляющая света
     float shadow = calculateShadow(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-     color = ((lights[i].kAmbient +  (1 - shadow)*lights[i].kDiffuse*diff)*lights[i].color * texColor);
-    // float minDepth = texture(lights[i].shadowMap_texture1, fsIn.texCoord).r;//shadowDepth(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
-    // color = vec4(vec3(shadow), 1.0);
+    vec4 color = ((lights[i].kAmbient +  (1 - shadow)*lights[i].kDiffuse*diff)*lights[i].color * texColor);
+
+    return color;
+}
+
+void main() {
+  vec4 texColor = texture(main_texture0, fsIn.texCoord);
+  color = vec4(0);
+  for(int i = 0; i < lightsCnt; ++i) {
+     color += calculateLight(i, texColor);
   }
+  color /= float(lightsCnt);
 }
