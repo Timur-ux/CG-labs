@@ -141,14 +141,15 @@ int main() {
 
   // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
+  Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram,
                  containerTex);
   Rectangle cube2(glm::vec3(.5), glm::vec3(5, 0, 5), blinPhongProgram,
                  containerTex, true);
-  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25),
-                  blinPhongProgram, containerTex);
+  Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, -12.5),
+                  blinPhongProgram, floorTex);
   glCheckError();
 
   // Камера
@@ -167,7 +168,7 @@ int main() {
   BlinPhongLight light1(lightPos, glm::vec3(0), cameraData, blinPhongProgram,
                         DepthFramebuffer(2400, 2400, 1));
 
-  BlinPhongLight light2(lightPos + glm::vec3(-1, 1, 1), glm::vec3(0),
+  BlinPhongLight light2(lightPos + glm::vec3(3, -1, 3), glm::vec3(0),
                         cameraData, blinPhongProgram,
                         DepthFramebuffer(2400, 2400, 1));
 

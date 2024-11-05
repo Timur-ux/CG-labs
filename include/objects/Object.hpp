@@ -13,12 +13,12 @@
 #include <glm/vec3.hpp>
 #include <iostream>
 
-inline std::ostream &operator<<(std::ostream &os, glm::vec3 &vec) {
+inline std::ostream &operator<<(std::ostream &os, const glm::vec3 &vec) {
   os << "vec3(" << vec.x << ", " << vec.y << ", " << vec.z << ")" << std::endl;
   return os;
 }
 
-inline std::ostream &operator<<(std::ostream &os, glm::vec2 &vec) {
+inline std::ostream &operator<<(std::ostream &os, const glm::vec2 &vec) {
   os << "vec3(" << vec.x << ", " << vec.y << ")" << std::endl;
   return os;
 }

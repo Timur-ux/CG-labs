@@ -1,7 +1,6 @@
 #include "CameraMVP.hpp"
 #include "IMoveable.hpp"
 #include "Program.hpp"
-#include "geometry.hpp"
 #include "glCheckError.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -11,6 +10,7 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 #include <stdexcept>
+#include "objects/Object.hpp"
 
 CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
                      glm::vec3 target, GLfloat fov, GLfloat ratio)
