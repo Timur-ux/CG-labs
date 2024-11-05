@@ -16,15 +16,14 @@ class LookupEventHandler : public IEventHandler<double, double> {
   double x_, y_;
   double yaw_ = -90, pitch_ = 0;
   double sensetivity_ = 0.05;
-  bool first = false;
   GLFWwindow * win_;
-
   public:
   LookupEventHandler(CameraMVP& cameraData, GLFWwindow * win) : cameraData_(cameraData), win_(win) {
     glfwGetCursorPos(win, &x_, &y_);
   }
 
   void call(double newX, double newY) override; 
+  static bool first;
 };
 
 #endif // !LOOKUP_HANDLER_HPP_

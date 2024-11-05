@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 
 class MoveEventHandler : public IEventHandler<int, int, int> {
+protected:
   CameraMVP &cameraData_;
   GLfloat moveSpeed_;
   GLfloat acceleration_;
@@ -17,7 +18,7 @@ class MoveEventHandler : public IEventHandler<int, int, int> {
 public:
   MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
       
-  void move();
+  virtual void move();
   void call(int key, int action, int mods) override;
 };
 

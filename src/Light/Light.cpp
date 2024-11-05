@@ -50,7 +50,7 @@ LightBase::LightBase(glm::vec3 position, glm::vec3 target, CameraMVP &cameraData
       , shadowMapProgram_(shadowMapProgram)
       , depthFramebuffer_(std::move(framebuffer)) {
 
-    lightProjection_ = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, n_, f_);
+    lightProjection_ = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, n_, f_);
     glm::mat4 view = glm::lookAt(
         position_, position_ + forward_, up_);
 

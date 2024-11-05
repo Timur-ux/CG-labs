@@ -54,9 +54,25 @@ static const std::vector<GLubyte> indexes{
     23, 22, 21, 21, 20, 23, // down
 };
 
+std::vector<glm::vec2> scaledTextures(float scaleX, float scaleY){
+  auto newTextureCoord = textureCoords;
+  for(auto & coord : newTextureCoord) {
+    coord.x *= scaleX;
+    coord.y *= scaleY;
+  }
+
+  return newTextureCoord;
+}
+
+std::vector<glm::vec2> prepareTextureCoords(glm::vec3 scales, bool scale) {
+  if(!scale)
+    return textureCoords;
+  return scaledTextures(scales.x, scales.z);
+}
+
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
                      Texture2D &texture, bool rotate)
-    : Object(position, program, vertexCoords, textureCoords, normals, indexes,
+    : Object(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
              GL_TRIANGLES, texture, rotate),
       texture_(texture) {
   model_ = glm::scale(model_, sideSize);

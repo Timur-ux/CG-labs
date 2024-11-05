@@ -89,12 +89,21 @@ float calculateShadow(vec4 fragPosLightSpace, sampler2D shadowMap) {
   vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
   // Приводим координаты к интервалу [0, 1]
   projCoords = 0.5 * projCoords + 0.5;
-
-  float minDepth = texture(shadowMap, projCoords.xy).r;
   fragPosLightSpace = 0.5 * fragPosLightSpace + 0.5;
-  float curDepth = fragPosLightSpace.z;
 
-  float shadow = ((curDepth - bias <= minDepth) ? 0.0 : 1.0);
+  // Расчет тени сделаем в виде свертки средним ядром
+  float shadow = 0;
+  float curDepth = fragPosLightSpace.z;
+  vec2 texelSize = vec2(1) / textureSize(shadowMap, 0); 
+  for(int x = -1; x <= 1; ++x) {
+    for(int y = -1; y <=1; ++y) {
+      float minDepth = texture(shadowMap, projCoords.xy + vec2(x, y)*texelSize).r;
+      shadow += ((curDepth - bias <= minDepth) ? 0.0 : 1.0);
+    }
+  }
+  shadow /= 9.0;
+
+  // Для далеких теней не ставим тени
   if(projCoords.z >= 1)
     shadow = 0.0;
 
@@ -131,5 +140,5 @@ void main() {
   for(int i = 0; i < lightsCnt; ++i) {
      color += calculateLight(i, texColor);
   }
-  color /= float(lightsCnt);
+  // color /= float(lightsCnt);
 }
