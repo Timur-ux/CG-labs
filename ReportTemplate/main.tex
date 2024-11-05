@@ -1,0 +1,18 @@
+\documentclass[pdf, unicode, 12pt, a4paper,oneside,fleqn]{article}
+
+\newcommand{\labNumber}{Insert lab number inplace this text}
+\newcommand{\commitDate}[1][\today]{#1}
+\newcommand{\theme}{Insert theme name there\\}
+\newcommand{\task}{Insert task description there\\}
+\newcommand{\variantNumber}{Insert variant number there}
+\newcommand{\variantTask}{Insert task of your variant there\\}
+\newcommand{\decision}{Insert desicion of your variant there\\}
+\newcommand{\thinks}{Insert your thinks there\\}
+\usepackage{./styles/logStyle}
+\begin{document}
+
+\input{./src/titlepage.tex}
+\input{./src/problem.tex}
+\input{./src/thinks.tex}
+
+\end{document}

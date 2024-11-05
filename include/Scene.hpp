@@ -1,33 +1,23 @@
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
-// Definition of scene -- container of objects
 
-#include "Camera.hpp"
-#include "IUpdateable.hpp"
-#include "Object.hpp"
-#include "events.hpp"
+#include "CameraMVP.hpp"
+#include "Light/Light.hpp"
+#include "Program.hpp"
+#include "objects/Object.hpp"
+#include <list>
 
-class UpdateEventHandler;
-class Scene : public IUpdateable {
-  std::map<Id, Object*> objects_;
-  std::map<Id, Camera*> cameras_;
-  ptr<UpdateEventHandler> objectUpdateEventHandler_;
-  Event<const double &, const double &> timeUpdateEvent_;
+class Scene {
+  std::list<Object*> objects_;
+  CameraMVP cameraData_;
+  Program & program_;
+  std::vector<ILight *> lights_;
 
-  public:
-  Scene();
-  IEvent<const double &, const double &> &updateEvent;
-  void addObject(Object* object);
-  void addCamera(Camera* camera);
+public:
+  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::list<Object*> objects = {});
 
-  void update(const double & time, const double & dt) override;
-  void initialUpdate(const double & dt); // Call before start application loop
+  void update(double time, double dt);
 };
 
-class UpdateEventHandler : public IEventHandler<Object*> {
-  std::vector<Object*> movedObjects;
-  public:
-  void call(Object*) override;
-  std::vector<Object*>&& getAndReset();
-};
-#endif // !SCENE_HPP_
+
+#endif // ! SCENE_HPP_

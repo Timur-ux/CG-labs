@@ -14,7 +14,6 @@ class IEventHandler {
     IEventHandler() {}
 };
 
-
 template <typename ...Args>
 class IEvent {
   public:

@@ -1,44 +1,40 @@
 #include "Scene.hpp"
-#include <vector>
+#include <glm/gtc/type_ptr.hpp>
+#include "Light/Light.hpp"
+#include "Program.hpp"
+#include "glCheckError.hpp"
+#include <iostream>
 
-Scene::Scene() : objectUpdateEventHandler_(new UpdateEventHandler), updateEvent(timeUpdateEvent_){}
 
-void Scene::update(const double & time, const double &dt) {
-  std::vector<Object*> movedObject = objectUpdateEventHandler_->getAndReset();
+Scene::Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights, std::list<Object*> objects) 
+    : program_(program), cameraData_(cameraData), objects_(objects), lights_(lights) {}
 
-  timeUpdateEvent_.invoke(time, dt);
-  for(auto &[_, camera] : cameras_) {
-    camera->recalcObjectsInFrame(movedObject);
-    camera->update(time, dt);
+
+void Scene::update(double time, double dt) {
+  // render to shadow map
+  glCheckError();
+  for(auto & light: lights_) {
+  glCheckError();
+    light->renderToShadowMap(objects_);
+  glCheckError();
   }
-}
+  glCheckError();
+  glFinish();
 
-void Scene::initialUpdate(const double &dt) {
-  std::vector<Object*> movedObject{};
-  for(const auto & it : objects_) movedObject.push_back(it.second);
+  program_.bind();
+  // render scene with generated depth map
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  for(Object * object : objects_) {
+    for(size_t i = 0; i < lights_.size(); ++i) {
+      if(!lights_[i]->setLightParamsFor(*object, i))
+        std::cerr << "Can't set light data as uniform" << std::endl;
+    }
 
-  timeUpdateEvent_.invoke(0, dt);
-  for(auto &[_, camera] : cameras_) {
-    camera->recalcObjectsInFrame(movedObject);
-    camera->update(0, dt);
+  glCheckError();
+    object->draw();
+  glCheckError();
   }
 
-}
-void Scene::addObject(Object* object) {
-  objects_[object->getId()] = object;
-  object->updateEvent += *objectUpdateEventHandler_;
-  updateEvent += *object;
-}
-
-void Scene::addCamera(Camera* camera) {
-  cameras_[camera->getId()] = camera;
-}
-
-
-void UpdateEventHandler::call(Object* object) {
-  movedObjects.push_back(object);
-}
-
-std::vector<Object*> && UpdateEventHandler::getAndReset() {
-  return std::move(movedObjects);
+  program_.unbind();
+  glCheckError();
 }

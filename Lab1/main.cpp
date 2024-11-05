@@ -48,7 +48,6 @@ class SpeedChangeEventHandler : public IEventHandler<> {
 };
 
 
-
 void squareChangeSize(const double & time, GLfloat & width, GLfloat & height) {
   width = sin(time)/5;
   height = cos(time)/5;
