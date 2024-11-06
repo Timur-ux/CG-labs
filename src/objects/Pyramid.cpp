@@ -33,7 +33,7 @@ static const std::vector<GLuint> indexes{
 
 std::vector<glm::vec3> generateNormals(std::vector<glm::vec3> vertex) {
   std::vector<glm::vec3> normals;
-  normals.reserve(vertexes.size());
+  normals.assign(vertexes.size(), glm::vec3(0));
 
   glm::vec3 front = -glm::normalize(
       glm::cross(vertexes[2] - vertexes[1], vertexes[0] - vertexes[1]));

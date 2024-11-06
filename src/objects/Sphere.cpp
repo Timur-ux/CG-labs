@@ -19,16 +19,16 @@ struct SphereData {
  *
  * @return vector of verticies
  */
-SphereData generateSphereData(GLfloat r, GLuint n) {
+SphereData generateSphereData(GLfloat r, GLuint iN, GLuint jN) {
   SphereData result;
 
-  GLfloat yawD = 360.0f / n;
-  GLfloat pitchD = 180.0f / n * 2;
+  GLfloat yawD = 360.0f / jN;
+  GLfloat pitchD = 180.0f / iN;
   GLfloat pitch0 = -90.0f;
-  GLfloat du = 1.0f / n * 2;
-  GLfloat dv = 1.0f / n;
+  GLfloat du = 1.0f / iN;
+  GLfloat dv = 1.0f / jN;
 
-  size_t iN = n / 2, jN = n;
+  glm::mat4 rotor = glm::rotate(glm::rotate(glm::mat4(1), glm::radians(90.0f), {1, 0, 0}), glm::radians(90.0f), {0, 0, 1});
   for(size_t i = 0; i <= iN; ++i) {
     for(size_t j = 0; j <= jN; ++j) {
       // direction
@@ -45,7 +45,7 @@ SphereData generateSphereData(GLfloat r, GLuint n) {
       result.normals.push_back(direction);
       // uv texture coord
       GLfloat u = i * du, v = j * dv;
-      result.texCoords.push_back(glm::vec2(u, v));
+      result.texCoords.push_back(glm::vec2(v, -u));
     }
   }
 
@@ -59,10 +59,9 @@ SphereData generateSphereData(GLfloat r, GLuint n) {
  *
  * @return 
  */
-std::vector<GLuint> generateIndexes(GLuint n) {
+std::vector<GLuint> generateIndexes(GLuint iN, GLuint jN) {
   std::vector<GLuint> indexes;
 
-  size_t iN = n / 2, jN = n;
   for(size_t i = 0; i < iN; ++i) {
     for(size_t j = 0; j < jN; ++j) {
       indexes.push_back(i*(jN + 1) + j);
@@ -80,7 +79,13 @@ std::vector<GLuint> generateIndexes(GLuint n) {
 
 Sphere::Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization)
     : Object() {
-      SphereData data = generateSphereData(r, detalization);
-      std::vector<GLuint> indexes = generateIndexes(detalization);
+      SphereData data = generateSphereData(r, detalization, detalization);
+      std::vector<GLuint> indexes = generateIndexes(detalization, detalization);
       setupData(position, program, data.vertexes, data.texCoords, data.normals, indexes, GL_TRIANGLES, texture);
 }
+Sphere::Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalizationI, GLuint detalizationJ)
+  : Object() {
+      SphereData data = generateSphereData(r, detalizationI, detalizationJ);
+      std::vector<GLuint> indexes = generateIndexes(detalizationI, detalizationJ);
+      setupData(position, program, data.vertexes, data.texCoords, data.normals, indexes, GL_TRIANGLES, texture);
+  }

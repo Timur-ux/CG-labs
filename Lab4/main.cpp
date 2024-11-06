@@ -57,13 +57,19 @@ int main() {
   // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D floorTex("./textures/stoneFloor.png", 0);
-  Texture2D * redColTex = Texture2D::createMonocolor(1200, 1200, glm::vec3(1, 0, 0));
+  Texture2D smileTex("./textures/scarySmile.png", 0);
 
   // Объекты
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram, containerTex);
   Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25), blinPhongProgram, floorTex);
-  Sphere bloodSphere(1, glm::vec3(7, 3, 7), blinPhongProgram, &containerTex);
-  Pyramid pyramid(glm::vec3(-2, 3, -2), blinPhongProgram, redColTex);
+  Sphere sphere1(1, glm::vec3(7, 2, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere2(1, glm::vec3(9, 2, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere3(2, glm::vec3(8, 4, 7), blinPhongProgram, &containerTex, 3, 100);
+  Sphere sphere4(1, glm::vec3(8, 6.5, 7), blinPhongProgram, &smileTex, 100);
+  Rectangle hands(glm::vec3(4, .5, .5), glm::vec3(8, 4, 7), blinPhongProgram, containerTex);
+  Sphere sphere5(1, glm::vec3(12, 4, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere6(1, glm::vec3(4, 4, 7), blinPhongProgram, &containerTex, 100);
+  Pyramid pyramid(glm::vec3(-2, 3, -2), blinPhongProgram, &containerTex);
   glCheckError();
 
   // Камера
@@ -84,7 +90,7 @@ int main() {
   BlinPhongLight light2(lightPos*glm::vec3(-1, 1, 1), glm::vec3(0), cameraData, blinPhongProgram, DepthFramebuffer(1200, 1200, 1));
 
   // Сцены
-  Scene scene(blinPhongProgram, cameraData, {&light1, &light2}, { &cube, &floor, &bloodSphere, &pyramid});
+  Scene scene(blinPhongProgram, cameraData, {&light1, &light2}, { &cube, &floor, &sphere1, &sphere2, &sphere3, &sphere5, &sphere6, &sphere4, &pyramid, &hands});
 
   // Настройки шейдерной программы
   if(!blinPhongProgram.setUniformInt("main_texture0", 0))
@@ -118,7 +124,6 @@ int main() {
   glCheckError();
 
   // Освобождаем ресурсы
-  delete redColTex;
   glfwDestroyWindow(win);
   glfwTerminate();
   glCheckError();
