@@ -23,3 +23,6 @@ void MoveableBase::rotateAround(glm::vec3 v, float rads)  {
   up_ = glm::vec3(modelTemp * glm::vec4(up_, 1.0f));
   model_ = modelTemp * model_;
 }
+void MoveableBase::lookInto(glm::vec3 direction) {
+  forward_ = glm::normalize(direction);
+}

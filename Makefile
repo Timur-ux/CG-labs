@@ -17,13 +17,13 @@ L2:
 	./build/Lab2/Lab2_main
 
 L3:
-	./build/Lab3/Lab2_main
+	./build/Lab3/Lab3_main
 
 L4:
-	./build/Lab4/Lab2_main
+	./build/Lab4/Lab4_main
 
 L5:
-	./build/Lab5/Lab2_main
+	./build/Lab5/Lab5_main
 
 L6:
-	./build/Lab6/Lab2_main
+	./build/Lab6/Lab6_main

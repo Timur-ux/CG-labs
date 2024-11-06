@@ -14,6 +14,7 @@ public:
   virtual void shiftBy(glm::vec3 dp) = 0;
   virtual void moveTo(glm::vec3 newPosition) = 0;
   virtual void rotateAround(glm::vec3 v, float rads) = 0;
+  virtual void lookInto(glm::vec3 direction) = 0;
 
   virtual ~IMoveable() {}
 };
@@ -26,7 +27,7 @@ protected:
   glm::vec3 up_ = glm::vec3(0, 1, 0);
 
 public:
-  MoveableBase(glm::vec3 position, glm::vec3 target);
+  MoveableBase(glm::vec3 position = glm::vec3(0), glm::vec3 target = glm::vec3(0));
 
   const glm::vec3 &position() const override { return position_; }
   const glm::vec3 &forward() const override { return forward_; }
@@ -37,6 +38,8 @@ public:
   virtual void shiftBy(glm::vec3 dp) override;
   virtual void moveTo(glm::vec3 newPosition) override;
   virtual void rotateAround(glm::vec3 v, float rads) override;
+  virtual void lookInto(glm::vec3 direction) override;
+
 
   virtual ~MoveableBase() {}
 };

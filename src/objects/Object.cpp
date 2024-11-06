@@ -13,48 +13,39 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 
-
-Object::Object(glm::vec3 position) : MoveableBase(position, glm::vec3(0)) {
-  ProgramBind progBinding(*program_);
-  VAOBind vaoBingind(vao_);
-
-  glCheckError();
-  model_ = glm::translate(model_, position_);
-  forward_ = glm::vec3(model_ * glm::vec4(0, 0, 1, 1));
+Object::Object() : MoveableBase() {
   up_ = glm::vec3(model_ * glm::vec4(0, 1, 0, 1));
 }
 
 Object::Object(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
-               std::vector<glm::vec3> normals, std::vector<GLubyte> indexes,
+               std::vector<glm::vec3> normals, std::vector<GLuint> indexes,
                GLenum drawMode, Texture2D &texture, bool rotate)
-    : MoveableBase(position, glm::vec3(0)), program_(&program), drawMode_(drawMode),
-      textures_({&texture}) {
+    : MoveableBase(position, glm::vec3(0)), program_(&program),
+      drawMode_(drawMode), textures_({&texture}) {
 
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
   glCheckError();
   model_ = glm::translate(model_, position_);
-  if(position_ != glm::vec3(0))
-    forward_ = glm::normalize(position_ - glm::vec3(0));
+  if (position_ != glm::vec3(0))
+    forward_ = glm::normalize(-position_);
   else
     forward_ = glm::vec3(1, 0, 0);
 
-  if(rotate)
+  if (rotate)
     model_ = glm::rotate(model_, glm::radians(45.0f), forward_);
-  up_ = glm::vec3(glm::vec4(0, 1, 0, 1));
+  up_ = glm::vec3(0, 1, 0);
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
                 normals.size() * sizeof(normals[0]);
   vertexSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]);
   textureSize_ = textureCoords.size() * sizeof(textureCoords[0]);
   normalsSize_ = normals.size() * sizeof(normals[0]);
-  // char *buffer = new char[bufferSize_]{0};
 
   vboData_.create(GL_ARRAY_BUFFER, bufferSize_, nullptr);
-  // delete[] buffer;
   glCheckError();
 
   vboData_.bind();
@@ -105,14 +96,76 @@ Object::Object(glm::vec3 position, Program &program,
   glCheckError();
 }
 
+void Object::setupData(glm::vec3 position, Program &program,
+                       std::vector<glm::vec3> verticiesCoords,
+                       std::vector<glm::vec2> textureCoords,
+                       std::vector<glm::vec3> normals,
+                       std::vector<GLuint> indexes, GLenum drawMode,
+                       Texture2D *texture) {
+  *this = Object(position, program, verticiesCoords, textureCoords, normals,
+                 indexes, drawMode, *texture);
+  glCheckError();
+}
+
+Object::Object(Object &&other) {
+  model_ = other.model_;
+  position_ = other.position_;
+  forward_ = other.forward_;
+  up_ = other.up_;
+
+  program_ = other.program_;
+  vao_ = std::move(other.vao_);
+  vboData_ = std::move(other.vboData_);
+  vboIndicies_ = std::move(other.vboIndicies_);
+
+  textures_ = other.textures_;
+  drawMode_ = other.drawMode_;
+
+  bufferSize_ = other.bufferSize_;
+  indexes_ = other.indexes_;
+  vertexSize_ = other.vertexSize_;
+  textureSize_ = other.textureSize_;
+  normalsSize_ = other.normalsSize_;
+  glCheckError();
+}
+
+Object & Object::operator=(Object &&other) {
+  if(this == &other)
+    return *this;
+
+  model_ = other.model_;
+  position_ = other.position_;
+  forward_ = other.forward_;
+  up_ = other.up_;
+
+  program_ = other.program_;
+  vao_ = std::move(other.vao_);
+  vboData_ = std::move(other.vboData_);
+  vboIndicies_ = std::move(other.vboIndicies_);
+
+  textures_ = other.textures_;
+  drawMode_ = other.drawMode_;
+
+  bufferSize_ = other.bufferSize_;
+  indexes_ = other.indexes_;
+  vertexSize_ = other.vertexSize_;
+  textureSize_ = other.textureSize_;
+  normalsSize_ = other.normalsSize_;
+  glCheckError();
+
+  return *this;
+}
+
 void Object::draw() {
   glCheckError();
   for (size_t i = 0; i < textures_.size(); ++i) {
     textures_[i]->bind();
   }
   glCheckError();
-  // ProgramBind _(*program_);
+  ProgramBind _(*program_);
+  glCheckError();
   vao_.bind();
+  glCheckError();
   vboIndicies_.bind();
   glCheckError();
 
@@ -121,7 +174,7 @@ void Object::draw() {
               << " uniform" << std::endl;
   glCheckError();
 
-  glDrawElements(drawMode_, indexes_, GL_UNSIGNED_BYTE, 0);
+  glDrawElements(drawMode_, indexes_, GL_UNSIGNED_INT, 0);
   glCheckError();
 
   vboIndicies_.unbind();

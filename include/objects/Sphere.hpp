@@ -6,7 +6,7 @@
 class Sphere : public Object {
   GLfloat r_;
   public:
-  Sphere(GLfloat r, glm::vec3 position, GLuint detalization = 10);
+  Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization = 100);
 };
 
 

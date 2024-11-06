@@ -1,4 +1,5 @@
 #include "objects/Sphere.hpp"
+#include "Program.hpp"
 #include "objects/Object.hpp"
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
@@ -6,7 +7,7 @@
 
 struct SphereData {
   std::vector<glm::vec3> vertexes;
-  std::vector<glm::vec3> texCoords;
+  std::vector<glm::vec2> texCoords;
   std::vector<glm::vec3> normals;
 };
 
@@ -20,15 +21,19 @@ struct SphereData {
  */
 SphereData generateSphereData(GLfloat r, GLuint n) {
   SphereData result;
-  GLfloat yaw0 = 0;
-  GLfloat pitch0 = 0;
 
-  GLfloat delta = 360.0f / n;
+  GLfloat yawD = 360.0f / n;
+  GLfloat pitchD = 180.0f / n * 2;
+  GLfloat pitch0 = -90.0f;
+  GLfloat du = 1.0f / n * 2;
+  GLfloat dv = 1.0f / n;
 
-  for(size_t i = 0; i < n; ++i) {
-    for(size_t j = 0; j < n; ++j) {
-      GLfloat yaw = glm::radians(yaw0 + delta * i);
-      GLfloat pitch = glm::radians(pitch0 + delta * n);
+  size_t iN = n / 2, jN = n;
+  for(size_t i = 0; i <= iN; ++i) {
+    for(size_t j = 0; j <= jN; ++j) {
+      // direction
+      GLfloat yaw = glm::radians(yawD * j);
+      GLfloat pitch = glm::radians(pitch0 + pitchD * i);
 
       glm::vec3 direction(
           glm::cos(pitch) * glm::cos(yaw),
@@ -37,15 +42,45 @@ SphereData generateSphereData(GLfloat r, GLuint n) {
           );
 
       result.vertexes.push_back(direction * r);
-      result.texCoords.push_back(direction);
       result.normals.push_back(direction);
+      // uv texture coord
+      GLfloat u = i * du, v = j * dv;
+      result.texCoords.push_back(glm::vec2(u, v));
     }
   }
 
   return result;
 }
 
-Sphere::Sphere(GLfloat r, glm::vec3 position, GLuint detalization)
-    : Object(position) {
-      // TODO
+/**
+ * @brief Generate indexes vector for drawing mode GL_TRIANGLES
+ *
+ * @param n -- detalization used in generateSphereData
+ *
+ * @return 
+ */
+std::vector<GLuint> generateIndexes(GLuint n) {
+  std::vector<GLuint> indexes;
+
+  size_t iN = n / 2, jN = n;
+  for(size_t i = 0; i < iN; ++i) {
+    for(size_t j = 0; j < jN; ++j) {
+      indexes.push_back(i*(jN + 1) + j);
+      indexes.push_back((i + 1)*(jN + 1) + j);
+      indexes.push_back(i*(jN + 1) + j + 1);
+
+      indexes.push_back((i + 1)*(jN + 1) + j);
+      indexes.push_back((i + 1)*(jN + 1) + j + 1);
+      indexes.push_back(i*(jN + 1) + j + 1);
     }
+  }
+
+  return indexes;
+}
+
+Sphere::Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization)
+    : Object() {
+      SphereData data = generateSphereData(r, detalization);
+      std::vector<GLuint> indexes = generateIndexes(detalization);
+      setupData(position, program, data.vertexes, data.texCoords, data.normals, indexes, GL_TRIANGLES, texture);
+}

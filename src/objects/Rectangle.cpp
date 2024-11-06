@@ -43,7 +43,7 @@ static const std::vector<glm::vec3> normals{
     {0, -1, 0}, {0, -1, 0}, {0, -1, 0}, {0, -1, 0}, // down
 };
 
-static const std::vector<GLubyte> indexes{
+static const std::vector<GLuint> indexes{
     2,  1,  0,  0,  3,  2, // front
     5,  6,  7,  7,  4,  5, // back
 

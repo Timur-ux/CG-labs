@@ -6,7 +6,9 @@
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
+#include "objects/Pyramid.hpp"
 #include "objects/Rectangle.hpp"
+#include "objects/Sphere.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -55,10 +57,13 @@ int main() {
   // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D floorTex("./textures/stoneFloor.png", 0);
+  Texture2D * redColTex = Texture2D::createMonocolor(1200, 1200, glm::vec3(1, 0, 0));
 
   // Объекты
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram, containerTex);
   Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25), blinPhongProgram, floorTex);
+  Sphere bloodSphere(1, glm::vec3(7, 3, 7), blinPhongProgram, &containerTex);
+  Pyramid pyramid(glm::vec3(-2, 3, -2), blinPhongProgram, redColTex);
   glCheckError();
 
   // Камера
@@ -79,7 +84,7 @@ int main() {
   BlinPhongLight light2(lightPos*glm::vec3(-1, 1, 1), glm::vec3(0), cameraData, blinPhongProgram, DepthFramebuffer(1200, 1200, 1));
 
   // Сцены
-  Scene scene(blinPhongProgram, cameraData, {&light1, &light2}, { &cube, &floor});
+  Scene scene(blinPhongProgram, cameraData, {&light1, &light2}, { &cube, &floor, &bloodSphere, &pyramid});
 
   // Настройки шейдерной программы
   if(!blinPhongProgram.setUniformInt("main_texture0", 0))
@@ -113,6 +118,7 @@ int main() {
   glCheckError();
 
   // Освобождаем ресурсы
+  delete redColTex;
   glfwDestroyWindow(win);
   glfwTerminate();
   glCheckError();

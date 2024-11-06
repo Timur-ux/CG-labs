@@ -2,6 +2,7 @@
 #define TEXTURE_HPP_
 
 #include <SOIL/SOIL.h>
+#include <glm/glm.hpp>
 #include <list>
 #include <string>
 #define GLEW_STATIC
@@ -32,9 +33,6 @@ public:
   virtual ~Texture();
 };
 
-/*
- * Creates 2d texture with rgba image
- * */
 class Texture2D : public Texture {
   int width_;
   int height_;
@@ -57,7 +55,7 @@ public:
                 {{GL_TEXTURE_MAG_FILTER, GL_NEAREST},
                  {GL_TEXTURE_MIN_FILTER, GL_NEAREST}},
             GLenum elementType = GL_UNSIGNED_BYTE, int block = 0);
-  Texture2D(unsigned char *data, int block = 0);
+  Texture2D(int width, int height, unsigned char * data, GLenum imageType = GL_RGBA, int block = 0);
 
   Texture2D(Texture2D &other) = delete;
   Texture2D &operator=(Texture2D &other) = delete;
@@ -67,6 +65,18 @@ public:
 
   int width() { return width_; }
   int height() { return height_; }
+
+  /**
+   * @brief Creates dynamic allocated texture object
+   *
+   * @param width
+   * @param height
+   * @param color -- color used to fill texture
+   * @param block
+   *
+   * @return 
+   */
+  static Texture2D * createMonocolor(int width, int height, glm::vec3 color, int block = 0);
 };
 
 #endif // !TEXTURE_HPP_

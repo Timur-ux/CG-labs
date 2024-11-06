@@ -128,6 +128,7 @@ vec4 calculateLight(int i, vec4 texColor) {
 
     float shadow = calculateShadow(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
 
+    // return ( (1.0 - shadow) * (diffuse + specular)) * texColor;
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * texColor;
 }
 
