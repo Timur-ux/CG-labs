@@ -91,6 +91,12 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Sphere.cpp.o -c /home/raison/git/CG-labs/src/objects/Sphere.cpp",
+  "file": "/home/raison/git/CG-labs/src/objects/Sphere.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/objects/Sphere.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/utils/OpenglInitializer.cpp.o -c /home/raison/git/CG-labs/src/utils/OpenglInitializer.cpp",
   "file": "/home/raison/git/CG-labs/src/utils/OpenglInitializer.cpp",
   "output": "CMakeFiles/src_lib.dir/src/utils/OpenglInitializer.cpp.o"
@@ -190,5 +196,11 @@
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab3/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab3_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab3/main.cpp",
   "file": "/home/raison/git/CG-labs/Lab3/main.cpp",
   "output": "Lab3/CMakeFiles/Lab3_main.dir/main.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build/Lab4",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab4/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab4_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab4/main.cpp",
+  "file": "/home/raison/git/CG-labs/Lab4/main.cpp",
+  "output": "Lab4/CMakeFiles/Lab4_main.dir/main.cpp.o"
 }
 ]

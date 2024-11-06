@@ -129,3 +129,4 @@ void keyCallback(GLFWwindow *win, int key, int scancode, int action, int mods) {
 void mouseMoveCallback(GLFWwindow * win, double x, double y) {
   mouseMoveEvent.invoke(x, y);
 }
+

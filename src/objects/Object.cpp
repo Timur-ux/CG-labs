@@ -51,10 +51,10 @@ Object::Object(glm::vec3 position, Program &program,
   vertexSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]);
   textureSize_ = textureCoords.size() * sizeof(textureCoords[0]);
   normalsSize_ = normals.size() * sizeof(normals[0]);
-  char *buffer = new char[bufferSize_]{0};
+  // char *buffer = new char[bufferSize_]{0};
 
-  vboData_.create(GL_ARRAY_BUFFER, bufferSize_, buffer);
-  delete[] buffer;
+  vboData_.create(GL_ARRAY_BUFFER, bufferSize_, nullptr);
+  // delete[] buffer;
   glCheckError();
 
   vboData_.bind();
