@@ -16,6 +16,7 @@ struct LightData {
 
   mat4 lightSpaceMatrix;
   sampler2D shadowMap_texture1;
+  int enabled;
 };
 
 uniform LightData lights[MAX_LIGHTS];
@@ -45,6 +46,7 @@ void main() {
   vsOut.fragPosWorldSpace = model*vec4(vertexPosition, 1.0);
 
   for(int i = 0; i < lightsCnt; ++i) {
+    if(!bool(lights[i].enabled)) continue;
     vsOut.fragPosLightSpace[i] = lights[i].lightSpaceMatrix*vsOut.fragPosWorldSpace ;
     vsOut.n[i] = normalize(lights[i].normalMatrix * normal);
     vsOut.l[i] = normalize(lights[i].lightPosition - vec3(p));
@@ -68,6 +70,7 @@ struct LightData {
   float kGlare; // Коэффициент блика 
   mat4 lightSpaceMatrix;
   sampler2D shadowMap_texture1;
+  int enabled;
 };
 
 uniform LightData lights[MAX_LIGHTS];
@@ -128,7 +131,6 @@ vec4 calculateLight(int i, vec4 texColor) {
 
     float shadow = calculateShadow(fsIn.fragPosLightSpace[i], lights[i].shadowMap_texture1);
 
-    // return (  (diffuse + specular)) * texColor;
     return (ambient + (1.0 - shadow) * (diffuse + specular)) * texColor;
 }
 
@@ -139,6 +141,7 @@ void main() {
   vec4 texColor = texture(main_texture0, fsIn.texCoord);
   color = vec4(0);
   for(int i = 0; i < lightsCnt; ++i) {
+    if(!bool(lights[i].enabled)) continue;
      color += calculateLight(i, texColor);
   }
   // color /= float(lightsCnt);

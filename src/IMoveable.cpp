@@ -19,9 +19,14 @@ void MoveableBase::moveTo(glm::vec3 newPos) {
 void MoveableBase::rotateAround(glm::vec3 v, float rads)  {
   glm::mat4 modelTemp(1);
   modelTemp = glm::rotate(modelTemp, rads, v);
+  glm::vec3 newPos = modelTemp * glm::vec4(position_, 1);
+  modelTemp = glm::translate(modelTemp, position_ - newPos);
+
   forward_ = glm::vec3(modelTemp * glm::vec4(forward_, 1.0f));
   up_ = glm::vec3(modelTemp * glm::vec4(up_, 1.0f));
   model_ = modelTemp * model_;
+
+  // model_ = glm::translate(model_, -position_ + newPos);
 }
 void MoveableBase::lookInto(glm::vec3 direction) {
   forward_ = glm::normalize(direction);

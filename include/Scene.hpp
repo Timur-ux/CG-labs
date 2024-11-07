@@ -8,13 +8,14 @@
 #include <list>
 
 class Scene {
-  std::list<Object*> objects_;
+protected:
+  std::vector<Object*> objects_;
   CameraMVP cameraData_;
   Program & program_;
   std::vector<ILight *> lights_;
 
 public:
-  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::list<Object*> objects = {});
+  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::vector<Object*> objects = {});
 
   void update(double time, double dt);
 };
