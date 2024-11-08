@@ -148,7 +148,7 @@ int main() {
                  containerTex);
   Rectangle cube2(glm::vec3(.5), glm::vec3(5, 0, 5), blinPhongProgram,
                  containerTex, true);
-  Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, -12.5),
+  Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, 0),
                   blinPhongProgram, floorTex);
   glCheckError();
 

@@ -71,7 +71,7 @@ Pyramid::Pyramid(glm::vec3 position, Program &program, Texture2D *texture,
                  glm::vec3 scale)
     : scale_(scale), Object() {
   glm::mat4 scaleMatrix = glm::scale(glm::mat4(1), scale);
-  model_ = scaleMatrix * model_;
+  translateModel_ = scaleMatrix * translateModel_;
 
   setupData(position, program, vertexes, textureCoords,
             generateNormals(vertexes), indexes, GL_TRIANGLES, texture);

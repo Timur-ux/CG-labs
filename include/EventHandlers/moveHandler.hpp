@@ -2,6 +2,7 @@
 #define MOVE_EVENT_HANDLER_HPP_
 
 
+#include "RigidBody.hpp"
 #include "events.hpp"
 #include "CameraMVP.hpp"
 #define GLEW_STATIC
@@ -15,9 +16,13 @@ protected:
   GLfloat moveSpeed_;
   GLfloat acceleration_;
   bool pressed[1024]{false};
+
+  RigidBody * rigidBody_ = nullptr;
+  void moveRigidBody();
 public:
   MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
       
+  void setRigidBody(RigidBody * rigidBody) {rigidBody_ = rigidBody;}
   virtual void move();
   void call(int key, int action, int mods) override;
 };

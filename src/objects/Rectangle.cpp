@@ -75,5 +75,5 @@ Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
     : Object(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
              GL_TRIANGLES, texture, rotate),
       texture_(texture) {
-  model_ = glm::scale(model_, sideSize);
+        scaleBy(sideSize);
 }

@@ -14,7 +14,7 @@
 #include <iostream>
 
 Object::Object() : MoveableBase() {
-  up_ = glm::vec3(model_ * glm::vec4(0, 1, 0, 1));
+  up_ = glm::vec3(translateModel_ * glm::vec4(0, 1, 0, 1));
 }
 
 Object::Object(glm::vec3 position, Program &program,
@@ -29,14 +29,14 @@ Object::Object(glm::vec3 position, Program &program,
   VAOBind vaoBingind(vao_);
 
   glCheckError();
-  model_ = glm::translate(model_, position_);
+  translateModel_ = glm::translate(translateModel_, position_);
   if (position_ != glm::vec3(0))
     forward_ = glm::normalize(-position_);
   else
     forward_ = glm::vec3(1, 0, 0);
 
   if (rotate)
-    model_ = glm::rotate(model_, glm::radians(45.0f), forward_);
+    translateModel_ = glm::rotate(translateModel_, glm::radians(45.0f), forward_);
   up_ = glm::vec3(0, 1, 0);
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
@@ -108,7 +108,7 @@ void Object::setupData(glm::vec3 position, Program &program,
 }
 
 Object::Object(Object &&other) {
-  model_ = other.model_;
+  translateModel_ = other.translateModel_;
   position_ = other.position_;
   forward_ = other.forward_;
   up_ = other.up_;
@@ -133,7 +133,7 @@ Object & Object::operator=(Object &&other) {
   if(this == &other)
     return *this;
 
-  model_ = other.model_;
+  translateModel_ = other.translateModel_;
   position_ = other.position_;
   forward_ = other.forward_;
   up_ = other.up_;
@@ -169,7 +169,7 @@ void Object::draw() {
   vboIndicies_.bind();
   glCheckError();
 
-  if (!program_->setUniformMat4(uniforms::modelMatrix, model_))
+  if (!program_->setUniformMat4(uniforms::modelMatrix, translateModel_))
     std::cerr << "Can't find location of " << uniforms::modelMatrix
               << " uniform" << std::endl;
   glCheckError();

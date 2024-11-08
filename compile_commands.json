@@ -43,6 +43,12 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/RigidBody.cpp.o -c /home/raison/git/CG-labs/src/RigidBody.cpp",
+  "file": "/home/raison/git/CG-labs/src/RigidBody.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/RigidBody.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Scene.cpp.o -c /home/raison/git/CG-labs/src/Scene.cpp",
   "file": "/home/raison/git/CG-labs/src/Scene.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Scene.cpp.o"
@@ -208,5 +214,11 @@
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab4/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab4_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab4/main.cpp",
   "file": "/home/raison/git/CG-labs/Lab4/main.cpp",
   "output": "Lab4/CMakeFiles/Lab4_main.dir/main.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build/Lab6",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab6/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab6_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab6/main.cpp",
+  "file": "/home/raison/git/CG-labs/Lab6/main.cpp",
+  "output": "Lab6/CMakeFiles/Lab6_main.dir/main.cpp.o"
 }
 ]

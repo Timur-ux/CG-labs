@@ -15,13 +15,17 @@ public:
   virtual void moveTo(glm::vec3 newPosition) = 0;
   virtual void rotateAround(glm::vec3 v, float rads) = 0;
   virtual void lookInto(glm::vec3 direction) = 0;
+  virtual void scaleBy(glm::vec3 scale) = 0;
 
   virtual ~IMoveable() {}
 };
 
 class MoveableBase : public IMoveable {
 protected:
+  glm::mat4 translateModel_;
+  glm::mat4 rotateModel_;
   glm::mat4 model_;
+
   glm::vec3 position_;
   glm::vec3 forward_;
   glm::vec3 up_ = glm::vec3(0, 1, 0);
@@ -39,6 +43,7 @@ public:
   virtual void moveTo(glm::vec3 newPosition) override;
   virtual void rotateAround(glm::vec3 v, float rads) override;
   virtual void lookInto(glm::vec3 direction) override;
+  virtual void scaleBy(glm::vec3 scale) override;
 
 
   virtual ~MoveableBase() {}

@@ -8,6 +8,8 @@ class Sphere : public Object {
   public:
   Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization = 100);
   Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalizationI, GLuint detalizationJ);
+
+  GLfloat radius() {return r_;}
 };
 
 

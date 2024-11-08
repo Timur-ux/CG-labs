@@ -1,12 +1,16 @@
 #include "CameraMVP.hpp"
+#include "GlobalEvents.hpp"
 #include "Light/BlinPhongLight.hpp"
 #include "Light/Lambert.hpp"
 #include "Program.hpp"
+#include "RigidBody.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
+#include "objects/Pyramid.hpp"
 #include "objects/Rectangle.hpp"
+#include "objects/Sphere.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -17,23 +21,22 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #define GLEW_STATIC
+#include "EventHandlers/LookupHandler.hpp"
+#include "EventHandlers/moveHandler.hpp"
+#include "MoveObjectFN.hpp"
 #include "utils/customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "EventHandlers/moveHandler.hpp"
-#include "EventHandlers/LookupHandler.hpp"
-#include "MoveObjectFN.hpp"
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
 Event<int, int, int> keyPressEvent;
 Event<double, double> mouseMoveEvent;
 
-
 static OpenglInitializer initializer;
 
 int main() {
-  GLFWwindow * win = initializer.getWindow();
+  GLFWwindow *win = initializer.getWindow();
   glfwMakeContextCurrent(win);
   // Настройки opengl
   int width, height;
@@ -51,40 +54,50 @@ int main() {
   // Шейдерная программа для основного рендера
   Program blinPhongProgram("./shaders/BlinPhong_shadow.glsl");
   eTB_GLSL__print_uniforms(blinPhongProgram.get());
- 
+
   // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
   Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
-  Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram, containerTex);
-  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, 0), blinPhongProgram, floorTex);
-  glCheckError();
+  Rectangle cube(glm::vec3(.5), glm::vec3(0, 1, 0), blinPhongProgram,
+                 containerTex);
+
+  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0),
+                  blinPhongProgram, floorTex);
 
   // Камера
-  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 0, 5), glm::vec3(0, 1, 0),
-                       glm::vec3(0, 0, 0));
+  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 1, 0),
+                       glm::vec3(0, 5, 0));
+  RigidBody rigidBody(cameraData, 600);
+
+
+  // Источники света
+  int LIGHTS_CNT = 1;
+  glm::vec3 lightPos(10.0f, 15.0f, -1.0f);
+  BlinPhongLight light1(lightPos, glm::vec3(0), cameraData, blinPhongProgram,
+                        DepthFramebuffer(1200, 1200, 1));
+
+  BlinPhongLight light2(lightPos * glm::vec3(-1, 1, 1), glm::vec3(0),
+                        cameraData, blinPhongProgram,
+                        DepthFramebuffer(1200, 1200, 1));
+
+  // Сцены
+  Scene scene(blinPhongProgram, cameraData, {&light1, &light2},
+              {&cube, &floor});
 
   // Event Handler'ы
-  MoveEventHandler moveHandler(cameraData);
+  MoveEventHandler moveHandler(cameraData, 650);
   keyPressEvent += moveHandler;
   LookupEventHandler lookupHandler(cameraData, win);
   mouseMoveEvent += lookupHandler;
 
-  // Источники света
-  int LIGHTS_CNT = 2;
-  glm::vec3 lightPos(10.0f, 15.0f, -1.0f);
-  BlinPhongLight light1(lightPos, glm::vec3(0), cameraData, blinPhongProgram, DepthFramebuffer(1200, 1200, 1));
-
-  BlinPhongLight light2(lightPos*glm::vec3(-1, 1, 1), glm::vec3(0), cameraData, blinPhongProgram, DepthFramebuffer(1200, 1200, 1));
-
-  // Сцены
-  Scene scene(blinPhongProgram, cameraData, {&light1, &light2}, { &cube, &floor});
+  moveHandler.setRigidBody(&rigidBody);
 
   // Настройки шейдерной программы
-  if(!blinPhongProgram.setUniformInt("main_texture0", 0))
+  if (!blinPhongProgram.setUniformInt("main_texture0", 0))
     std::cerr << "Cant set main texture uniform!" << std::endl;
-  if(! blinPhongProgram.setUniformInt("lightsCnt", LIGHTS_CNT)) 
+  if (!blinPhongProgram.setUniformInt("lightsCnt", LIGHTS_CNT))
     std::cerr << "Cant set quantity of light sources uniforms!" << std::endl;
 
   // Цикл рендера
@@ -99,6 +112,7 @@ int main() {
     // рендерим сцену
     glClearColor(0, 0.2, 0.2, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    GlobalEvents::updateEvent.invoke(time, dt);
     scene.update(time, dt);
 
     // Свапаем буферы glfwGetWindowSize(win, &width, &height);
@@ -121,11 +135,12 @@ int main() {
 }
 
 void keyCallback(GLFWwindow *win, int key, int scancode, int action, int mods) {
-  if(key == GLFW_KEY_ESCAPE)
+  if (key == GLFW_KEY_ESCAPE)
     glfwSetWindowShouldClose(win, GLFW_TRUE);
   keyPressEvent.invoke(key, action, mods);
 }
 
-void mouseMoveCallback(GLFWwindow * win, double x, double y) {
+void mouseMoveCallback(GLFWwindow *win, double x, double y) {
   mouseMoveEvent.invoke(x, y);
 }
+
