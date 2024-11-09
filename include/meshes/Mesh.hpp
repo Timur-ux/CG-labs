@@ -13,7 +13,7 @@
 #include <glm/vec3.hpp>
 #include <iostream>
 
-class Object : public MoveableBase {
+class Mesh : public MoveableBase {
 protected:
   Program *    program_;
   VertexArray  vao_;
@@ -30,17 +30,17 @@ protected:
   size_t normalsSize_ = 0;
 
 public:
-  Object();
-  Object(glm::vec3 position, Program &program,
+  Mesh();
+  Mesh(glm::vec3 position, Program &program,
          std::vector<glm::vec3> verticiesCoords,
          std::vector<glm::vec2> textureCoords, std::vector<glm::vec3> normals,
          std::vector<GLuint> indexes, GLenum drawMode, Texture2D &texture, bool rotate = false);
 
-  Object(Object &) = delete;
-  Object(Object &&);
+  Mesh(Mesh &) = delete;
+  Mesh(Mesh &&);
 
-  Object & operator=(Object&) = delete;
-  Object & operator=(Object&&);
+  Mesh & operator=(Mesh&) = delete;
+  Mesh & operator=(Mesh&&);
 
   void setupData(glm::vec3 position, Program &program,
          std::vector<glm::vec3> verticiesCoords,

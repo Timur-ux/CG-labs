@@ -10,13 +10,13 @@
 #include <glm/trigonometric.hpp>
 #include <iostream>
 #include <stdexcept>
-#include "objects/Object.hpp"
+#include "meshes/Mesh.hpp"
 
 CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
                      glm::vec3 target, GLfloat fov, GLfloat ratio)
-    : MoveableBase(position, target), program_(program), 
+    : MoveableBase(position), program_(program), 
        fov_(fov), ratio_(ratio), view_(1), perspective_(1) {
-   up_ = up;
+  lookAt(target);
 
   viewLoc_ = glGetUniformLocation(program_.get(), "view");
   perspectiveLoc_ = glGetUniformLocation(program_.get(), "perspective");
@@ -57,12 +57,12 @@ void CameraMVP::updateState() {
 }
 
 void CameraMVP::lookAt(glm::vec3 target) {
-  forward_ = glm::normalize(target - position_ );
+  MoveableBase::lookAt(target);
   viewChanged_ = true;
 }
 
 void CameraMVP::lookInto(glm::vec3 direction) {
-  forward_ = glm::normalize(direction);
+  MoveableBase::lookInto(direction);
   viewChanged_ = true;
 }
 

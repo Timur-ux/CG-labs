@@ -1,5 +1,4 @@
-#include "objects/Pyramid.hpp"
-#include "objects/Object.hpp"
+#include "meshes/Pyramid.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/geometric.hpp>
 #include "utils/printGlm.hpp"
@@ -69,7 +68,7 @@ std::vector<glm::vec3> generateNormals(std::vector<glm::vec3> vertex) {
 
 Pyramid::Pyramid(glm::vec3 position, Program &program, Texture2D *texture,
                  glm::vec3 scale)
-    : scale_(scale), Object() {
+    : scale_(scale), Mesh() {
   glm::mat4 scaleMatrix = glm::scale(glm::mat4(1), scale);
   translateModel_ = scaleMatrix * translateModel_;
 

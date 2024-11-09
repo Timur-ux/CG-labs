@@ -1,4 +1,4 @@
-#include "objects/Rectangle.hpp"
+#include "meshes/Rectangle.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -72,7 +72,7 @@ std::vector<glm::vec2> prepareTextureCoords(glm::vec3 scales, bool scale) {
 
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
                      Texture2D &texture, bool rotate)
-    : Object(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
+    : Mesh(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
              GL_TRIANGLES, texture, rotate),
       texture_(texture) {
         scaleBy(sideSize);

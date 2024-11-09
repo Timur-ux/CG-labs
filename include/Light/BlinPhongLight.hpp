@@ -13,7 +13,7 @@ class BlinPhongLight : public LightBase {
                            GLfloat kDiffuse = 1, GLfloat kAmbient = 0.2, GLfloat kGlare = 1)
     : LightBase(position, target, cameraData, blinPhongProgram, std::move(framebuffer), color, kDiffuse, kAmbient, kGlare) {};
 
-  bool setLightParamsFor(const Object &object, size_t i) override {
+  bool setLightParamsFor(const Mesh &object, size_t i) override {
     glm::vec3 cameraPos = cameraData_.position();
     return program_.setUniformVec3(uniforms::cameraPos, cameraPos) 
       && LightBase::setLightParamsFor(object, i);

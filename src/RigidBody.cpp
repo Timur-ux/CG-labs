@@ -19,13 +19,6 @@ void RigidBody::call(double time, double dt) {
   glm::vec3 horizontalVelocity = velocity_;
   horizontalVelocity.y = 0;
   glm::vec3 friction = glm::length(horizontalVelocity) > 0 ? -horizontalVelocity * mu_ /float(dt)* g : glm::vec3(0);
-  std::cout << friction << velocity_ << "--------\n";
-  // glm::vec3 horizontalForce = force_;
-  // horizontalForce.y = 0;
-  // if (velocity_ == zero &&
-  //     glm::length(horizontalForce) < glm::length(friction)) {
-  //   friction = glm::normalize(friction) * glm::length(horizontalForce);
-  // }
 
   if(velocity_ != zero)
     force_ += friction;
@@ -33,11 +26,10 @@ void RigidBody::call(double time, double dt) {
   glm::vec3 acceleration = force_ / mass_;
 
 
-  if (velocity_!=zero && glm::length(velocity_) < velocityEps_) {
-    std::cout << velocity_ << std::endl;
+  if (velocity_ != zero && glm::length(velocity_) < velocityEps_) {
     velocity_ = zero;
-    // return;
   }
+
   velocity_ += acceleration * float(dt);
 
   host_.shiftBy(velocity_ * float(dt));

@@ -45,14 +45,14 @@ GLfloat *BezierCurve2d::calculateVerticies(std::vector<coord> coords, GLuint ver
 
 BezierCurve2d::BezierCurve2d(std::vector<std::pair<GLfloat, GLfloat>> coords,
                              GLuint vertexN, Program program)
-    : Object(vertexN+1, sizeof(GLfloat) * 3, calculateVerticies(coords, vertexN),
+    : Mesh(vertexN+1, sizeof(GLfloat) * 3, calculateVerticies(coords, vertexN),
              program), coords_(coords) {
   type_ = GL_LINE_STRIP;
   draw();
 }
 
 void BezierCurve2d::draw() {
-  Object::draw();
+  Mesh::draw();
 }
 
 GLfloat * coordToGLfloatPtr(coord p) {

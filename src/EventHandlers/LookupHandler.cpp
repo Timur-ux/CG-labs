@@ -1,8 +1,6 @@
 #include "EventHandlers/LookupHandler.hpp"
 #include <cmath>
 #include <glm/trigonometric.hpp>
-#include <iostream>
-#include "objects/Object.hpp"
 #define max(a, b) (a > b ? a : b)
 #define min(a, b) (a < b ? a : b)
 
@@ -32,8 +30,7 @@ void LookupEventHandler::call(double newX, double newY)
     newForward.y = glm::sin(pitchRad);
     newForward.z = glm::cos(pitchRad) * glm::sin(yawRad);
     
-    cameraData_.lookInto(newForward);
-    // std::cout << cameraData_.forward() << std::endl;
+    host_.lookInto(newForward);
     glCheckError();
 
 

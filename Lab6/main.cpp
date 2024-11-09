@@ -1,32 +1,22 @@
 #include "CameraMVP.hpp"
 #include "GlobalEvents.hpp"
 #include "Light/BlinPhongLight.hpp"
-#include "Light/Lambert.hpp"
 #include "Program.hpp"
-#include "RigidBody.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Pyramid.hpp"
-#include "objects/Rectangle.hpp"
-#include "objects/Sphere.hpp"
+#include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/fwd.hpp>
-#include <glm/geometric.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#define GLEW_STATIC
 #include "EventHandlers/LookupHandler.hpp"
 #include "EventHandlers/moveHandler.hpp"
-#include "MoveObjectFN.hpp"
-#include "utils/customWindow.hpp"
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "utils/printGlm.hpp"
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
@@ -68,8 +58,9 @@ int main() {
 
   // Камера
   CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 1, 0),
-                       glm::vec3(0, 5, 0));
-  RigidBody rigidBody(cameraData, 600);
+                       glm::vec3(0, 0, 0));
+  RigidBody rigidBody(cube, 600);
+  cameraData.follow(&cube, {2, 5, 7});
 
 
   // Источники света
@@ -87,12 +78,11 @@ int main() {
               {&cube, &floor});
 
   // Event Handler'ы
-  MoveEventHandler moveHandler(cameraData, 650);
-  keyPressEvent += moveHandler;
-  LookupEventHandler lookupHandler(cameraData, win);
+  MoveEventHandler moveHandler1(cube, 6000);
+  keyPressEvent += moveHandler1;
+  moveHandler1.setRigidBody(&rigidBody);
+  LookupEventHandler lookupHandler(cube, win);
   mouseMoveEvent += lookupHandler;
-
-  moveHandler.setRigidBody(&rigidBody);
 
   // Настройки шейдерной программы
   if (!blinPhongProgram.setUniformInt("main_texture0", 0))
@@ -122,7 +112,7 @@ int main() {
     // Обрабатываем ввод
     cameraData.updateState();
     glfwPollEvents();
-    moveHandler.move();
+    moveHandler1.move();
   }
   glCheckError();
 

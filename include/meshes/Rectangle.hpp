@@ -2,11 +2,11 @@
 #define OBJECT_CUBE_HPP_
 
 
-#include "Object.hpp"
+#include "meshes/Mesh.hpp"
 #include "Texture.hpp"
 #include "VertexBuffer.hpp"
 
-class Rectangle : public Object {
+class Rectangle : public Mesh {
   VertexBuffer dataVBO_;
   Texture2D &texture_;
 

@@ -4,7 +4,7 @@
 #include "Program.hpp"
 #include "Object.hpp"
 
-class Line2D : public Object {
+class Line2D : public Mesh {
 public:
   Line2D(GLfloat verticies[6], Program program, TMoveFN moveFN = nullptr);
 };

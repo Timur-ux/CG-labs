@@ -3,7 +3,7 @@
 
 #include "Object.hpp"
 
-class Square2d : public Object {
+class Square2d : public Mesh {
   protected:
     GLfloat width_, height_;
     GLfloat x_;

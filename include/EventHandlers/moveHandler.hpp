@@ -12,7 +12,7 @@
 
 class MoveEventHandler : public IEventHandler<int, int, int> {
 protected:
-  CameraMVP &cameraData_;
+  MoveableBase &host_;
   GLfloat moveSpeed_;
   GLfloat acceleration_;
   bool pressed[1024]{false};
@@ -20,7 +20,7 @@ protected:
   RigidBody * rigidBody_ = nullptr;
   void moveRigidBody();
 public:
-  MoveEventHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
+  MoveEventHandler(MoveableBase &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
       
   void setRigidBody(RigidBody * rigidBody) {rigidBody_ = rigidBody;}
   virtual void move();

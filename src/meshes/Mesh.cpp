@@ -1,4 +1,4 @@
-#include "objects/Object.hpp"
+#include "meshes/Mesh.hpp"
 #include "IMoveable.hpp"
 #include "Program.hpp"
 #include "VertexArray.hpp"
@@ -12,28 +12,24 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
+#include "utils/printGlm.hpp"
 
-Object::Object() : MoveableBase() {
-  up_ = glm::vec3(translateModel_ * glm::vec4(0, 1, 0, 1));
-}
+Mesh::Mesh() : MoveableBase() { }
 
-Object::Object(glm::vec3 position, Program &program,
+Mesh::Mesh(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
                std::vector<glm::vec3> normals, std::vector<GLuint> indexes,
                GLenum drawMode, Texture2D &texture, bool rotate)
-    : MoveableBase(position, glm::vec3(0)), program_(&program),
+    : MoveableBase(position), program_(&program),
       drawMode_(drawMode), textures_({&texture}) {
+        std::cout << forward();
 
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
   glCheckError();
   translateModel_ = glm::translate(translateModel_, position_);
-  if (position_ != glm::vec3(0))
-    forward_ = glm::normalize(-position_);
-  else
-    forward_ = glm::vec3(1, 0, 0);
 
   if (rotate)
     translateModel_ = glm::rotate(translateModel_, glm::radians(45.0f), forward_);
@@ -96,18 +92,18 @@ Object::Object(glm::vec3 position, Program &program,
   glCheckError();
 }
 
-void Object::setupData(glm::vec3 position, Program &program,
+void Mesh::setupData(glm::vec3 position, Program &program,
                        std::vector<glm::vec3> verticiesCoords,
                        std::vector<glm::vec2> textureCoords,
                        std::vector<glm::vec3> normals,
                        std::vector<GLuint> indexes, GLenum drawMode,
                        Texture2D *texture) {
-  *this = Object(position, program, verticiesCoords, textureCoords, normals,
+  *this = Mesh(position, program, verticiesCoords, textureCoords, normals,
                  indexes, drawMode, *texture);
   glCheckError();
 }
 
-Object::Object(Object &&other) {
+Mesh::Mesh(Mesh &&other) {
   translateModel_ = other.translateModel_;
   position_ = other.position_;
   forward_ = other.forward_;
@@ -129,7 +125,7 @@ Object::Object(Object &&other) {
   glCheckError();
 }
 
-Object & Object::operator=(Object &&other) {
+Mesh & Mesh::operator=(Mesh &&other) {
   if(this == &other)
     return *this;
 
@@ -156,7 +152,7 @@ Object & Object::operator=(Object &&other) {
   return *this;
 }
 
-void Object::draw() {
+void Mesh::draw() {
   glCheckError();
   for (size_t i = 0; i < textures_.size(); ++i) {
     textures_[i]->bind();
@@ -169,7 +165,7 @@ void Object::draw() {
   vboIndicies_.bind();
   glCheckError();
 
-  if (!program_->setUniformMat4(uniforms::modelMatrix, translateModel_))
+  if (!program_->setUniformMat4(uniforms::modelMatrix, model_))
     std::cerr << "Can't find location of " << uniforms::modelMatrix
               << " uniform" << std::endl;
   glCheckError();
@@ -184,7 +180,7 @@ void Object::draw() {
   glCheckError();
 }
 
-void Object::draw(Program *otherProgram) {
+void Mesh::draw(Program *otherProgram) {
   Program *myProgram = program_;
   program_ = otherProgram;
   glCheckError();
@@ -193,7 +189,7 @@ void Object::draw(Program *otherProgram) {
   program_ = myProgram;
 }
 
-bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
+bool Mesh::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -217,7 +213,7 @@ bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
   return true;
 }
 
-bool Object::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
+bool Mesh::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -244,7 +240,7 @@ bool Object::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
   return true;
 }
 
-bool Object::setNormals(const std::vector<glm::vec3> &normals) {
+bool Mesh::setNormals(const std::vector<glm::vec3> &normals) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -267,7 +263,7 @@ bool Object::setNormals(const std::vector<glm::vec3> &normals) {
   return true;
 }
 
-bool Object::setIndexes(const std::vector<GLubyte> &indexes) {
+bool Mesh::setIndexes(const std::vector<GLubyte> &indexes) {
   VBOBind _(vboIndicies_);
 
   vboIndicies_.setData(indexes.size() * sizeof(GLubyte), indexes.data());

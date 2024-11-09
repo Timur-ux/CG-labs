@@ -79,33 +79,27 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/geometry.cpp.o -c /home/raison/git/CG-labs/src/geometry.cpp",
-  "file": "/home/raison/git/CG-labs/src/geometry.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/geometry.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o -c /home/raison/git/CG-labs/src/meshes/Mesh.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Mesh.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Object.cpp.o -c /home/raison/git/CG-labs/src/objects/Object.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Object.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Object.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Pyramid.cpp.o -c /home/raison/git/CG-labs/src/meshes/Pyramid.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Pyramid.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Pyramid.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Pyramid.cpp.o -c /home/raison/git/CG-labs/src/objects/Pyramid.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Pyramid.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Pyramid.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/meshes/Rectangle.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Rectangle.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Rectangle.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/objects/Rectangle.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Rectangle.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o"
-},
-{
-  "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Sphere.cpp.o -c /home/raison/git/CG-labs/src/objects/Sphere.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Sphere.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Sphere.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Sphere.cpp.o -c /home/raison/git/CG-labs/src/meshes/Sphere.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Sphere.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Sphere.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",

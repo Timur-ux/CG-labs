@@ -12,13 +12,13 @@
 
 
 class LookupEventHandler : public IEventHandler<double, double> {
-  CameraMVP & cameraData_;
+  MoveableBase & host_;
   double x_, y_;
-  double yaw_ = -90, pitch_ = 0;
+  double yaw_ = 90, pitch_ = 0;
   double sensetivity_ = 0.05;
   GLFWwindow * win_;
   public:
-  LookupEventHandler(CameraMVP& cameraData, GLFWwindow * win) : cameraData_(cameraData), win_(win) {
+  LookupEventHandler(MoveableBase& host, GLFWwindow * win) : host_(host), win_(win) {
     glfwGetCursorPos(win, &x_, &y_);
   }
 

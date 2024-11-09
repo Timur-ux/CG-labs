@@ -3,10 +3,8 @@
 
 #include "CameraMVP.hpp"
 #include "DepthFramebuffer.hpp"
-#include "Framebuffer.hpp"
 #include "IMoveable.hpp"
-#include "objects/Object.hpp"
-#include <list>
+#include "meshes/Mesh.hpp"
 
 // Структура для передачи данных о свете внутрь программы шейдера
 // Для корректной работы структура LightData должна совпадать с оной в шейдере
@@ -54,12 +52,12 @@ struct LightData {
 };
 
 class ILight {
-  virtual LightData getData(const Object &object) = 0;
+  virtual LightData getData(const Mesh &object) = 0;
 
 public:
-  virtual void renderToShadowMap(const std::vector<Object *> &objects) = 0;
+  virtual void renderToShadowMap(const std::vector<Mesh *> &objects) = 0;
   virtual void bindDepthMapTo(int block) = 0;
-  virtual bool setLightParamsFor(const Object &object, size_t i) = 0;
+  virtual bool setLightParamsFor(const Mesh &object, size_t i) = 0;
   virtual void swapState() = 0;
   virtual ~ILight() {}
 };
@@ -81,7 +79,7 @@ protected:
   GLfloat n_ = 1.0f, f_ = 100.0f;
   DepthFramebuffer depthFramebuffer_;
 
-  LightData getData(const Object &object) override;
+  LightData getData(const Mesh &object) override;
   bool enabled_ = true;
 public:
   LightBase(glm::vec3 position, glm::vec3 target, CameraMVP &cameraData,
@@ -89,9 +87,9 @@ public:
             glm::vec4 color = {1, 1, 1, 1}, GLfloat kDiffuse = 0.6,
             GLfloat kAmbient = 0.2, GLfloat kGlare = 0.2);
 
-  virtual void renderToShadowMap(const std::vector<Object *> &objects) override;
+  virtual void renderToShadowMap(const std::vector<Mesh *> &objects) override;
   virtual void bindDepthMapTo(int block) override;
-  virtual bool setLightParamsFor(const Object &object, size_t i) override;
+  virtual bool setLightParamsFor(const Mesh &object, size_t i) override;
   virtual void swapState() override {enabled_ = !enabled_;}
 };
 #endif // !LIGHT_HPP_

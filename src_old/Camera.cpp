@@ -20,8 +20,8 @@ Id Camera::getId() {
   return id_;
 }
 
-void FullScene2DCamera::recalcObjectsInFrame(std::vector<Object*> movedObjects) {
-  for(Object* object : movedObjects) {
+void FullScene2DCamera::recalcObjectsInFrame(std::vector<Mesh*> movedObjects) {
+  for(Mesh* object : movedObjects) {
     objectsInFrame_[object->getId()] = object;
   }
 }

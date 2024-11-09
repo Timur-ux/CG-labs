@@ -33,10 +33,11 @@ LightBase::LightBase(glm::vec3 position, glm::vec3 target,
                      CameraMVP &cameraData, Program &program,
                      DepthFramebuffer &&framebuffer, glm::vec4 color,
                      GLfloat kDiffuse, GLfloat kAmbient, GLfloat kGlare)
-    : MoveableBase(position, target), cameraData_(cameraData),
+    : MoveableBase(position), cameraData_(cameraData),
       program_(program), color_(color), kDiffuse_(kDiffuse),
       kAmbient_(kAmbient), kGlare_(kGlare), shadowMapProgram_(shadowMapProgram),
       depthFramebuffer_(std::move(framebuffer)) {
+  lookAt(target);
 
   lightProjection_ = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, n_, f_);
   glm::mat4 view = glm::lookAt(position_, position_ + forward_, up_);
@@ -44,7 +45,7 @@ LightBase::LightBase(glm::vec3 position, glm::vec3 target,
   lightSpaceMatrix_ = lightProjection_ * view;
 };
 
-LightData LightBase::getData(const Object &object) {
+LightData LightBase::getData(const Mesh &object) {
   glCheckError();
   LightData res{
       glm::inverseTranspose(glm::mat3(cameraData_.view() * object.model())),
@@ -60,7 +61,7 @@ LightData LightBase::getData(const Object &object) {
   return res;
 }
 
-bool LightBase::setLightParamsFor(const Object &object, size_t i) {
+bool LightBase::setLightParamsFor(const Mesh &object, size_t i) {
   glCheckError();
   GLint lightLoc = program_.getUniformLoc(LightData::firstField().c_str());
   glCheckError();
@@ -88,7 +89,7 @@ void LightBase::bindDepthMapTo(int block) {
   depthFramebuffer_.depthMap().setTextureBlock(block);
 }
 
-void LightBase::renderToShadowMap(const std::vector<Object *> &objects) {
+void LightBase::renderToShadowMap(const std::vector<Mesh *> &objects) {
   shadowMapProgram_.bind();
   if (!shadowMapProgram_.setUniformMat4(uniforms::lightSpaceMatrix,
                                         lightSpaceMatrix_))

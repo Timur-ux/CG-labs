@@ -1,9 +1,9 @@
 #ifndef SHPERE_HPP_
 #define SHPERE_HPP_
 
-#include "Object.hpp"
+#include "meshes/Mesh.hpp"
 
-class Sphere : public Object {
+class Sphere : public Mesh {
   GLfloat r_;
   public:
   Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization = 100);

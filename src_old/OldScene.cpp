@@ -4,7 +4,7 @@
 Scene::Scene() : objectUpdateEventHandler_(new UpdateEventHandler), updateEvent(timeUpdateEvent_){}
 
 void Scene::update(const double & time, const double &dt) {
-  std::vector<Object*> movedObject = objectUpdateEventHandler_->getAndReset();
+  std::vector<Mesh*> movedObject = objectUpdateEventHandler_->getAndReset();
 
   timeUpdateEvent_.invoke(time, dt);
   for(auto &[_, camera] : cameras_) {
@@ -14,7 +14,7 @@ void Scene::update(const double & time, const double &dt) {
 }
 
 void Scene::initialUpdate(const double &dt) {
-  std::vector<Object*> movedObject{};
+  std::vector<Mesh*> movedObject{};
   for(const auto & it : objects_) movedObject.push_back(it.second);
 
   timeUpdateEvent_.invoke(0, dt);
@@ -24,7 +24,7 @@ void Scene::initialUpdate(const double &dt) {
   }
 
 }
-void Scene::addObject(Object* object) {
+void Scene::addObject(Mesh* object) {
   objects_[object->getId()] = object;
   object->updateEvent += *objectUpdateEventHandler_;
   updateEvent += *object;
@@ -35,10 +35,10 @@ void Scene::addCamera(Camera* camera) {
 }
 
 
-void UpdateEventHandler::call(Object* object) {
+void UpdateEventHandler::call(Mesh* object) {
   movedObjects.push_back(object);
 }
 
-std::vector<Object*> && UpdateEventHandler::getAndReset() {
+std::vector<Mesh*> && UpdateEventHandler::getAndReset() {
   return std::move(movedObjects);
 }

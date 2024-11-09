@@ -36,7 +36,7 @@ void Geometry::unbindVBO() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Object::setAttrPtr(std::string name, int componentsN, GLsizei stride,
+void Mesh::setAttrPtr(std::string name, int componentsN, GLsizei stride,
                         void *offset, GLenum type, bool normalized) {
   GLint loc = glGetAttribLocation(program_.get(), name.c_str());
 
@@ -47,7 +47,7 @@ void Object::setAttrPtr(std::string name, int componentsN, GLsizei stride,
   glEnableVertexAttribArray(loc);
 }
 
-void Object::draw() {
+void Mesh::draw() {
   program_.bind();
   geometry_.bindVAO();
 
@@ -57,4 +57,4 @@ void Object::draw() {
   program_.unbind();
 }
 
-Id Object::getId() { return id_; }
+Id Mesh::getId() { return id_; }

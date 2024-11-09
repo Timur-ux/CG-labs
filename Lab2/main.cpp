@@ -6,7 +6,7 @@
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Rectangle.hpp"
+#include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -17,12 +17,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #define GLEW_STATIC
-#include "utils/customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
-#include "MoveObjectFN.hpp"
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);

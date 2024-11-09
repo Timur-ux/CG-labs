@@ -1,6 +1,5 @@
-#include "objects/Sphere.hpp"
+#include "meshes/Sphere.hpp"
 #include "Program.hpp"
-#include "objects/Object.hpp"
 #include <glm/fwd.hpp>
 #include <glm/trigonometric.hpp>
 #include <vector>
@@ -78,13 +77,13 @@ std::vector<GLuint> generateIndexes(GLuint iN, GLuint jN) {
 }
 
 Sphere::Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalization)
-    : Object() {
+    : Mesh() {
       SphereData data = generateSphereData(r, detalization, detalization);
       std::vector<GLuint> indexes = generateIndexes(detalization, detalization);
       setupData(position, program, data.vertexes, data.texCoords, data.normals, indexes, GL_TRIANGLES, texture);
 }
 Sphere::Sphere(GLfloat r, glm::vec3 position,  Program & program, Texture2D *texture, GLuint detalizationI, GLuint detalizationJ)
-  : Object() {
+  : Mesh() {
       SphereData data = generateSphereData(r, detalizationI, detalizationJ);
       std::vector<GLuint> indexes = generateIndexes(detalizationI, detalizationJ);
       setupData(position, program, data.vertexes, data.texCoords, data.normals, indexes, GL_TRIANGLES, texture);

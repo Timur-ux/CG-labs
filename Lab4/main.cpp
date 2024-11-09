@@ -6,9 +6,9 @@
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Pyramid.hpp"
-#include "objects/Rectangle.hpp"
-#include "objects/Sphere.hpp"
+#include "meshes/Pyramid.hpp"
+#include "meshes/Rectangle.hpp"
+#include "meshes/Sphere.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -21,7 +21,6 @@
 #define GLEW_STATIC
 #include "EventHandlers/LookupHandler.hpp"
 #include "EventHandlers/moveHandler.hpp"
-#include "MoveObjectFN.hpp"
 #include "utils/customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -35,7 +34,7 @@ class LightChanderScene : public Scene {
 public:
   LightChanderScene(Program &program, CameraMVP& cameraData,
                     std::vector<ILight *> lights = {},
-                    std::vector<Object *> objects = {})
+                    std::vector<Mesh *> objects = {})
       : Scene(program, cameraData, lights, objects) {}
 
   /**
