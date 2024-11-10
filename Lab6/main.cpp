@@ -59,8 +59,8 @@ int main() {
   // Камера
   CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 1, 0),
                        glm::vec3(0, 0, 0));
-  RigidBody rigidBody(cube, 600);
-  cameraData.follow(&cube, {2, 5, 7});
+  // RigidBody rigidBody(cube, 600);
+  cameraData.follow(&cube, {0, 0, 5});
 
 
   // Источники света
@@ -78,11 +78,16 @@ int main() {
               {&cube, &floor});
 
   // Event Handler'ы
-  MoveEventHandler moveHandler1(cube, 6000);
+  MoveEventHandler moveHandler1(cube);
   keyPressEvent += moveHandler1;
-  moveHandler1.setRigidBody(&rigidBody);
+  // moveHandler1.setRigidBody(&rigidBody);
   LookupEventHandler lookupHandler(cube, win);
+  lookupHandler.lockY();
   mouseMoveEvent += lookupHandler;
+  // lookupHandler.setPitchFov(30);
+  LookupEventHandler lookupHandler2(cameraData, win);
+  // lookupHandler2.lockX();
+  mouseMoveEvent += lookupHandler2;
 
   // Настройки шейдерной программы
   if (!blinPhongProgram.setUniformInt("main_texture0", 0))

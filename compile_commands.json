@@ -79,6 +79,12 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o -c /home/raison/git/CG-labs/src/collaiders/AABB.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/AABB.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o -c /home/raison/git/CG-labs/src/meshes/Mesh.cpp",
   "file": "/home/raison/git/CG-labs/src/meshes/Mesh.cpp",
   "output": "CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o"

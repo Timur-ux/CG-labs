@@ -18,6 +18,7 @@ public:
   virtual void lookInto(glm::vec3 direction) = 0;
   virtual void lookAt(glm::vec3 position) = 0;
   virtual void scaleBy(glm::vec3 scale) = 0;
+  virtual void freezeUp() = 0;
 
   virtual ~IMoveable() {}
 };
@@ -37,6 +38,8 @@ protected:
   MoveableBase *following_ = nullptr;
   glm::vec3 followOffset_{0};
 
+  bool upFreezed_ = false;
+
 public:
   MoveableBase(glm::vec3 position = glm::vec3(0), glm::vec3 forward = glm::vec3(0, 0, 1));
 
@@ -54,6 +57,7 @@ public:
   virtual void lookInto(glm::vec3 direction) override;
   virtual void lookAt(glm::vec3 position) override;
   virtual void scaleBy(glm::vec3 scale) override;
+  virtual void freezeUp() override {upFreezed_ = !upFreezed_;};
 
   void follow(MoveableBase *objToFollow, glm::vec3 followOffset);
 

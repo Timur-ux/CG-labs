@@ -14,13 +14,20 @@ void LookupEventHandler::call(double newX, double newY)
     double dx = newX - x_, dy = y_ - newY;
     x_ = newX, y_ = newY;
 
+    if(lockY_)
+      dy = 0;
+    if(lockX_)
+      dx = 0;
+
     dx *= sensetivity_;
     dy *= sensetivity_;
+    dx /= 2.0f;
+    dy *= 2.0f;
 
     yaw_ += dx;
     pitch_ += dy;
-    if(pitch_ >= 89.0) pitch_ = 89.0;
-    else if (pitch_ <= -89.0) pitch_ = -89.0;
+    if(pitch_ >= pitchFov_) pitch_ = pitchFov_;
+    else if (pitch_ <= -pitchFov_) pitch_ = -pitchFov_;
 
     double yawRad = glm::radians(yaw_);
     double pitchRad = glm::radians(pitch_);
@@ -30,7 +37,7 @@ void LookupEventHandler::call(double newX, double newY)
     newForward.y = glm::sin(pitchRad);
     newForward.z = glm::cos(pitchRad) * glm::sin(yawRad);
     
-    host_.lookInto(newForward);
+    host_.lookInto(host_.forward() + newForward);
     glCheckError();
 
 
