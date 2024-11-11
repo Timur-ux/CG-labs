@@ -4,7 +4,6 @@
 
 #include "RigidBody.hpp"
 #include "events.hpp"
-#include "CameraMVP.hpp"
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -12,7 +11,7 @@
 
 class MoveEventHandler : public IEventHandler<int, int, int> {
 protected:
-  MoveableBase &host_;
+  Transform &host_;
   GLfloat moveSpeed_;
   GLfloat acceleration_;
   bool pressed[1024]{false};
@@ -20,7 +19,7 @@ protected:
   RigidBody * rigidBody_ = nullptr;
   void moveRigidBody();
 public:
-  MoveEventHandler(MoveableBase &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
+  MoveEventHandler(Transform &cameraData, GLfloat moveSpeed = 0.05f, GLfloat acceleration = 0.01f);
       
   void setRigidBody(RigidBody * rigidBody) {rigidBody_ = rigidBody;}
   virtual void move();

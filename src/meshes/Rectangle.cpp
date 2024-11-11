@@ -71,9 +71,9 @@ std::vector<glm::vec2> prepareTextureCoords(glm::vec3 scales, bool scale) {
 }
 
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
-                     Texture2D &texture, bool rotate)
+                     Texture2D &texture)
     : Mesh(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
-             GL_TRIANGLES, texture, rotate),
+             GL_TRIANGLES, texture),
       texture_(texture) {
         scaleBy(sideSize);
 }

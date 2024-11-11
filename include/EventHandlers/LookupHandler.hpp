@@ -12,17 +12,17 @@
 
 
 class LookupEventHandler : public IEventHandler<double, double> {
-  MoveableBase & host_;
+  Transform & host_;
   double x_, y_;
-  double yaw_ = 90, pitch_ = 0;
-  double sensetivity_ = 0.01;
+  double yaw_ = -90, pitch_ = 0;
+  double sensetivity_ = 0.05;
   GLFWwindow * win_;
   double pitchFov_ = 89.9;
 
   bool lockY_ = false;
   bool lockX_ = false;
   public:
-  LookupEventHandler(MoveableBase& host, GLFWwindow * win) : host_(host), win_(win) {
+  LookupEventHandler(Transform& host, GLFWwindow * win) : host_(host), win_(win) {
     glfwGetCursorPos(win, &x_, &y_);
   }
 

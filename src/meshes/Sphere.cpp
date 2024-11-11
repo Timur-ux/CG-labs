@@ -1,6 +1,7 @@
 #include "meshes/Sphere.hpp"
 #include "Program.hpp"
-#include <glm/fwd.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/glm.hpp>
 #include <glm/trigonometric.hpp>
 #include <vector>
 

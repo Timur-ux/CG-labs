@@ -14,25 +14,23 @@
 #include <iostream>
 #include "utils/printGlm.hpp"
 
-Mesh::Mesh() : MoveableBase() { }
+Mesh::Mesh() : Transform() { }
 
 Mesh::Mesh(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
                std::vector<glm::vec3> normals, std::vector<GLuint> indexes,
-               GLenum drawMode, Texture2D &texture, bool rotate)
-    : MoveableBase(position), program_(&program),
+               GLenum drawMode, Texture2D &texture)
+    : Transform(position), program_(&program),
       drawMode_(drawMode), textures_({&texture}) {
-        std::cout << forward();
 
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
   glCheckError();
-  translateModel_ = glm::translate(translateModel_, position_);
+  moveTo(position);
 
-  if (rotate)
-    translateModel_ = glm::rotate(translateModel_, glm::radians(45.0f), forward_);
+
   up_ = glm::vec3(0, 1, 0);
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
@@ -122,6 +120,10 @@ Mesh::Mesh(Mesh &&other) {
   vertexSize_ = other.vertexSize_;
   textureSize_ = other.textureSize_;
   normalsSize_ = other.normalsSize_;
+
+  translateModel_ = other.translateModel_;
+  rotateModel_ = other.rotateModel_;
+  model_ = other.model_;
   glCheckError();
 }
 
@@ -147,6 +149,10 @@ Mesh & Mesh::operator=(Mesh &&other) {
   vertexSize_ = other.vertexSize_;
   textureSize_ = other.textureSize_;
   normalsSize_ = other.normalsSize_;
+
+  translateModel_ = other.translateModel_;
+  rotateModel_ = other.rotateModel_;
+  model_ = other.model_;
   glCheckError();
 
   return *this;

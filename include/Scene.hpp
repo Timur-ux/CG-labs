@@ -5,7 +5,6 @@
 #include "Light/Light.hpp"
 #include "Program.hpp"
 #include "meshes/Mesh.hpp"
-#include <list>
 
 class Scene {
 protected:

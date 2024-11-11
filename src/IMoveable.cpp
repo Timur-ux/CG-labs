@@ -6,14 +6,14 @@
 #include <glm/geometric.hpp>
 #include <glm/trigonometric.hpp>
 
-MoveableBase::MoveableBase(glm::vec3 position, glm::vec3 forward)
+Transform::Transform(glm::vec3 position, glm::vec3 forward)
     : translateModel_(1), rotateModel_(1), position_(position),
       forward_(forward), onMove(onMove_) {
   translateModel_ = glm::translate(translateModel_, position_);
   model_ = translateModel_ * rotateModel_;
 }
 
-void MoveableBase::shiftBy(glm::vec3 dp) {
+void Transform::shiftBy(glm::vec3 dp) {
   // std::cout << dp;
   position_ += dp;
   translateModel_ = glm::translate(glm::mat4(1), position_);
@@ -21,20 +21,20 @@ void MoveableBase::shiftBy(glm::vec3 dp) {
   onMove_.invoke();
 }
 
-void MoveableBase::moveTo(glm::vec3 newPos) {
+void Transform::moveTo(glm::vec3 newPos) {
   translateModel_ = glm::translate(translateModel_, newPos - position_);
   position_ = newPos;
   model_ = translateModel_ * rotateModel_;
   onMove_.invoke();
 }
 
-void MoveableBase::scaleBy(glm::vec3 scale) {
+void Transform::scaleBy(glm::vec3 scale) {
   translateModel_ = glm::scale(translateModel_, scale);
   model_ = translateModel_ * rotateModel_;
   onMove_.invoke();
 }
 
-void MoveableBase::rotateAround(glm::vec3 v, float rads) {
+void Transform::rotateAround(glm::vec3 v, float rads) {
   glm::mat4 modelTemp(1);
   modelTemp = glm::rotate(modelTemp, rads, v);
 
@@ -47,20 +47,20 @@ void MoveableBase::rotateAround(glm::vec3 v, float rads) {
   onMove_.invoke();
 }
 
-void MoveableBase::lookInto(glm::vec3 direction) {
+void Transform::lookInto(glm::vec3 direction) {
   direction = glm::normalize(direction);
   if (direction == forward_ || direction == -forward_) {
     std::cerr << "Undefined rotation, skip" << std::endl;
     return;
   }
-  if(glm::abs(glm::dot(forward_, direction) - 1) < 0.000001 ) {
+  if(glm::abs(glm::dot(forward_, direction) - 1) < 0.00005 ) {
     std::cerr << "Undefined rotation, skip" << std::endl;
     return;
   }
 
-  glm::vec3 n = glm::cross(forward_, direction);
+  glm::vec3 n = glm::normalize(glm::cross(forward_, direction));
   float angle = glm::acos(glm::dot(forward_, direction));
-  std::cout << n << angle << ' ' <<glm::dot(forward_, direction)<< std::endl;
+  // std::cout << n << angle << ' ' <<glm::dot(forward_, direction)<< std::endl;
   ;
   // angle = glm::min(angle, glm::pi<float>() - angle);
 
@@ -97,14 +97,14 @@ void MoveableBase::lookInto(glm::vec3 direction) {
 //   onMove_.invoke();
 // }
 
-void MoveableBase::lookAt(glm::vec3 position) {
+void Transform::lookAt(glm::vec3 position) {
   glm::vec3 direction = glm::normalize(position - position_);
   forward_ = direction;
 
   // lookInto(direction);
 }
 
-void MoveableBase::follow(MoveableBase *objToFollow, glm::vec3 followOffset) {
+void Transform::follow(Transform *objToFollow, glm::vec3 followOffset) {
   if (following_ != nullptr)
     following_->onMove -= *this;
 
@@ -113,7 +113,7 @@ void MoveableBase::follow(MoveableBase *objToFollow, glm::vec3 followOffset) {
   followOffset_ = followOffset;
 }
 
-void MoveableBase::call() {
+void Transform::call() {
   glm::vec3 offset =
       (following_->up() - following_->forward()) * glm::length(followOffset_);
 

@@ -22,6 +22,7 @@
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
 
+
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
 Event<int, int, int> keyPressEvent;

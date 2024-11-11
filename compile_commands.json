@@ -37,6 +37,12 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Object.cpp.o -c /home/raison/git/CG-labs/src/Object.cpp",
+  "file": "/home/raison/git/CG-labs/src/Object.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/Object.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /home/raison/git/CG-labs/src/Program.cpp",
   "file": "/home/raison/git/CG-labs/src/Program.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Program.cpp.o"
@@ -82,6 +88,18 @@
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o -c /home/raison/git/CG-labs/src/collaiders/AABB.cpp",
   "file": "/home/raison/git/CG-labs/src/collaiders/AABB.cpp",
   "output": "CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/Sphere.cpp.o -c /home/raison/git/CG-labs/src/collaiders/Sphere.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/Sphere.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/Sphere.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/intersections.cpp.o -c /home/raison/git/CG-labs/src/collaiders/intersections.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/intersections.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/intersections.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",

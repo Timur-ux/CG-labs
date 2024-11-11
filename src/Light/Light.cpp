@@ -4,6 +4,7 @@
 #include "glslDataNaming.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <stdexcept>
 
 std::string LightData::firstField() {
@@ -33,7 +34,7 @@ LightBase::LightBase(glm::vec3 position, glm::vec3 target,
                      CameraMVP &cameraData, Program &program,
                      DepthFramebuffer &&framebuffer, glm::vec4 color,
                      GLfloat kDiffuse, GLfloat kAmbient, GLfloat kGlare)
-    : MoveableBase(position), cameraData_(cameraData),
+    : Transform(position), cameraData_(cameraData),
       program_(program), color_(color), kDiffuse_(kDiffuse),
       kAmbient_(kAmbient), kGlare_(kGlare), shadowMapProgram_(shadowMapProgram),
       depthFramebuffer_(std::move(framebuffer)) {

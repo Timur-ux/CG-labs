@@ -4,7 +4,7 @@
 #include <glm/geometric.hpp>
 #include <iostream>
 
-RigidBody::RigidBody(MoveableBase &host, float mass)
+RigidBody::RigidBody(Transform &host, float mass)
     : host_(host), mass_(mass) {
   velocity_ = glm::vec3(0);
 

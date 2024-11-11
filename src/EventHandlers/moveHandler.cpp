@@ -1,12 +1,10 @@
 #include "EventHandlers/moveHandler.hpp"
 #include "RigidBody.hpp"
-#include "utils/printGlm.hpp"
 #include <GLFW/glfw3.h>
-#include <iostream>
 
 #define max(a, b) (a > b ? a : b)
 
-MoveEventHandler::MoveEventHandler(MoveableBase &cameraData, GLfloat moveSpeed,
+MoveEventHandler::MoveEventHandler(Transform &cameraData, GLfloat moveSpeed,
                                    GLfloat acceleration)
     : host_(cameraData), moveSpeed_(moveSpeed), acceleration_(acceleration) {}
 

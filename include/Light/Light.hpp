@@ -62,7 +62,7 @@ public:
   virtual ~ILight() {}
 };
 
-class LightBase : public ILight, public MoveableBase {
+class LightBase : public ILight, public Transform {
 protected:
   CameraMVP &cameraData_;
   Program &program_;
@@ -92,4 +92,5 @@ public:
   virtual bool setLightParamsFor(const Mesh &object, size_t i) override;
   virtual void swapState() override {enabled_ = !enabled_;}
 };
+
 #endif // !LIGHT_HPP_

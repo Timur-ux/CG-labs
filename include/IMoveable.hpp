@@ -23,7 +23,7 @@ public:
   virtual ~IMoveable() {}
 };
 
-class MoveableBase : public IMoveable, public IEventHandler<> {
+class Transform : public IMoveable, public IEventHandler<> {
 protected:
   glm::mat4 translateModel_;
   glm::mat4 rotateModel_;
@@ -35,13 +35,13 @@ protected:
 
   Event<> onMove_;
 
-  MoveableBase *following_ = nullptr;
+  Transform *following_ = nullptr;
   glm::vec3 followOffset_{0};
 
   bool upFreezed_ = false;
 
 public:
-  MoveableBase(glm::vec3 position = glm::vec3(0), glm::vec3 forward = glm::vec3(0, 0, 1));
+  Transform(glm::vec3 position = glm::vec3(0), glm::vec3 forward = glm::vec3(0, 0, 1));
 
   IEvent<> & onMove;
 
@@ -59,11 +59,11 @@ public:
   virtual void scaleBy(glm::vec3 scale) override;
   virtual void freezeUp() override {upFreezed_ = !upFreezed_;};
 
-  void follow(MoveableBase *objToFollow, glm::vec3 followOffset);
+  void follow(Transform *objToFollow, glm::vec3 followOffset);
 
   virtual void call() override;
 
-  virtual ~MoveableBase() {}
+  virtual ~Transform() {}
 };
 
 #endif // !IMOVABLE_HPP_

@@ -48,7 +48,7 @@ class MoveAndCheckpointHandler : public MoveEventHandler {
   constexpr static GLfloat eps_ = 0.05;
 
 public:
-  MoveAndCheckpointHandler(MoveableBase &host, GLfloat moveSpeed = 0.05f,
+  MoveAndCheckpointHandler(Transform &host, GLfloat moveSpeed = 0.05f,
                            GLfloat acceleration = 0.01f)
       : MoveEventHandler(host, moveSpeed, acceleration) {}
   void move() override {
@@ -147,7 +147,7 @@ int main() {
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram,
                  containerTex);
   Rectangle cube2(glm::vec3(.5), glm::vec3(5, 0, 5), blinPhongProgram,
-                 containerTex, true);
+                 containerTex);
   Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, 0),
                   blinPhongProgram, floorTex);
   glCheckError();

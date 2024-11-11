@@ -1,6 +1,5 @@
 #include "CameraMVP.hpp"
 #include "Light/BlinPhongLight.hpp"
-#include "Light/Lambert.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
@@ -21,7 +20,6 @@
 #define GLEW_STATIC
 #include "EventHandlers/LookupHandler.hpp"
 #include "EventHandlers/moveHandler.hpp"
-#include "utils/customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -140,15 +138,15 @@ int main() {
                  containerTex);
   Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, 0),
                   blinPhongProgram, floorTex);
-  Sphere sphere1(2, glm::vec3(7, 2, 7), blinPhongProgram, &containerTex, 100);
-  Sphere sphere2(2, glm::vec3(9, 2, 7), blinPhongProgram, &containerTex, 100);
-  Sphere sphere3(4, glm::vec3(8, 4, 7), blinPhongProgram, &containerTex, 3,
+  Sphere sphere1(1, glm::vec3(7, 2, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere2(1, glm::vec3(9, 2, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere3(2, glm::vec3(8, 4, 7), blinPhongProgram, &containerTex, 3,
                  100);
-  Sphere sphere4(2, glm::vec3(8, 6.5, 7), blinPhongProgram, &smileTex, 100);
+  Sphere sphere4(1, glm::vec3(8, 6.5, 7), blinPhongProgram, &smileTex, 100);
   Rectangle hands(glm::vec3(8, 1, 1), glm::vec3(8, 4, 7), blinPhongProgram,
                   containerTex);
-  Sphere sphere5(2, glm::vec3(12, 4, 7), blinPhongProgram, &containerTex, 100);
-  Sphere sphere6(2, glm::vec3(4, 4, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere5(2, glm::vec3(16, 4, 7), blinPhongProgram, &containerTex, 100);
+  Sphere sphere6(2, glm::vec3(0, 4, 7), blinPhongProgram, &containerTex, 100);
   Pyramid pyramid(glm::vec3(0, 2.5, 0), blinPhongProgram, &containerTex);
   glCheckError();
 

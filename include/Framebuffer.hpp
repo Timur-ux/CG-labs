@@ -6,6 +6,7 @@
 #include <iostream>
 #include <GL/glew.h>
 
+
 struct FBOBind;
 class Framebuffer {
   private:
@@ -115,6 +116,8 @@ struct FBOBind {
     glBindFramebuffer(framebuffer.target(), oldFramebuffer);
   }
 };
+
+
 
 
 #endif // !FRAMEBUFFER_HPP_

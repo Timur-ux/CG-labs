@@ -16,7 +16,8 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "utils/printGlm.hpp"
+#include "Object.hpp"
+
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
@@ -86,7 +87,7 @@ int main() {
   mouseMoveEvent += lookupHandler;
   // lookupHandler.setPitchFov(30);
   LookupEventHandler lookupHandler2(cameraData, win);
-  // lookupHandler2.lockX();
+  lookupHandler2.lockY();
   mouseMoveEvent += lookupHandler2;
 
   // Настройки шейдерной программы

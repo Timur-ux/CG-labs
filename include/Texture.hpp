@@ -7,7 +7,6 @@
 #include <string>
 #define GLEW_STATIC
 #include <GL/glew.h>
-
 class Texture {
 protected:
   GLuint texture_ = 0;

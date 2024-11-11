@@ -4,6 +4,7 @@
 #include "glslDataNaming.hpp"
 #include "Light/Light.hpp"
 #include <glm/gtc/type_ptr.hpp>
+
 class BlinPhongLight : public LightBase {
   public:
 

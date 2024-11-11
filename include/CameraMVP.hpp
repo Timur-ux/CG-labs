@@ -7,7 +7,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-struct CameraMVP : public MoveableBase {
+struct CameraMVP : public Transform {
   glm::mat4 view_;
   glm::mat4 perspective_;
 

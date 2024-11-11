@@ -14,15 +14,9 @@ void LookupEventHandler::call(double newX, double newY)
     double dx = newX - x_, dy = y_ - newY;
     x_ = newX, y_ = newY;
 
-    if(lockY_)
-      dy = 0;
-    if(lockX_)
-      dx = 0;
 
     dx *= sensetivity_;
     dy *= sensetivity_;
-    dx /= 2.0f;
-    dy *= 2.0f;
 
     yaw_ += dx;
     pitch_ += dy;
@@ -36,8 +30,16 @@ void LookupEventHandler::call(double newX, double newY)
     newForward.x = glm::cos(pitchRad) * glm::cos(yawRad);
     newForward.y = glm::sin(pitchRad);
     newForward.z = glm::cos(pitchRad) * glm::sin(yawRad);
+
+    glm::vec3 hostForward = host_.forward();
+    if(lockY_) 
+      newForward.y = hostForward.y;
+    if(lockX_) {
+      newForward.x = hostForward.x;
+      newForward.z = hostForward.z;
+    }
     
-    host_.lookInto(host_.forward() + newForward);
+    host_.lookInto(newForward);
     glCheckError();
 
 

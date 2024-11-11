@@ -2,21 +2,20 @@
 #define AABB_COLLAIDER_HPP_
 
 #include "IMoveable.hpp"
+#include "collaiders/CollaiderBase.hpp"
 #include <glm/glm.hpp>
 
 namespace collaider {
-
-class AxisAlignedBB : private MoveableBase {
-  float width_, height_;
-  glm::vec3 position_;
-  MoveableBase *host_;
+class AxisAlignedBB : public CollaiderBase, public Transform {
+  glm::vec3 min_;
+  glm::vec3 max_;
+  Transform *host_;
 
 public:
-  AxisAlignedBB(float width, float height, MoveableBase *host)
-      : width_(width), height_(height), host_(host) {
-        follow(host_, {0, 0, 0});
-        position_ = host_->position();
-      }
+  AxisAlignedBB(float width, float height, float depth, Transform *host);
+  AxisAlignedBB(float width, float height, float depth, glm::vec3 pos);
+  const glm::vec3 & min() {return min_;}
+  const glm::vec3 & max() {return max_;}
 };
 
 } // namespace collaider
