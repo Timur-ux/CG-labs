@@ -1,5 +1,5 @@
-#ifndef OBJECT_HPP_
-#define OBJECT_HPP_
+#ifndef MESH_HPP_
+#define MESH_HPP_
 
 #include "IMoveable.hpp"
 #include "Program.hpp"
@@ -57,4 +57,4 @@ public:
   virtual void draw(Program *otherProgram);
 };
 
-#endif // !OBJECT_HPP_
+#endif // !MESH_HPP_

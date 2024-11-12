@@ -5,10 +5,10 @@
 #include "collaiders/CollaiderBase.hpp"
 namespace collaider {
 
-class Sphere : public CollaiderBase, public Transform {
+class Sphere : public CollaiderBase {
   glm::vec3 center_;
   float r_;
-  Transform * host_;
+  void call() override;
 public:
   Sphere(float r, Transform &host);
 

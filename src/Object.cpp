@@ -6,7 +6,7 @@ using namespace engine;
 void ObjectBase::setComponent(ComponentType type, void * component) {
   switch (type) {
     case ComponentType::mesh:
-      mesh_ = component;
+      mesh_ = (Mesh*)component;
       break;
     case ComponentType::transform:
       transform_ = (Transform*)component;

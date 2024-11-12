@@ -6,14 +6,13 @@
 #include <glm/glm.hpp>
 
 namespace collaider {
-class AxisAlignedBB : public CollaiderBase, public Transform {
+class AxisAlignedBB : public CollaiderBase {
   glm::vec3 min_;
   glm::vec3 max_;
-  Transform *host_;
 
+  void call() override;
 public:
   AxisAlignedBB(float width, float height, float depth, Transform *host);
-  AxisAlignedBB(float width, float height, float depth, glm::vec3 pos);
   const glm::vec3 & min() {return min_;}
   const glm::vec3 & max() {return max_;}
 };

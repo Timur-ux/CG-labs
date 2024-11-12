@@ -54,23 +54,17 @@ void Transform::lookInto(glm::vec3 direction) {
     return;
   }
   if(glm::abs(glm::dot(forward_, direction) - 1) < 0.00005 ) {
-    std::cerr << "Undefined rotation, skip" << std::endl;
     return;
   }
 
   glm::vec3 n = glm::normalize(glm::cross(forward_, direction));
   float angle = glm::acos(glm::dot(forward_, direction));
-  // std::cout << n << angle << ' ' <<glm::dot(forward_, direction)<< std::endl;
-  ;
-  // angle = glm::min(angle, glm::pi<float>() - angle);
 
-  // rotateModel_ = glm::rotate(rotateModel_, angle, n);
   glm::mat4 rotMat = glm::rotate(glm::mat4(1), angle, n);
   rotateModel_ = rotMat * rotateModel_;
   model_ = translateModel_ * rotateModel_;
 
   forward_ = rotMat * glm::vec4(forward_, 0);
-  // up_ = glm::vec3(rotMat * glm::vec4(up_, 0));
   onMove_.invoke();
 }
 

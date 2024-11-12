@@ -10,9 +10,11 @@ class RigidBody : public IEventHandler<double, double> {
   static constexpr glm::vec3 zero = glm::vec3(0);
   constexpr static float floorLevel_ = 1;
   constexpr static float velocityEps_ = 0.01;
-  Transform & host_;
+  Transform * host_;
   float mass_;
-  float mu_ = 0.8; // before collaider done, set mu as constant
+  float invMass_;
+  float mu_ = 0.8;
+  float restitution_ = 0.8;
   glm::vec3 force_ = glm::vec3(0);
 
   glm::vec3 velocity_;
@@ -20,9 +22,17 @@ class RigidBody : public IEventHandler<double, double> {
   void call(double time, double dt) override;
   public:
 
-  RigidBody(Transform &host, float mass);
+  RigidBody(Transform *host, float mass, float mu = 0.8, float restitution = 0.5);
+  ~RigidBody();
+
   void addForce(glm::vec3 force);
-  const glm::vec3 &velocity() {return velocity_;}
+  void setVelocity(glm::vec3 newVelocity) {velocity_ = newVelocity;}
+
+  const glm::vec3 &velocity() const {return velocity_;}
+  float restitution() const {return restitution_;}
+
+  float mass() const {return mass_;}
+  float invMass() const {return invMass_;}
 
 
 };

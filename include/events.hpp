@@ -32,7 +32,7 @@ class Event : public IEvent<Args...> {
 
   void operator-=(IEventHandler<Args...> & handler) override final {
     auto it = std::begin(handlers);
-    while(**it != handler) ++it;
+    while(it != std::end(handlers) && **it != handler) ++it;
 
     if(it == std::end(handlers)) return;
     handlers.erase(it);

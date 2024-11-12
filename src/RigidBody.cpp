@@ -2,16 +2,24 @@
 #include "GlobalEvents.hpp"
 #include "utils/printGlm.hpp"
 #include <glm/geometric.hpp>
-#include <iostream>
 
-RigidBody::RigidBody(Transform &host, float mass)
-    : host_(host), mass_(mass) {
-  velocity_ = glm::vec3(0);
+RigidBody::RigidBody(Transform *host, float mass, float mu, float restitution)
+    : host_(host), mass_(mass), mu_(mu), restitution_(restitution), velocity_(0) {
+  if(mass_ == 0)
+    invMass_ = 0;
+  else
+    invMass_ = 1/mass_;
 
   GlobalEvents::updateEvent += *this;
 }
 
+RigidBody::~RigidBody() {
+  GlobalEvents::updateEvent -= *this;
+}
+
 void RigidBody::call(double time, double dt) {
+  if(!host_)
+    return;
   // gravity
   force_ += glm::vec3(0, -mass_ * g, 0);
 
@@ -32,13 +40,13 @@ void RigidBody::call(double time, double dt) {
 
   velocity_ += acceleration * float(dt);
 
-  host_.shiftBy(velocity_ * float(dt));
-  glm::vec3 hostPos = host_.position();
-  if (hostPos.y < floorLevel_) {
-    hostPos.y = floorLevel_;
-    host_.moveTo(hostPos);
-    velocity_.y = 0;
-  }
+  host_->shiftBy(velocity_ * float(dt));
+  // glm::vec3 hostPos = host_->position();
+  // if (hostPos.y < floorLevel_) {
+  //   hostPos.y = floorLevel_;
+  //   host_->moveTo(hostPos);
+  //   velocity_.y = 0;
+  // }
 
   force_ = zero;
 }

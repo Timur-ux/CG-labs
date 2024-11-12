@@ -3,8 +3,8 @@
 
 #include "RigidBody.hpp"
 #include "collaiders/CollaiderBase.hpp"
-#include "IMoveable.hpp"
 #include "meshes/Mesh.hpp"
+
 namespace engine {
 
 enum class ComponentType {
@@ -23,11 +23,11 @@ class IObject {
 class ObjectBase : public IObject {
   Transform * transform_ = nullptr;
   RigidBody * rigidBody_ = nullptr;
-  void * mesh_ = nullptr;
+  Mesh * mesh_ = nullptr;
   collaider::CollaiderBase * collaider_ = nullptr;
 
   public:
-  ObjectBase();
+  ObjectBase() = default;
   void *getComponent(ComponentType type) override;
   void setComponent(ComponentType type, void * component) override;
 };

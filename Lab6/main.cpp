@@ -1,23 +1,28 @@
 #include "CameraMVP.hpp"
+#include "EventHandlers/LookupHandler.hpp"
+#include "EventHandlers/moveHandler.hpp"
 #include "GlobalEvents.hpp"
 #include "Light/BlinPhongLight.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
+#include "collaiders/AABB.hpp"
+#include "collaiders/CollaiderBase.hpp"
+#include "collaiders/Sphere.hpp"
+#include "collaiders/intersections.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
 #include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
+#include <cmath>
 #include <glm/glm.hpp>
 #include <iostream>
-#include "EventHandlers/LookupHandler.hpp"
-#include "EventHandlers/moveHandler.hpp"
+#include <optional>
 #define GLEW_STATIC
+#include "Object.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Object.hpp"
-
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
@@ -51,18 +56,28 @@ int main() {
   Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
-  Rectangle cube(glm::vec3(.5), glm::vec3(0, 1, 0), blinPhongProgram,
+  Rectangle cube(glm::vec3(.5), glm::vec3(0, 10, 0), blinPhongProgram,
                  containerTex);
+  collaider::Sphere cubeAABB(.5f, cube);
+  RigidBody rigidBody(&cube, 600);
+  engine::ObjectBase cubeBase;
+  cubeBase.setComponent(engine::ComponentType::transform, &cube);
+  cubeBase.setComponent(engine::ComponentType::collaider, &cubeAABB);
+  cubeBase.setComponent(engine::ComponentType::rigidBody, &rigidBody);
+  cubeBase.setComponent(engine::ComponentType::mesh, &cube);
 
-  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0),
-                  blinPhongProgram, floorTex);
+  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0), blinPhongProgram,
+                  floorTex);
+  collaider::AxisAlignedBB floorAABB(50, 0.1, 50, &floor);
+  engine::ObjectBase floorBase;
+  floorBase.setComponent(engine::ComponentType::transform, &floor);
+  floorBase.setComponent(engine::ComponentType::collaider, &floorAABB);
+  floorBase.setComponent(engine::ComponentType::mesh, &floor);
 
   // Камера
-  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 1, 0),
+  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 5, 5),
                        glm::vec3(0, 0, 0));
-  // RigidBody rigidBody(cube, 600);
-  cameraData.follow(&cube, {0, 0, 5});
-
+  // cameraData.follow(&cube, {0, 0, 5});
 
   // Источники света
   int LIGHTS_CNT = 1;
@@ -79,15 +94,13 @@ int main() {
               {&cube, &floor});
 
   // Event Handler'ы
-  MoveEventHandler moveHandler1(cube);
+  MoveEventHandler moveHandler1(cameraData);
   keyPressEvent += moveHandler1;
-  // moveHandler1.setRigidBody(&rigidBody);
-  LookupEventHandler lookupHandler(cube, win);
-  lookupHandler.lockY();
+  LookupEventHandler lookupHandler(cameraData, win);
+  // lookupHandler.lockY();
   mouseMoveEvent += lookupHandler;
   // lookupHandler.setPitchFov(30);
   LookupEventHandler lookupHandler2(cameraData, win);
-  lookupHandler2.lockY();
   mouseMoveEvent += lookupHandler2;
 
   // Настройки шейдерной программы
@@ -110,6 +123,11 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GlobalEvents::updateEvent.invoke(time, dt);
     scene.update(time, dt);
+    std::optional<collaider::CollisionData> collisionData =
+        collaider::getIntersectionData(&cubeBase, &floorBase);
+    if (collisionData.has_value()) {
+      collaider::resolveCollision(collisionData.value());
+    }
 
     // Свапаем буферы glfwGetWindowSize(win, &width, &height);
     glViewport(0, 0, width, height);
@@ -139,4 +157,3 @@ void keyCallback(GLFWwindow *win, int key, int scancode, int action, int mods) {
 void mouseMoveCallback(GLFWwindow *win, double x, double y) {
   mouseMoveEvent.invoke(x, y);
 }
-
