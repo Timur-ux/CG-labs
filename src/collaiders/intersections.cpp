@@ -10,6 +10,14 @@
 #include <glm/geometric.hpp>
 #include <iostream>
 
+glm::vec3 clampV(glm::vec3 x, glm::vec3 minVals, glm::vec3 maxVals) {
+  x.x = glm::clamp(x.x, minVals.x, maxVals.x);
+  x.y = glm::clamp(x.y, minVals.y, maxVals.y);
+  x.z = glm::clamp(x.z, minVals.z, maxVals.z);
+
+  return x;
+}
+
 namespace collaider {
 bool isIntersect(AxisAlignedBB &a, AxisAlignedBB &b) {
   if (a.min().x > b.max().x || a.max().x < b.min().x)
@@ -24,54 +32,27 @@ bool isIntersect(AxisAlignedBB &a, AxisAlignedBB &b) {
 
 bool isIntersect(Sphere &a, Sphere &b) {
   glm::vec3 diff = a.center() - b.center();
-  float diff2 = diff.x * diff.x + diff.y * diff.y + diff.z * diff.z;
 
+  float diff2 = glm::dot(diff, diff);
   float rSum = a.r() + b.r();
 
   return diff2 < rSum * rSum;
 }
 
-glm::vec3 getClosestTo(AxisAlignedBB &a, const glm::vec3 &pos) {
-  float direction[2]{1, -1};
-  glm::vec3 diag2 = (a.max() - a.min()) / 2.0f;
-  glm::vec3 bPos = (a.max() + a.min()) / 2.0f;
+bool isIntersect(AxisAlignedBB &a, Sphere &b) {
+  glm::vec3 size2 = (a.max() - a.min()) / 2.0f;
+  glm::vec3 a2b = b.center() - a.center();
 
-  float diffMin = 1e9;
-  glm::vec3 res(0);
-  for (int i = 0; i < 2; ++i) {
-    for (int j = 0; j < 2; ++j) {
-      for (int k = 0; k < 2; ++k) {
-        glm::vec3 corner =
-            bPos + diag2 * glm::vec3(direction[i], direction[j], direction[k]);
-        glm::vec3 diff = corner - pos;
+  glm::vec3 closest = clampV(a2b, -size2, size2);
 
-        float diff2 = glm::dot(diff, diff);
-        if (diff2 < diffMin) {
-          diffMin = diff2;
-          res = corner;
-        }
-      }
-    }
-  }
-  return res;
-}
-bool isIntersect(Sphere &a, AxisAlignedBB &b) {
-  AxisAlignedBB aAABB(a.r(), a.r(), a.r(), a.host());
-  if (!isIntersect(aAABB, b))
-    return false;
+  if (closest == a2b) // В этом случае центр сферы внутри AABB
+    return true;      // Чтобы сферу куда нибудь выкинуло из AABB
 
-  glm::vec3 closest = getClosestTo(b, a.center());
-  glm::vec3 diff = closest - a.center();
-
-  float diff2 = glm::dot(diff, diff);
-  float r2 = a.r() * a.r();
-  if (diff2 < r2)
-    return true;
-
-  return false;
+  glm::vec3 normal = a2b - closest;
+  return glm::dot(normal, normal) < b.r() * b.r();
 }
 
-bool isIntersect(AxisAlignedBB &a, Sphere &b) { return isIntersect(b, a); }
+bool isIntersect(Sphere &a, AxisAlignedBB &b) { return isIntersect(b, a); }
 
 bool isIntersect(engine::ObjectBase &a, engine::ObjectBase &b) {
   CollaiderBase *aColliderBase =
@@ -117,42 +98,46 @@ CollisionData calculateIntersectionData(AxisAlignedBB &a, AxisAlignedBB &b) {
   float yOverlap = aSize2.x + bSize2.x - glm::abs(a2b.x);
   float zOverlap = aSize2.x + bSize2.x - glm::abs(a2b.x);
 
-  if(xOverlap <= 0 || yOverlap <= 0 || zOverlap <= 0) {
-    std::cerr << "Warn: called collision calculating for non intersecting AABB colliders, ret zeros\n" ;
+  if (xOverlap <= 0 || yOverlap <= 0 || zOverlap <= 0) {
+    std::cerr << "Warn: called collision calculating for non intersecting AABB "
+                 "colliders, ret zeros\n";
     data.normal = glm::vec3(0);
     data.penetration = 0;
     return data;
   }
 
-  if(xOverlap <= yOverlap && xOverlap <= zOverlap) {
+  if (xOverlap <= yOverlap && xOverlap <= zOverlap) {
     data.normal = glm::vec3(glm::sign(a2b.x), 0, 0);
     data.penetration = xOverlap;
-  }
-  else if(yOverlap <= xOverlap && yOverlap <= zOverlap) {
+  } else if (yOverlap <= xOverlap && yOverlap <= zOverlap) {
     data.normal = glm::vec3(0, glm::sign(a2b.y), 0);
     data.penetration = yOverlap;
-  }
-  else if(zOverlap <= xOverlap && zOverlap <= yOverlap) {
+  } else if (zOverlap <= xOverlap && zOverlap <= yOverlap) {
     data.normal = glm::vec3(0, 0, glm::sign(a2b.z));
     data.penetration = zOverlap;
   }
-
-
-  return data;
-}
-
-CollisionData calculateIntersectionData(Sphere &a, AxisAlignedBB &b) {
-  CollisionData data;
-  glm::vec3 aPos = a.center();
-  glm::vec3 closest = getClosestTo(b, a.center());
-
-  data.normal = glm::normalize(aPos - closest);
-  data.penetration = a.r() - glm::length(aPos - closest);
 
   return data;
 }
 
 CollisionData calculateIntersectionData(AxisAlignedBB &a, Sphere &b) {
+  CollisionData data;
+
+  glm::vec3 size2 = (a.max() - a.min()) / 2.0f;
+  glm::vec3 a2b = b.center() - a.center();
+
+  glm::vec3 closest = clampV(a2b, -size2, size2);
+
+  if (closest == a2b) { // В этом случае центр сферы внутри AABB, выкинем её к ближайшей грани
+    glm::vec3 distPositive = size2 - closest;
+    glm::vec3 distNegative = size2 + closest;
+  }
+
+  glm::vec3 normal = a2b - closest;
+
+}
+
+CollisionData calculateIntersectionData(Sphere &a, AxisAlignedBB &b) {
   CollisionData data = calculateIntersectionData(b, a);
   data.normal *= -1;
   return data;
@@ -230,30 +215,32 @@ std::optional<CollisionData> getIntersectionData(engine::ObjectBase *a,
 static RigidBody nullRigidBody(nullptr, 0);
 void resolveCollision(CollisionData data) {
   std::cout << "Resolving collision" << std::endl;
-  RigidBody * aRigidBody = (RigidBody *)data.a->getComponent(engine::ComponentType::rigidBody);
-  RigidBody * bRigidBody = (RigidBody *)data.b->getComponent(engine::ComponentType::rigidBody);
+  RigidBody *aRigidBody =
+      (RigidBody *)data.a->getComponent(engine::ComponentType::rigidBody);
+  RigidBody *bRigidBody =
+      (RigidBody *)data.b->getComponent(engine::ComponentType::rigidBody);
 
-  if(!aRigidBody && !bRigidBody)
+  if (!aRigidBody && !bRigidBody)
     return;
 
-  if(!aRigidBody)
+  if (!aRigidBody)
     aRigidBody = &nullRigidBody;
-  if(!bRigidBody)
+  if (!bRigidBody)
     bRigidBody = &nullRigidBody;
 
   glm::vec3 rv = bRigidBody->velocity() - aRigidBody->velocity();
   // data.normal = glm::vec3(0,1,0);
   float velocityAlongNormal = glm::dot(rv, data.normal);
 
-  if(velocityAlongNormal < 0) 
+  if (velocityAlongNormal < 0)
     return;
 
   float e = glm::min(aRigidBody->restitution(), bRigidBody->restitution());
 
-  float j = -(1 - e) * velocityAlongNormal / (aRigidBody->invMass() + bRigidBody->invMass());
+  float j = -(1 - e) * velocityAlongNormal /
+            (aRigidBody->invMass() + bRigidBody->invMass());
 
-  
-  glm::vec3 impulse = j*data.normal;
+  glm::vec3 impulse = j * data.normal;
 
   float massSum = aRigidBody->mass() + bRigidBody->mass();
   float ratio = aRigidBody->mass() / massSum;
@@ -262,21 +249,21 @@ void resolveCollision(CollisionData data) {
   ratio = 1 - ratio; // bRigidBody->mass / massSum;
   bRigidBody->setVelocity(bRigidBody->velocity() + ratio * impulse);
 
-
   // // Positional correction
   //
   // constexpr float percent = 0.2;
   // constexpr float slope = 0.01;
-  // glm::vec3 correction = glm::max(data.penetration - slope, 0.0f) / (aRigidBody->invMass() + bRigidBody->invMass()) * data.normal;
+  // glm::vec3 correction = glm::max(data.penetration - slope, 0.0f) /
+  // (aRigidBody->invMass() + bRigidBody->invMass()) * data.normal;
   //
-  // Transform * aTransform = (Transform *)data.a->getComponent(engine::ComponentType::transform);
-  // Transform * bTransform = (Transform *)data.b->getComponent(engine::ComponentType::transform);
-  // if(aRigidBody != &nullRigidBody) 
+  // Transform * aTransform = (Transform
+  // *)data.a->getComponent(engine::ComponentType::transform); Transform *
+  // bTransform = (Transform
+  // *)data.b->getComponent(engine::ComponentType::transform); if(aRigidBody !=
+  // &nullRigidBody)
   //   aTransform->shiftBy(aRigidBody->invMass() * correction);
   // if(bRigidBody != &nullRigidBody)
   //   bTransform->shiftBy(bRigidBody->invMass()*correction);
-
-
 }
 
 } // namespace collaider
