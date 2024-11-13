@@ -13,6 +13,12 @@ Transform::Transform(glm::vec3 position, glm::vec3 forward)
   model_ = translateModel_ * rotateModel_;
 }
 
+Transform::~Transform() {
+  if(following_) {
+    following_->onMove -= *this;
+  }
+}
+
 void Transform::shiftBy(glm::vec3 dp) {
   // std::cout << dp;
   position_ += dp;

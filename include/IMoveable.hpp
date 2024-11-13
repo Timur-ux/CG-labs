@@ -42,6 +42,7 @@ protected:
 
 public:
   Transform(glm::vec3 position = glm::vec3(0), glm::vec3 forward = glm::vec3(0, 0, 1));
+  virtual ~Transform();
 
   IEvent<> & onMove;
 
@@ -62,8 +63,6 @@ public:
   void follow(Transform *objToFollow, glm::vec3 followOffset);
 
   virtual void call() override;
-
-  virtual ~Transform() {}
 };
 
 #endif // !IMOVABLE_HPP_

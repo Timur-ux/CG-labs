@@ -40,7 +40,8 @@ class Event : public IEvent<Args...> {
 
   virtual void invoke(Args... args) {
     for(auto & handler : handlers) 
-      handler->call(args...);
+      if(handler)
+        handler->call(args...);
   }
 };
 

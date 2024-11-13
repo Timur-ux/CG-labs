@@ -5,6 +5,7 @@
 #include "collaiders/AABB.hpp"
 #include "collaiders/CollaiderBase.hpp"
 #include "collaiders/Sphere.hpp"
+#include <glm/common.hpp>
 #include <glm/ext/quaternion_geometric.hpp>
 #include <glm/geometric.hpp>
 #include <iostream>
@@ -108,14 +109,34 @@ bool isIntersect(engine::ObjectBase &a, engine::ObjectBase &b) {
 
 CollisionData calculateIntersectionData(AxisAlignedBB &a, AxisAlignedBB &b) {
   CollisionData data;
-  glm::vec3 aPos = (a.max() + a.min()) / 2.0f;
-  glm::vec3 bPos = (b.max() + b.min()) / 2.0f;
-  glm::vec3 closestToA = getClosestTo(b, aPos);
-  glm::vec3 closestToB = getClosestTo(a, bPos);
+  glm::vec3 aSize2 = (a.max() - a.min()) / 2.0f;
+  glm::vec3 bSize2 = (b.max() - b.min()) / 2.0f;
 
-  data.normal = closestToB - closestToA;
-  data.penetration = glm::length(data.normal);
-  data.normal = glm::normalize(data.normal);
+  glm::vec3 a2b = b.center() - a.center();
+  float xOverlap = aSize2.x + bSize2.x - glm::abs(a2b.x);
+  float yOverlap = aSize2.x + bSize2.x - glm::abs(a2b.x);
+  float zOverlap = aSize2.x + bSize2.x - glm::abs(a2b.x);
+
+  if(xOverlap <= 0 || yOverlap <= 0 || zOverlap <= 0) {
+    std::cerr << "Warn: called collision calculating for non intersecting AABB colliders, ret zeros\n" ;
+    data.normal = glm::vec3(0);
+    data.penetration = 0;
+    return data;
+  }
+
+  if(xOverlap <= yOverlap && xOverlap <= zOverlap) {
+    data.normal = glm::vec3(glm::sign(a2b.x), 0, 0);
+    data.penetration = xOverlap;
+  }
+  else if(yOverlap <= xOverlap && yOverlap <= zOverlap) {
+    data.normal = glm::vec3(0, glm::sign(a2b.y), 0);
+    data.penetration = yOverlap;
+  }
+  else if(zOverlap <= xOverlap && zOverlap <= yOverlap) {
+    data.normal = glm::vec3(0, 0, glm::sign(a2b.z));
+    data.penetration = zOverlap;
+  }
+
 
   return data;
 }
@@ -221,6 +242,7 @@ void resolveCollision(CollisionData data) {
     bRigidBody = &nullRigidBody;
 
   glm::vec3 rv = bRigidBody->velocity() - aRigidBody->velocity();
+  // data.normal = glm::vec3(0,1,0);
   float velocityAlongNormal = glm::dot(rv, data.normal);
 
   if(velocityAlongNormal < 0) 
@@ -229,6 +251,7 @@ void resolveCollision(CollisionData data) {
   float e = glm::min(aRigidBody->restitution(), bRigidBody->restitution());
 
   float j = -(1 - e) * velocityAlongNormal / (aRigidBody->invMass() + bRigidBody->invMass());
+
   
   glm::vec3 impulse = j*data.normal;
 
@@ -240,18 +263,18 @@ void resolveCollision(CollisionData data) {
   bRigidBody->setVelocity(bRigidBody->velocity() + ratio * impulse);
 
 
-  // Positional correction
-
-  constexpr float percent = 0.2;
-  constexpr float slope = 0.01;
-  glm::vec3 correction = glm::max(data.penetration - slope, 0.0f) / (aRigidBody->invMass() + bRigidBody->invMass()) * data.normal;
-
-  Transform * aTransform = (Transform *)data.a->getComponent(engine::ComponentType::transform);
-  Transform * bTransform = (Transform *)data.b->getComponent(engine::ComponentType::transform);
-  if(aRigidBody != &nullRigidBody) 
-    aTransform->shiftBy(aRigidBody->invMass() * correction);
-  if(bRigidBody != &nullRigidBody)
-    bTransform->shiftBy(bRigidBody->invMass()*correction);
+  // // Positional correction
+  //
+  // constexpr float percent = 0.2;
+  // constexpr float slope = 0.01;
+  // glm::vec3 correction = glm::max(data.penetration - slope, 0.0f) / (aRigidBody->invMass() + bRigidBody->invMass()) * data.normal;
+  //
+  // Transform * aTransform = (Transform *)data.a->getComponent(engine::ComponentType::transform);
+  // Transform * bTransform = (Transform *)data.b->getComponent(engine::ComponentType::transform);
+  // if(aRigidBody != &nullRigidBody) 
+  //   aTransform->shiftBy(aRigidBody->invMass() * correction);
+  // if(bRigidBody != &nullRigidBody)
+  //   bTransform->shiftBy(bRigidBody->invMass()*correction);
 
 
 }

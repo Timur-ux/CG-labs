@@ -75,7 +75,7 @@ int main() {
   floorBase.setComponent(engine::ComponentType::mesh, &floor);
 
   // Камера
-  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 5, 5), glm::vec3(0, 5, 5),
+  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 1, 0), glm::vec3(0, 0, 0),
                        glm::vec3(0, 0, 0));
   // cameraData.follow(&cube, {0, 0, 5});
 
@@ -121,13 +121,13 @@ int main() {
     // рендерим сцену
     glClearColor(0, 0.2, 0.2, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    GlobalEvents::updateEvent.invoke(time, dt);
     scene.update(time, dt);
     std::optional<collaider::CollisionData> collisionData =
         collaider::getIntersectionData(&cubeBase, &floorBase);
     if (collisionData.has_value()) {
       collaider::resolveCollision(collisionData.value());
     }
+    GlobalEvents::updateEvent.invoke(time, dt);
 
     // Свапаем буферы glfwGetWindowSize(win, &width, &height);
     glViewport(0, 0, width, height);
