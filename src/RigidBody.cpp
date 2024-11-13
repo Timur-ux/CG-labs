@@ -1,7 +1,7 @@
 #include "RigidBody.hpp"
 #include "GlobalEvents.hpp"
-#include <glm/geometric.hpp>
 #include "utils/printGlm.hpp"
+#include <glm/geometric.hpp>
 
 RigidBody::RigidBody(Transform *host, float mass, float mu, float restitution)
     : host_(host), mass_(mass), mu_(mu), restitution_(restitution),
@@ -17,9 +17,6 @@ RigidBody::RigidBody(Transform *host, float mass, float mu, float restitution)
 RigidBody::~RigidBody() { GlobalEvents::updateEvent -= *this; }
 
 void RigidBody::call(double time, double dt) {
-  std::cout << velocity_ ;
-  if(host_)
-    std::cout << '\t' << host_->position();
   if (!host_)
     return;
   // gravity
@@ -44,14 +41,16 @@ void RigidBody::call(double time, double dt) {
   velocity_ += acceleration * float(dt);
 
   host_->shiftBy(velocity_ * float(dt));
-  // glm::vec3 hostPos = host_->position();
-  // if (hostPos.y < floorLevel_) {
-  //   hostPos.y = floorLevel_;
-  //   host_->moveTo(hostPos);
-  //   velocity_.y = 0;
-  // }
 
   force_ = zero;
 }
 
-void RigidBody::addForce(glm::vec3 force) { force_ += force; }
+void RigidBody::addForce(glm::vec3 force) {
+  if (host_)
+    force_ += force;
+}
+
+void RigidBody::setVelocity(glm::vec3 newVelocity) {
+  if (host_)
+    velocity_ = newVelocity;
+}

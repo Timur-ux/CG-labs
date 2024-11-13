@@ -56,10 +56,10 @@ int main() {
   Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
-  Rectangle cube(glm::vec3(.5), glm::vec3(0, 10, 0), blinPhongProgram,
+  Rectangle cube(glm::vec3(.5), glm::vec3(0, 2, 0), blinPhongProgram,
                  containerTex);
-  collaider::Sphere cubeAABB(.5f, cube);
-  RigidBody rigidBody(&cube, 600);
+  collaider::AxisAlignedBB cubeAABB(.5f, .5f, .5f, &cube);
+  RigidBody rigidBody(&cube, 5);
   engine::ObjectBase cubeBase;
   cubeBase.setComponent(engine::ComponentType::transform, &cube);
   cubeBase.setComponent(engine::ComponentType::collaider, &cubeAABB);
@@ -68,14 +68,14 @@ int main() {
 
   Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0), blinPhongProgram,
                   floorTex);
-  collaider::AxisAlignedBB floorAABB(50, 0.1, 50, &floor);
+  collaider::AxisAlignedBB floorAABB(50, 1.8, 50, &floor);
   engine::ObjectBase floorBase;
   floorBase.setComponent(engine::ComponentType::transform, &floor);
   floorBase.setComponent(engine::ComponentType::collaider, &floorAABB);
   floorBase.setComponent(engine::ComponentType::mesh, &floor);
 
   // Камера
-  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 1, 0), glm::vec3(0, 0, 0),
+  CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 2, 3), glm::vec3(0, 0, 0),
                        glm::vec3(0, 0, 0));
   // cameraData.follow(&cube, {0, 0, 5});
 
@@ -111,32 +111,37 @@ int main() {
 
   // Цикл рендера
   double time = glfwGetTime(), prevTime = time;
+  float accumulator = 0;
+  float dt = 0.02;
   while (!glfwWindowShouldClose(win)) {
     // Обновляем время
     prevTime = time;
     time = glfwGetTime();
-    float dt = time - prevTime;
+    accumulator += time - prevTime;
     glCheckError();
 
-    // рендерим сцену
-    glClearColor(0, 0.2, 0.2, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    scene.update(time, dt);
-    std::optional<collaider::CollisionData> collisionData =
-        collaider::getIntersectionData(&cubeBase, &floorBase);
-    if (collisionData.has_value()) {
-      collaider::resolveCollision(collisionData.value());
+    while(accumulator > 0.2) {
+      accumulator -= dt;
+      // рендерим сцену
+      glClearColor(0, 0.2, 0.2, 1);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      scene.update(time, dt);
+      std::optional<collaider::CollisionData> collisionData =
+          collaider::getIntersectionData(&cubeBase, &floorBase);
+      if (collisionData.has_value()) {
+        collaider::resolveCollision(collisionData.value());
+      }
+      GlobalEvents::updateEvent.invoke(time, dt);
+
+      // Свапаем буферы glfwGetWindowSize(win, &width, &height);
+      glViewport(0, 0, width, height);
+      glfwSwapBuffers(win);
+
+      // Обрабатываем ввод
+      cameraData.updateState();
+      glfwPollEvents();
+      moveHandler1.move();
     }
-    GlobalEvents::updateEvent.invoke(time, dt);
-
-    // Свапаем буферы glfwGetWindowSize(win, &width, &height);
-    glViewport(0, 0, width, height);
-    glfwSwapBuffers(win);
-
-    // Обрабатываем ввод
-    cameraData.updateState();
-    glfwPollEvents();
-    moveHandler1.move();
   }
   glCheckError();
 
