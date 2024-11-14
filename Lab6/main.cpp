@@ -6,13 +6,10 @@
 #include "Program.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
-#include "collaiders/AABB.hpp"
-#include "collaiders/CollaiderBase.hpp"
-#include "collaiders/Sphere.hpp"
 #include "collaiders/intersections.hpp"
 #include "events.hpp"
+#include "fabrics/Box.hpp"
 #include "glCheckError.hpp"
-#include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <cmath>
@@ -56,23 +53,32 @@ int main() {
   Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
-  Rectangle cube(glm::vec3(.5), glm::vec3(0, 2, 0), blinPhongProgram,
-                 containerTex);
-  collaider::AxisAlignedBB cubeAABB(.5f, .5f, .5f, &cube);
-  RigidBody rigidBody(&cube, 5);
-  engine::ObjectBase cubeBase;
-  cubeBase.setComponent(engine::ComponentType::transform, &cube);
-  cubeBase.setComponent(engine::ComponentType::collaider, &cubeAABB);
-  cubeBase.setComponent(engine::ComponentType::rigidBody, &rigidBody);
-  cubeBase.setComponent(engine::ComponentType::mesh, &cube);
+  // Rectangle cube(glm::vec3(.5), glm::vec3(0, 2, 0), blinPhongProgram,
+  //                containerTex);
+  // collaider::AxisAlignedBB cubeAABB(.5f, .5f, .5f, &cube);
+  // RigidBody rigidBody(&cube, 5);
+  // engine::ObjectBase cubeBase;
+  // cubeBase.setComponent(engine::ComponentType::transform, &cube);
+  // cubeBase.setComponent(engine::ComponentType::collaider, &cubeAABB);
+  // cubeBase.setComponent(engine::ComponentType::rigidBody, &rigidBody);
+  // cubeBase.setComponent(engine::ComponentType::mesh, &cube);
+  //
+  // Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0), blinPhongProgram,
+  //                 floorTex);
+  // collaider::AxisAlignedBB floorAABB(50, 1.8, 50, &floor);
+  // engine::ObjectBase floorBase;
+  // floorBase.setComponent(engine::ComponentType::transform, &floor);
+  // floorBase.setComponent(engine::ComponentType::collaider, &floorAABB);
+  // floorBase.setComponent(engine::ComponentType::mesh, &floor);
 
-  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, 0, 0), blinPhongProgram,
-                  floorTex);
-  collaider::AxisAlignedBB floorAABB(50, 1.8, 50, &floor);
-  engine::ObjectBase floorBase;
-  floorBase.setComponent(engine::ComponentType::transform, &floor);
-  floorBase.setComponent(engine::ComponentType::collaider, &floorAABB);
-  floorBase.setComponent(engine::ComponentType::mesh, &floor);
+  fabric::BoxFabric boxFabric("./textures/container.jpg", glm::vec3(0,2,0), glm::vec3(.5), glm::vec3 (0, 0, 1), 5, &blinPhongProgram);
+
+  auto cube = boxFabric.create();
+  boxFabric.mass = 0;
+  boxFabric.pos = {0, 0, 0};
+  boxFabric.size = {50, 0.1, 50};
+  boxFabric.setTexture("./textures/stoneFloor.png");
+  auto floor = boxFabric.create();
 
   // Камера
   CameraMVP cameraData(blinPhongProgram, glm::vec3(0, 2, 3), glm::vec3(0, 0, 0),
@@ -91,7 +97,7 @@ int main() {
 
   // Сцены
   Scene scene(blinPhongProgram, cameraData, {&light1, &light2},
-              {&cube, &floor});
+      {(Mesh*)cube->getComponent(engine::ComponentType::mesh), (Mesh*)floor->getComponent(engine::ComponentType::mesh)});
 
   // Event Handler'ы
   MoveEventHandler moveHandler1(cameraData);
@@ -127,7 +133,7 @@ int main() {
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
       scene.update(time, dt);
       std::optional<collaider::CollisionData> collisionData =
-          collaider::getIntersectionData(&cubeBase, &floorBase);
+          collaider::getIntersectionData(cube.get(), floor.get());
       if (collisionData.has_value()) {
         collaider::resolveCollision(collisionData.value());
       }

@@ -107,7 +107,6 @@ CollisionData calculateIntersectionData(AxisAlignedBB &a, AxisAlignedBB &b) {
     return data;
   }
 
-  std::cout << xOverlap << ' ' << yOverlap << ' ' << zOverlap << std::endl;
   if (xOverlap <= yOverlap && xOverlap <= zOverlap) {
     data.normal = glm::vec3(glm::sign(a2b.x), 0, 0);
     data.penetration = xOverlap;
@@ -221,7 +220,6 @@ std::optional<CollisionData> getIntersectionData(engine::ObjectBase *a,
 
 static RigidBody nullRigidBody(nullptr, 0);
 void resolveCollision(CollisionData data) {
-  std::cout << "Collision normal: " << data.normal;
   RigidBody *aRigidBody =
       (RigidBody *)data.a->getComponent(engine::ComponentType::rigidBody);
   RigidBody *bRigidBody =

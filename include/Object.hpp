@@ -28,6 +28,8 @@ class ObjectBase : public IObject {
 
   public:
   ObjectBase() = default;
+  virtual ~ObjectBase();
+
   void *getComponent(ComponentType type) override;
   void setComponent(ComponentType type, void * component) override;
 };

@@ -1,5 +1,6 @@
 #include "Object.hpp"
 #include "meshes/Mesh.hpp"
+#include <glm/matrix.hpp>
 
 using namespace engine;
 
@@ -31,4 +32,13 @@ void * ObjectBase::getComponent(ComponentType type) {
     case ComponentType::collaider:
       return collaider_;
   }
+}
+
+ObjectBase::~ObjectBase() {
+  if(collaider_)
+    delete collaider_;
+  if(rigidBody_)
+    delete rigidBody_;
+  if(mesh_)
+    delete mesh_;
 }
