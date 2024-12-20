@@ -37,9 +37,21 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Object.cpp.o -c /home/raison/git/CG-labs/src/Object.cpp",
+  "file": "/home/raison/git/CG-labs/src/Object.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/Object.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/Program.cpp.o -c /home/raison/git/CG-labs/src/Program.cpp",
   "file": "/home/raison/git/CG-labs/src/Program.cpp",
   "output": "CMakeFiles/src_lib.dir/src/Program.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/RigidBody.cpp.o -c /home/raison/git/CG-labs/src/RigidBody.cpp",
+  "file": "/home/raison/git/CG-labs/src/RigidBody.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/RigidBody.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
@@ -73,21 +85,51 @@
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/geometry.cpp.o -c /home/raison/git/CG-labs/src/geometry.cpp",
-  "file": "/home/raison/git/CG-labs/src/geometry.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/geometry.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o -c /home/raison/git/CG-labs/src/collaiders/AABB.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/AABB.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/AABB.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Object.cpp.o -c /home/raison/git/CG-labs/src/objects/Object.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Object.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Object.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/Sphere.cpp.o -c /home/raison/git/CG-labs/src/collaiders/Sphere.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/Sphere.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/Sphere.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
-  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/objects/Rectangle.cpp",
-  "file": "/home/raison/git/CG-labs/src/objects/Rectangle.cpp",
-  "output": "CMakeFiles/src_lib.dir/src/objects/Rectangle.cpp.o"
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/collaiders/intersections.cpp.o -c /home/raison/git/CG-labs/src/collaiders/intersections.cpp",
+  "file": "/home/raison/git/CG-labs/src/collaiders/intersections.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/collaiders/intersections.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/fabrics/ObjectFabric.cpp.o -c /home/raison/git/CG-labs/src/fabrics/ObjectFabric.cpp",
+  "file": "/home/raison/git/CG-labs/src/fabrics/ObjectFabric.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/fabrics/ObjectFabric.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o -c /home/raison/git/CG-labs/src/meshes/Mesh.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Mesh.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Mesh.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Pyramid.cpp.o -c /home/raison/git/CG-labs/src/meshes/Pyramid.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Pyramid.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Pyramid.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Rectangle.cpp.o -c /home/raison/git/CG-labs/src/meshes/Rectangle.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Rectangle.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Rectangle.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/src_lib.dir/src/meshes/Sphere.cpp.o -c /home/raison/git/CG-labs/src/meshes/Sphere.cpp",
+  "file": "/home/raison/git/CG-labs/src/meshes/Sphere.cpp",
+  "output": "CMakeFiles/src_lib.dir/src/meshes/Sphere.cpp.o"
 },
 {
   "directory": "/home/raison/git/CG-labs/build",
@@ -190,5 +232,17 @@
   "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab3/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab3_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab3/main.cpp",
   "file": "/home/raison/git/CG-labs/Lab3/main.cpp",
   "output": "Lab3/CMakeFiles/Lab3_main.dir/main.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build/Lab4",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab4/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab4_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab4/main.cpp",
+  "file": "/home/raison/git/CG-labs/Lab4/main.cpp",
+  "output": "Lab4/CMakeFiles/Lab4_main.dir/main.cpp.o"
+},
+{
+  "directory": "/home/raison/git/CG-labs/build/Lab6",
+  "command": "/usr/bin/c++ -DDEBUG -I/home/raison/git/CG-labs/Lab6/include -I/home/raison/git/CG-labs/include -std=gnu++20 -g -o CMakeFiles/Lab6_main.dir/main.cpp.o -c /home/raison/git/CG-labs/Lab6/main.cpp",
+  "file": "/home/raison/git/CG-labs/Lab6/main.cpp",
+  "output": "Lab6/CMakeFiles/Lab6_main.dir/main.cpp.o"
 }
 ]

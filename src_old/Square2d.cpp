@@ -41,7 +41,7 @@ void Square2d::updateSquarePoints(GLfloat center[2], GLfloat width, GLfloat heig
   geometry_.updateVerticies(verticies_);
 }
 
-Square2d::Square2d(GLfloat center[2], GLfloat width, GLfloat height, Program program, TMoveFN moveFN) : Object(4, sizeof(GLfloat) * 3, constructSquarePoints(center, width, height), program, moveFN), width_(width), height_(height) {
+Square2d::Square2d(GLfloat center[2], GLfloat width, GLfloat height, Program program, TMoveFN moveFN) : Mesh(4, sizeof(GLfloat) * 3, constructSquarePoints(center, width, height), program, moveFN), width_(width), height_(height) {
   x_ = center[0];
   y_ = center[1];
   type_ = GL_TRIANGLE_FAN;

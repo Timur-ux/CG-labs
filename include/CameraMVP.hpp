@@ -7,7 +7,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-struct CameraMVP : public MoveableBase {
+struct CameraMVP : public Transform {
   glm::mat4 view_;
   glm::mat4 perspective_;
 
@@ -30,8 +30,8 @@ public:
   const glm::mat4 &view() const { return view_; };
   const glm::mat4 &perspective() const { return perspective_; };
 
-  void lookAt(glm::vec3 target);
-  void lookInto(glm::vec3 direction);
+  void lookAt(glm::vec3 target) override;
+  void lookInto(glm::vec3 direction) override;
 
   void changeFov(GLfloat newFov);
   void changeRatio(GLfloat newRatio);

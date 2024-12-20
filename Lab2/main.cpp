@@ -6,7 +6,7 @@
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Rectangle.hpp"
+#include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -17,12 +17,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #define GLEW_STATIC
-#include "utils/customWindow.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "EventHandlers/moveHandler.hpp"
 #include "EventHandlers/LookupHandler.hpp"
-#include "MoveObjectFN.hpp"
+
 
 void keyCallback(GLFWwindow *, int, int, int, int);
 void mouseMoveCallback(GLFWwindow *, double, double);
@@ -54,10 +53,11 @@ int main() {
  
   // Текстуры
   Texture2D containerTex("./textures/container.jpg", 0);
+  Texture2D floorTex("./textures/stoneFloor.png", 0);
 
   // Объекты
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram, containerTex);
-  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, -25), blinPhongProgram, containerTex);
+  Rectangle floor(glm::vec3(50, 0.1, 50), glm::vec3(0, -1, 0), blinPhongProgram, floorTex);
   glCheckError();
 
   // Камера

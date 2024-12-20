@@ -8,15 +8,13 @@
 #include <glm/geometric.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/trigonometric.hpp>
-#include <iostream>
 #include <stdexcept>
-#include "objects/Object.hpp"
 
 CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
                      glm::vec3 target, GLfloat fov, GLfloat ratio)
-    : MoveableBase(position, target), program_(program), 
+    : Transform(position), program_(program), 
        fov_(fov), ratio_(ratio), view_(1), perspective_(1) {
-   up_ = up;
+  lookAt(target);
 
   viewLoc_ = glGetUniformLocation(program_.get(), "view");
   perspectiveLoc_ = glGetUniformLocation(program_.get(), "perspective");
@@ -32,12 +30,12 @@ CameraMVP::CameraMVP(Program &program, glm::vec3 position, glm::vec3 up,
 }
 
 void CameraMVP::moveTo(glm::vec3 position) {
-  MoveableBase::moveTo(position);
+  Transform::moveTo(position);
   viewChanged_ = true;
 }
 
 void CameraMVP::shiftBy(glm::vec3 shift) {
-  MoveableBase::shiftBy(shift);
+  Transform::shiftBy(shift);
   viewChanged_ = true;
 }
 
@@ -57,17 +55,17 @@ void CameraMVP::updateState() {
 }
 
 void CameraMVP::lookAt(glm::vec3 target) {
-  forward_ = glm::normalize(target - position_ );
+  Transform::lookAt(target);
   viewChanged_ = true;
 }
 
 void CameraMVP::lookInto(glm::vec3 direction) {
-  forward_ = glm::normalize(direction);
+  Transform::lookInto(direction);
   viewChanged_ = true;
 }
 
 void CameraMVP::rotateAround(glm::vec3 v, float rads) {
-  MoveableBase::rotateAround(v, rads);
+  Transform::rotateAround(v, rads);
   viewChanged_ = true;
 }
 void CameraMVP::changeFov(GLfloat newFov) {

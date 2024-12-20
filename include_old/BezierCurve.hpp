@@ -10,7 +10,7 @@
 
 
 using coord = std::pair<GLfloat, GLfloat>;
-class BezierCurve2d : public Object {
+class BezierCurve2d : public Mesh {
   std::vector<coord> coords_;
 
   GLfloat * calculateVerticies(std::vector<std::pair<GLfloat, GLfloat>> coords, GLuint vertexN);

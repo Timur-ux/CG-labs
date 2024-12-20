@@ -5,7 +5,7 @@
 #include "events.hpp"
 #include "Object.hpp"
 
-class Point2D : public Object {
+class Point2D : public Mesh {
 public:
   Point2D(GLfloat vertex[3], Program program, TMoveFN moveFN = nullptr);
 };

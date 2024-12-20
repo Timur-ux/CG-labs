@@ -32,7 +32,7 @@ public:
 
   void updateVerticies(GLfloat *verticiesData);
 };
-class Object : public IDrawable,
+class Mesh : public IDrawable,
                public IEventHandler<const double &, const double &> {
   Id id_;
 
@@ -41,11 +41,11 @@ protected:
   Program program_;
   Geometry geometry_;
   GLenum type_ = GL_POINTS;
-  Event<Object *> updateEvent_;
+  Event<Mesh *> updateEvent_;
   GLfloat *verticies_;
   TMoveFN moveFN_;
 
-  Object(GLuint vertexN, GLuint vertexSize, GLfloat *vertexData,
+  Mesh(GLuint vertexN, GLuint vertexSize, GLfloat *vertexData,
          Program program, TMoveFN moveFN = nullptr)
 
       : geometry_(vertexN, vertexSize, vertexData), verticies_(vertexData),
@@ -67,8 +67,8 @@ protected:
         };
 
 public:
-  virtual ~Object() { delete verticies_; };
-  IEvent<Object *> &updateEvent;
+  virtual ~Mesh() { delete verticies_; };
+  IEvent<Mesh *> &updateEvent;
 
   /**
    * @brief Draw figure on geometry's verticies by default

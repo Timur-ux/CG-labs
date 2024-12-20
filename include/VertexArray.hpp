@@ -3,7 +3,6 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-
 class VertexArray {
 private:
   GLuint vao_;

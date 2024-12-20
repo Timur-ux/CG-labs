@@ -19,7 +19,8 @@ VertexBuffer::VertexBuffer(GLenum target, GLsizeiptr size, void *data,
   glBindBuffer(target, 0);
 }
 
-void VertexBuffer::create(GLenum target, GLsizeiptr size, void *data, GLenum usage) {
+void VertexBuffer::create(GLenum target, GLsizeiptr size, void *data,
+                          GLenum usage) {
   target_ = target;
   glGetError();
 
@@ -35,33 +36,45 @@ void VertexBuffer::create(GLenum target, GLsizeiptr size, void *data, GLenum usa
   isOK_ = true;
 }
 
-VertexBuffer::~VertexBuffer() { 
-  if ( vbo_ )
-    glDeleteBuffers(1, &vbo_); 
+VertexBuffer::~VertexBuffer() {
+  if (vbo_)
+    glDeleteBuffers(1, &vbo_);
 }
 
 VertexBuffer::VertexBuffer(VertexBuffer &&other) noexcept {
   vbo_ = other.vbo_;
   other.vbo_ = 0;
+  target_ = other.target_;
+  other.target_ = 0;
 }
 
 VertexBuffer &VertexBuffer::operator=(VertexBuffer &&other) noexcept {
-  if(this == &other)
+  if (this == &other)
     return *this;
   vbo_ = other.vbo_;
   other.vbo_ = 0;
+  target_ = other.target_;
+  other.target_ = 0;
 
   return *this;
 }
 
-void VertexBuffer::bind() {if ( vbo_ ) glBindBuffer(target_, vbo_); }
+void VertexBuffer::bind() {
+  if (vbo_) {
+    glBindBuffer(target_, vbo_);
+  }
+}
 
-void VertexBuffer::unbind() { if ( vbo_ ) glBindBuffer(target_, 0); }
+void VertexBuffer::unbind() {
+  if (vbo_)
+    glBindBuffer(target_, 0);
+}
 
 void VertexBuffer::setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
                                 const void *offset, GLenum type,
                                 GLboolean normalized) {
-  if (!isOK_) return;
+  if (!isOK_)
+    return;
   glCheckError();
 
   glVertexAttribPointer(idx, componentsN, type, normalized, stride, offset);
@@ -73,29 +86,28 @@ void VertexBuffer::setAttribPtr(GLuint idx, GLint componentsN, GLsizei stride,
 void VertexBuffer::setData(GLsizei size, const void *data, GLenum usage) {
   bind();
 
-  if(isOK_)
+  if (isOK_)
     glBufferData(target_, size, data, usage);
 }
 
 void VertexBuffer::resetData() {
   bind();
 
-  if(isOK_)
+  if (isOK_)
     glBufferData(target_, 1, nullptr, GL_DYNAMIC_DRAW);
 }
 
-
-void VertexBuffer::setSubData(GLintptr offset, GLsizeiptr size, const void * data) {
+void VertexBuffer::setSubData(GLintptr offset, GLsizeiptr size,
+                              const void *data) {
   bind();
 
-  if(isOK_)
+  if (isOK_)
     glBufferSubData(target_, offset, size, data);
 }
 
-
-void VertexBuffer::getSubData(GLintptr offset, GLsizeiptr size, void * ptr) {
+void VertexBuffer::getSubData(GLintptr offset, GLsizeiptr size, void *ptr) {
   bind();
 
-  if(isOK_)
+  if (isOK_)
     glGetBufferSubData(target_, offset, size, ptr);
 }

@@ -1,4 +1,4 @@
-#include "objects/Rectangle.hpp"
+#include "meshes/Rectangle.hpp"
 #include "Program.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -9,14 +9,14 @@
 
 // Counter clock wise from left bottom
 static const std::vector<glm::vec3> vertexCoords{
-    {-0.5, -0.5, 0}, {0.5, -0.5, 0},  {0.5, 0.5, 0},  {-0.5, 0.5, 0}, // front
-    {-0.5, -0.5, 1}, {0.5, -0.5, 1},  {0.5, 0.5, 1},  {-0.5, 0.5, 1}, // back
+    {-1, -1, -1}, {1, -1, -1},  {1, 1, -1},  {-1, 1, -1}, // front
+    {-1, -1, 1}, {1, -1, 1},  {1, 1, 1},  {-1, 1, 1}, // back
 
-    {-0.5, -0.5, 1}, {-0.5, -0.5, 0}, {-0.5, 0.5, 0}, {-0.5, 0.5, 1}, // left
-    {0.5, -0.5, 0},  {0.5, -0.5, 1},  {0.5, 0.5, 1},  {0.5, 0.5, 0},  // right
+    {-1, -1, 1}, {-1, -1, -1}, {-1, 1, -1}, {-1, 1, 1}, // left
+    {1, -1, -1},  {1, -1, 1},  {1, 1, 1},  {1, 1, -1},  // right
 
-    {-0.5, 0.5, 0},  {0.5, 0.5, 0},   {0.5, 0.5, 1},  {-0.5, 0.5, 1},  // up
-    {-0.5, -0.5, 1}, {0.5, -0.5, 1},  {0.5, -0.5, 0}, {-0.5, -0.5, 0}, // down
+    {-1, 1, -1},  {1, 1, -1},   {1, 1, 1},  {-1, 1, 1},  // up
+    {-1, -1, 1}, {1, -1, 1},  {1, -1, -1}, {-1, -1, -1}, // down
 };
 
 // Counter clock wise from left bottom
@@ -43,7 +43,7 @@ static const std::vector<glm::vec3> normals{
     {0, -1, 0}, {0, -1, 0}, {0, -1, 0}, {0, -1, 0}, // down
 };
 
-static const std::vector<GLubyte> indexes{
+static const std::vector<GLuint> indexes{
     2,  1,  0,  0,  3,  2, // front
     5,  6,  7,  7,  4,  5, // back
 
@@ -71,9 +71,9 @@ std::vector<glm::vec2> prepareTextureCoords(glm::vec3 scales, bool scale) {
 }
 
 Rectangle::Rectangle(glm::vec3 sideSize, glm::vec3 position, Program &program,
-                     Texture2D &texture, bool rotate)
-    : Object(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
-             GL_TRIANGLES, texture, rotate),
+                     Texture2D &texture)
+    : Mesh(position, program, vertexCoords, prepareTextureCoords(sideSize, true), normals, indexes,
+             GL_TRIANGLES, texture),
       texture_(texture) {
-  model_ = glm::scale(model_, sideSize);
+        scaleBy(sideSize);
 }

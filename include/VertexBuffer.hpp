@@ -4,7 +4,6 @@
 #include <cassert>
 #define GLEW_STATIC
 #include <GL/glew.h>
-
 class VertexBuffer {
 private:
   GLuint vbo_;

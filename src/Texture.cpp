@@ -92,7 +92,7 @@ Texture2D::Texture2D(int width, int height, GLenum type, std::list<std::pair<GLe
   glCheckError();
 }
 
-Texture2D::Texture2D(unsigned char * data, int block) : Texture() {
+Texture2D::Texture2D(int width, int height, unsigned char * data, GLenum imageType, int block) : Texture() {
   textureBlock_ = block;
   glGenTextures(1, &texture_);
   glBindTexture(GL_TEXTURE_2D, texture_);
@@ -102,14 +102,26 @@ Texture2D::Texture2D(unsigned char * data, int block) : Texture() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-  int width, height;
-
   width_ = width, height_= height;
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  glTexImage2D(GL_TEXTURE_2D, 0, imageType, width, height, 0, imageType, GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glCheckError();
+}
+
+Texture2D * Texture2D::createMonocolor(int width, int height, glm::vec3 color, int block) {
+  unsigned char data[width][height][4];
+  for(int i = 0; i < width; ++i) {
+    for(int j = 0; j < height; ++j) {
+        data[i][j][0] = 255*color.r;
+        data[i][j][1] = 255*color.g;
+        data[i][j][2] = 255*color.b;
+        data[i][j][3] = 255;
+    }
+  }
+
+  return new Texture2D(width, height, (unsigned char *)data, GL_RGBA, block);
 }
 
 Texture2D::Texture2D(Texture2D && other) {

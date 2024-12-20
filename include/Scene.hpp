@@ -4,17 +4,17 @@
 #include "CameraMVP.hpp"
 #include "Light/Light.hpp"
 #include "Program.hpp"
-#include "objects/Object.hpp"
-#include <list>
+#include "meshes/Mesh.hpp"
 
 class Scene {
-  std::list<Object*> objects_;
+protected:
+  std::vector<Mesh*> objects_;
   CameraMVP cameraData_;
   Program & program_;
   std::vector<ILight *> lights_;
 
 public:
-  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::list<Object*> objects = {});
+  Scene(Program & program, CameraMVP cameraData, std::vector<ILight *> lights = {}, std::vector<Mesh*> objects = {});
 
   void update(double time, double dt);
 };

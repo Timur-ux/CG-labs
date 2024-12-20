@@ -1,4 +1,4 @@
-#include "objects/Object.hpp"
+#include "meshes/Mesh.hpp"
 #include "IMoveable.hpp"
 #include "Program.hpp"
 #include "VertexArray.hpp"
@@ -12,49 +12,34 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/trigonometric.hpp>
 #include <iostream>
+#include "utils/printGlm.hpp"
 
+Mesh::Mesh() : Transform() { }
 
-Object::Object(glm::vec3 position) : MoveableBase(position, glm::vec3(0)) {
-  ProgramBind progBinding(*program_);
-  VAOBind vaoBingind(vao_);
-
-  glCheckError();
-  model_ = glm::translate(model_, position_);
-  forward_ = glm::vec3(model_ * glm::vec4(0, 0, 1, 1));
-  up_ = glm::vec3(model_ * glm::vec4(0, 1, 0, 1));
-}
-
-Object::Object(glm::vec3 position, Program &program,
+Mesh::Mesh(glm::vec3 position, Program &program,
                std::vector<glm::vec3> verticiesCoords,
                std::vector<glm::vec2> textureCoords,
-               std::vector<glm::vec3> normals, std::vector<GLubyte> indexes,
-               GLenum drawMode, Texture2D &texture, bool rotate)
-    : MoveableBase(position, glm::vec3(0)), program_(&program), drawMode_(drawMode),
-      textures_({&texture}) {
+               std::vector<glm::vec3> normals, std::vector<GLuint> indexes,
+               GLenum drawMode, Texture2D &texture)
+    : Transform(position), program_(&program),
+      drawMode_(drawMode), textures_({&texture}) {
 
   ProgramBind progBinding(*program_);
   VAOBind vaoBingind(vao_);
 
   glCheckError();
-  model_ = glm::translate(model_, position_);
-  if(position_ != glm::vec3(0))
-    forward_ = glm::normalize(position_ - glm::vec3(0));
-  else
-    forward_ = glm::vec3(1, 0, 0);
+  moveTo(position);
 
-  if(rotate)
-    model_ = glm::rotate(model_, glm::radians(45.0f), forward_);
-  up_ = glm::vec3(glm::vec4(0, 1, 0, 1));
+
+  up_ = glm::vec3(0, 1, 0);
   bufferSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]) +
                 textureCoords.size() * sizeof(textureCoords[0]) +
                 normals.size() * sizeof(normals[0]);
   vertexSize_ = verticiesCoords.size() * sizeof(verticiesCoords[0]);
   textureSize_ = textureCoords.size() * sizeof(textureCoords[0]);
   normalsSize_ = normals.size() * sizeof(normals[0]);
-  char *buffer = new char[bufferSize_]{0};
 
-  vboData_.create(GL_ARRAY_BUFFER, bufferSize_, buffer);
-  delete[] buffer;
+  vboData_.create(GL_ARRAY_BUFFER, bufferSize_, nullptr);
   glCheckError();
 
   vboData_.bind();
@@ -105,14 +90,84 @@ Object::Object(glm::vec3 position, Program &program,
   glCheckError();
 }
 
-void Object::draw() {
+void Mesh::setupData(glm::vec3 position, Program &program,
+                       std::vector<glm::vec3> verticiesCoords,
+                       std::vector<glm::vec2> textureCoords,
+                       std::vector<glm::vec3> normals,
+                       std::vector<GLuint> indexes, GLenum drawMode,
+                       Texture2D *texture) {
+  *this = Mesh(position, program, verticiesCoords, textureCoords, normals,
+                 indexes, drawMode, *texture);
+  glCheckError();
+}
+
+Mesh::Mesh(Mesh &&other) {
+  translateModel_ = other.translateModel_;
+  position_ = other.position_;
+  forward_ = other.forward_;
+  up_ = other.up_;
+
+  program_ = other.program_;
+  vao_ = std::move(other.vao_);
+  vboData_ = std::move(other.vboData_);
+  vboIndicies_ = std::move(other.vboIndicies_);
+
+  textures_ = other.textures_;
+  drawMode_ = other.drawMode_;
+
+  bufferSize_ = other.bufferSize_;
+  indexes_ = other.indexes_;
+  vertexSize_ = other.vertexSize_;
+  textureSize_ = other.textureSize_;
+  normalsSize_ = other.normalsSize_;
+
+  translateModel_ = other.translateModel_;
+  rotateModel_ = other.rotateModel_;
+  model_ = other.model_;
+  glCheckError();
+}
+
+Mesh & Mesh::operator=(Mesh &&other) {
+  if(this == &other)
+    return *this;
+
+  translateModel_ = other.translateModel_;
+  position_ = other.position_;
+  forward_ = other.forward_;
+  up_ = other.up_;
+
+  program_ = other.program_;
+  vao_ = std::move(other.vao_);
+  vboData_ = std::move(other.vboData_);
+  vboIndicies_ = std::move(other.vboIndicies_);
+
+  textures_ = other.textures_;
+  drawMode_ = other.drawMode_;
+
+  bufferSize_ = other.bufferSize_;
+  indexes_ = other.indexes_;
+  vertexSize_ = other.vertexSize_;
+  textureSize_ = other.textureSize_;
+  normalsSize_ = other.normalsSize_;
+
+  translateModel_ = other.translateModel_;
+  rotateModel_ = other.rotateModel_;
+  model_ = other.model_;
+  glCheckError();
+
+  return *this;
+}
+
+void Mesh::draw() {
   glCheckError();
   for (size_t i = 0; i < textures_.size(); ++i) {
     textures_[i]->bind();
   }
   glCheckError();
-  // ProgramBind _(*program_);
+  ProgramBind _(*program_);
+  glCheckError();
   vao_.bind();
+  glCheckError();
   vboIndicies_.bind();
   glCheckError();
 
@@ -121,7 +176,7 @@ void Object::draw() {
               << " uniform" << std::endl;
   glCheckError();
 
-  glDrawElements(drawMode_, indexes_, GL_UNSIGNED_BYTE, 0);
+  glDrawElements(drawMode_, indexes_, GL_UNSIGNED_INT, 0);
   glCheckError();
 
   vboIndicies_.unbind();
@@ -131,7 +186,7 @@ void Object::draw() {
   glCheckError();
 }
 
-void Object::draw(Program *otherProgram) {
+void Mesh::draw(Program *otherProgram) {
   Program *myProgram = program_;
   program_ = otherProgram;
   glCheckError();
@@ -140,7 +195,7 @@ void Object::draw(Program *otherProgram) {
   program_ = myProgram;
 }
 
-bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
+bool Mesh::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -164,7 +219,7 @@ bool Object::setVertexesCoords(const std::vector<glm::vec3> &vertexesCoords) {
   return true;
 }
 
-bool Object::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
+bool Mesh::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -191,7 +246,7 @@ bool Object::setTextureCoords(const std::vector<glm::vec2> &textureCoords) {
   return true;
 }
 
-bool Object::setNormals(const std::vector<glm::vec3> &normals) {
+bool Mesh::setNormals(const std::vector<glm::vec3> &normals) {
   VBOBind _(vboData_);
 
   char *buffer;
@@ -214,7 +269,7 @@ bool Object::setNormals(const std::vector<glm::vec3> &normals) {
   return true;
 }
 
-bool Object::setIndexes(const std::vector<GLubyte> &indexes) {
+bool Mesh::setIndexes(const std::vector<GLubyte> &indexes) {
   VBOBind _(vboIndicies_);
 
   vboIndicies_.setData(indexes.size() * sizeof(GLubyte), indexes.data());

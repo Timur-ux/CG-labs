@@ -1,12 +1,12 @@
 #include "CameraMVP.hpp"
+#include "IMoveable.hpp"
 #include "Light/BlinPhongLight.hpp"
-#include "Light/Lambert.hpp"
 #include "Program.hpp"
 #include "Scene.hpp"
 #include "Texture.hpp"
 #include "events.hpp"
 #include "glCheckError.hpp"
-#include "objects/Rectangle.hpp"
+#include "meshes/Rectangle.hpp"
 #include "utils/OpenglInitializer.hpp"
 #include "utils/printUniforms.hpp"
 #include <glm/ext/matrix_transform.hpp>
@@ -36,21 +36,21 @@ Event<double, double> mouseMoveEvent;
  M - перестать плавно перемещаться к последнему положению
 */
 class MoveAndCheckpointHandler : public MoveEventHandler {
-  struct CameraState {
+  struct State {
     glm::vec3 position;
     glm::vec3 up;
     glm::vec3 forward;
   };
-  std::vector<CameraState> states_;
+  std::vector<State> states_;
   bool isNowMovingToLastPos_ = false;
   GLint lastPressedKey = -1;
 
   constexpr static GLfloat eps_ = 0.05;
 
 public:
-  MoveAndCheckpointHandler(CameraMVP &cameraData, GLfloat moveSpeed = 0.05f,
+  MoveAndCheckpointHandler(Transform &host, GLfloat moveSpeed = 0.05f,
                            GLfloat acceleration = 0.01f)
-      : MoveEventHandler(cameraData, moveSpeed, acceleration) {}
+      : MoveEventHandler(host, moveSpeed, acceleration) {}
   void move() override {
     MoveEventHandler::move();
     if(lastPressedKey != -1 && pressed[lastPressedKey]) 
@@ -62,7 +62,7 @@ public:
         !pressed[GLFW_KEY_RIGHT_SHIFT]) {
       lastPressedKey = GLFW_KEY_R;
       states_.push_back(
-          {cameraData_.position(), cameraData_.up(), cameraData_.forward()});
+          {host_.position(), host_.up(), host_.forward()});
       std::cout << "Remember current state" << std::endl;
     }
     if (pressed[GLFW_KEY_R] &&
@@ -95,17 +95,17 @@ public:
       }
       LookupEventHandler::first = true; // Поднимаем флаг первого передвижения мыши, чтобы избежать рывка курсора
 
-      CameraState curState(cameraData_.position(), cameraData_.up(),
-                           cameraData_.forward());
-      CameraState lastState = states_[states_.size() - 1];
+      State curState(host_.position(), host_.up(),
+                           host_.forward());
+      State lastState = states_[states_.size() - 1];
       glm::vec3 dPos = lastState.position - curState.position;
       glm::vec3 dForward = lastState.forward - curState.forward;
 
       GLfloat posV = glm::length(dPos) > moveSpeed_ ? moveSpeed_ : glm::length(dPos);
       GLfloat forwardV = glm::length(dForward) > moveSpeed_ ? moveSpeed_ : glm::length(dForward);
 
-      cameraData_.shiftBy(dPos * posV);
-      cameraData_.lookInto(curState.forward + dForward * forwardV);
+      host_.shiftBy(dPos * posV);
+      host_.lookInto(curState.forward + dForward * forwardV);
 
       if(glm::length(dPos) < eps_ && glm::length(dForward) < eps_) {
         isNowMovingToLastPos_ = false;
@@ -147,8 +147,8 @@ int main() {
   Rectangle cube(glm::vec3(1), glm::vec3(0, 1, 0), blinPhongProgram,
                  containerTex);
   Rectangle cube2(glm::vec3(.5), glm::vec3(5, 0, 5), blinPhongProgram,
-                 containerTex, true);
-  Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, -12.5),
+                 containerTex);
+  Rectangle floor(glm::vec3(25, 0.1, 25), glm::vec3(0, -1, 0),
                   blinPhongProgram, floorTex);
   glCheckError();
 

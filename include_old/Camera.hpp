@@ -15,20 +15,20 @@ class Camera : public IUpdateable {
 
   protected:
   GLFWwindow * win_;
-  std::map<Id, Object*> objectsInFrame_;
+  std::map<Id, Mesh*> objectsInFrame_;
 
   public:
   Camera(GLFWwindow * win) : win_(win), id_(rand()) {}
   virtual void update(const double &, const double &) override;
 
   Id getId();
-  virtual void recalcObjectsInFrame(std::vector<Object*> movedObjects) = 0;
+  virtual void recalcObjectsInFrame(std::vector<Mesh*> movedObjects) = 0;
 };
 
 class FullScene2DCamera : public Camera {
 public:
   FullScene2DCamera(GLFWwindow * win) : Camera(win) {};
-  void recalcObjectsInFrame(std::vector<Object*> movedObjects) override final;
+  void recalcObjectsInFrame(std::vector<Mesh*> movedObjects) override final;
 };
 
 #endif // !CAMERA_HPP_

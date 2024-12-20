@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 
+
 GLuint loadShared(const char * source, GLenum shaderType) {
   GLuint shader = glCreateShader(shaderType);
   GLint status, length;
